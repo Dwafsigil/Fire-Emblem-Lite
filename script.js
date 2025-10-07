@@ -6,7 +6,11 @@ const state = {
   player: { row: 0, col: 0 },
 };
 
+const hover = { row: 0, col: 0 };
+
 const board = document.querySelector(".board");
+
+let playerSelected = false;
 
 // Create 8x8 board
 function createBoard(row, col) {
@@ -29,6 +33,27 @@ function tileAt(row, col) {
   return board.querySelector(`.tile[data-row="${row}"][data-col="${col}"]`);
 }
 
+// Hover Border
+function showHoverAt(r, c) {
+  if (!inBounds) return false;
+  hover.row = r;
+  hover.col = c;
+  const t = tileAt(r, c);
+  if (t && !t.classList.contains("hover")) t.classList.add("hover");
+}
+
+function removeHover() {
+  const t = tileAt(hover.row, hover.col);
+  t.classList.remove("hover");
+}
+
+function moveHover(dr, dc) {
+  const r = hover.row + dr;
+  const c = hover.col + dc;
+  if (inBounds(r, c)) showHoverAt(r, c);
+}
+
+// Player Move
 const playerNode = document.createElement("div");
 playerNode.className = "player";
 
@@ -50,15 +75,38 @@ function movePlayer(dr, dc) {
   if (inBounds(r, c)) placePlayer(r, c);
 }
 
+// Event Listeners
+
+// To move Hover and Player
 board.addEventListener("keydown", (e) => {
-  e.preventDefault();
-  const key = e.key;
-  if (key == "ArrowUp") movePlayer(-1, 0);
-  if (key == "ArrowDown") movePlayer(1, 0);
-  if (key == "ArrowRight") movePlayer(0, 1);
-  if (key == "ArrowLeft") movePlayer(0, -1);
+  const moves = {
+    ArrowUp: [-1, 0],
+    ArrowDown: [1, 0],
+    ArrowRight: [0, 1],
+    ArrowLeft: [0, -1],
+  };
+
+  if (moves[e.key]) {
+    e.preventDefault;
+    removeHover();
+    moveHover(...moves[e.key]);
+    console.log(`${hover.row}:${hover.col}`);
+    if (playerSelected) movePlayer(...moves[e.key]);
+  }
+});
+
+// To select player
+board.addEventListener("keydown", (e) => {
+  e.preventDefault;
+  if (e.key == " ") {
+    if (state.player.col == hover.col && state.player.row == hover.row) {
+      playerSelected = !playerSelected;
+      console.log("hehe");
+    }
+  }
 });
 
 createBoard(row, col);
-placePlayer(0, 0);
+placePlayer(5, 4);
+showHoverAt(0, 0);
 board.focus();
