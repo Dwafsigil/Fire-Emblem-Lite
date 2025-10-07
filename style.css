@@ -1,0 +1,86 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+:root {
+  --rows: 8;
+  --cols: 8;
+  --size: 56px;
+  --gap: 2px;
+}
+
+body {
+  /* 100 of viewheight min */
+  min-height: 100vh;
+  place-items: center;
+  display: grid;
+  background: #0b0f17;
+  color: #e5e7eb;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 56px);
+  grid-auto-rows: 56px;
+  gap: 2px;
+  padding: 2px;
+  background: #374151;
+  /* border-radius: 10px; */
+  outline: none; /* we’ll manage focus visually if you want later */
+}
+
+/* individual cells */
+.tile {
+  background: #fff4dc; /* light tile color, overridden by .dark */
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  user-select: none;
+  position: relative;
+}
+
+.tile.alt {
+  background: #ffe5aa;
+}
+
+/* The frame */
+.player {
+  /* Positions relative to the nearest positioned ancestor */
+  position: absolute;
+  /* Sets all four inset offsets to 0- */
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+/* /* Lets you create a virtual element inside another element, appears before the content of the real element. Basically overlays over the actual layer  512 x 128* Picture inside picture in the frame . */
+.player::before {
+  content: "";
+  /* Size of ONE frame */
+  width: 120px;
+  height: 140%;
+
+  /* Use whole spritesheet as the background */
+  background-image: url("assets/Knight_1/Idle.png");
+  /* Shows image only once */
+  background-repeat: no-repeat;
+
+  /* Scale the image up or down so the entire image fits, no cropping */
+  background-size: 400% 100%;
+  background-position: 0 0;
+
+  /* Doesnt blur but makes them crisp and sharp */
+  /* image-rendering: pixelated; */
+  /* border-radius: 4px; */
+  /* background-color: #0ea5e9; */
+  /* Draws a soft shadow based on the background imagfe provided */
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
+  transform: translate(-2px, -16px);
+  transform: translate;
+}
