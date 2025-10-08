@@ -8,6 +8,8 @@ const state = {
 
 const hover = { row: 0, col: 0 };
 
+const highTile = [];
+
 const board = document.querySelector(".board");
 
 let playerSelected = false;
@@ -75,6 +77,58 @@ function movePlayer(dr, dc) {
   if (inBounds(r, c)) placePlayer(r, c);
 }
 
+// Highlight possible moves
+function highlightMove(startRow, startCol, moveRange) {
+  const reachable = new Set();
+  const queue = [[startRow, startCol, moveRange]];
+  const visited = new Set();
+
+  while (queue.length > 0) {
+    const [r, c, movementLeft] = queue.shift();
+    reachable.add(`${r},${c}`);
+    if (movementLeft === 0) continue;
+
+    const directions = [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+    ];
+
+    for (const [dR, dC] of directions) {
+      const newRow = r + dR;
+      const newCol = c + dC;
+      const key = `${newRow},${newCol}`;
+
+      if (
+        newRow >= 0 &&
+        newRow < row &&
+        newCol >= 0 &&
+        newCol < col &&
+        !visited.has(key)
+      ) {
+        visited.add(key);
+        queue.push([newRow, newCol, movementLeft - 1]);
+      }
+    }
+  }
+
+  for (const key of reachable) {
+    let [r, c] = key.split(",").map(Number);
+    highTile.push([r, c]);
+    tileAt(r, c).classList.add("highlight");
+  }
+
+  // console.log(highTile);
+}
+
+//  Remove Highlighted Tiles
+function removeHighlight() {
+  for (const [r, c] of highTile) {
+    tileAt(r, c).classList.remove("highlight");
+  }
+}
+
 // Event Listeners
 
 // To move Hover and Player
@@ -90,7 +144,7 @@ board.addEventListener("keydown", (e) => {
     e.preventDefault;
     removeHover();
     moveHover(...moves[e.key]);
-    console.log(`${hover.row}:${hover.col}`);
+    // console.log(`${hover.row}:${hover.col}`);
     if (playerSelected) movePlayer(...moves[e.key]);
   }
 });
@@ -98,15 +152,24 @@ board.addEventListener("keydown", (e) => {
 // To select player
 board.addEventListener("keydown", (e) => {
   e.preventDefault;
+
   if (e.key == " ") {
     if (state.player.col == hover.col && state.player.row == hover.row) {
       playerSelected = !playerSelected;
-      console.log("hehe");
+      // console.log("hehe");
     }
+
+    if (!playerSelected && highTile.length > 0) removeHighlight();
+    if (playerSelected) {
+      highlightMove(state.player.row, state.player.col, 2);
+      console.log(highTile);
+    }
+    // removeHighlight();
   }
 });
 
 createBoard(row, col);
+// highlightMove(5, 4, 2);
 placePlayer(5, 4);
 showHoverAt(0, 0);
 board.focus();
