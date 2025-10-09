@@ -1,5 +1,13 @@
 import { unitStats } from "./unitStats.js";
 
+const Phase = {
+  PLAYER_TURN: "player_turn",
+  AWAIT_SELECT: "await_select",
+  AWAIT_ACTION: "await_action",
+  ANIMATING: "animating",
+  ENEMY_TURN: "enemy_turn",
+  ENEMY_THINKING: "enemy_thinking",
+};
 const actionBar = document.querySelector(".action-bar");
 const btns = Array.from(document.querySelectorAll("button"));
 // console.log(btns);
@@ -9,6 +17,8 @@ const actionButtons = {
   item: actionBar.querySelector(`[data-action="item"]`),
   wait: actionBar.querySelector(`[data-action="wait"]`),
 };
+let currentUnitsQueue = [];
+let playedUnits = [];
 
 let obstacles = [];
 const row = 8;
@@ -48,6 +58,8 @@ let allUnits = [
     col: 4,
   }),
 ];
+
+console.log(allUnits);
 
 // Action Buttons
 let i = btns.findIndex((b) => b.tabIndex == 0);
@@ -89,6 +101,18 @@ function initGame() {
   // placePlayer(5, 4);
   showHoverAt(0, 0);
   board.focus();
+}
+
+function playGame() {
+  initGame();
+
+  // Per Turn
+  do {
+    initTurn();
+    if (checkExhaustedUnits) {
+      playerTurn = !playerTurn;
+    }
+  } while (true);
 }
 // let enemy = [];
 
@@ -296,6 +320,44 @@ function isOccupied(r, c) {
   return true;
 }
 
+// function checkForOpposing(){
+//   enemyUnits = allUnits.map((e) => [e.row, e.col]);
+
+// }
+
+function initTurn() {
+  currentUnitsQueue = allUnits.filter((u) => u.affiliation == 0);
+}
+// initTurn();
+
+function updatePlayable(unit) {
+  if (playerTurn) {
+    if (playerSelected) {
+      currentUnitsQueue = currentUnitsQueue.filter(
+        (u) => u.playerId !== unit.playerId
+      );
+    }
+
+    console.log(currentUnitsQueue);
+  }
+}
+
+function checkPlayable(unit) {
+  console.log(currentUnitsQueue);
+  console.log(unit);
+  return currentUnitsQueue.some((e) => e.playerId == unit.playerId);
+}
+
+function endTurn() {
+  if (currentUnitsQueue.length == 0) {
+    if (playerTurn) {
+      playerTurn = false;
+    } else {
+      playerTurn = true;
+    }
+  }
+}
+
 // Event Listeners
 
 // To move Hover and Player with Arrow Keys
@@ -325,31 +387,38 @@ board.addEventListener("keydown", (e) => {
   }
 });
 
+updatePlayable();
+console.log(currentUnitsQueue);
+
+// console.log(currentUnitsQueue);
+
 // CHANGE THIS UP
 // Select and Deslect Player with Space
 board.addEventListener("keydown", (e) => {
   e.preventDefault();
   // t = tileAt(hover.row, hover.col);
   // if (!isOccupied(hover.row, hover.col)) return;
-  if (
-    e.key == " " &&
-    isOccupied(hover.row, hover.col) &&
-    playerSelected == false
-  ) {
-    playerSelected = !playerSelected;
+  if (e.key == " " && isOccupied(hover.row, hover.col) && !playerSelected) {
     selectedUnit = unitAt(hover.row, hover.col);
-    // console.log(selectedUnit);
-    highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
-    return;
-    // console.log("hehe");
+    if (checkPlayable(selectedUnit)) {
+      playerSelected = true;
+      updatePlayable(selectedUnit);
+      // console.log(checkPlayable());
+      console.log(currentUnitsQueue);
+
+      // console.log(selectedUnit);
+      highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
+      return;
+      // console.log("hehe");
+    }
   }
   if (e.key == " " && playerSelected == true) {
     removeHighlight();
     clearHighTile();
     // selectedUnit = null;
-    playerSelected = !playerSelected;
+    playerSelected = false;
     updateObstacle();
-    console.log("Deslected Unit");
+    console.log("Deselected Unit");
   }
 });
 
