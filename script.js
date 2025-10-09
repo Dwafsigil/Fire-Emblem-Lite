@@ -1,15 +1,61 @@
+import { unitStats } from "./unitStats.js";
+
+let obstacles = [];
 const row = 8;
 const col = 8;
 // Holds current state of the player, position
 const state = {
   player: { row: 0, col: 0, movement: 2 },
 };
+let playerTurn = true;
 // Holds Current hover position
 const hover = { row: 0, col: 0 };
 // Holds all highlighted tiels
 let highTile = [];
 const board = document.querySelector(".board");
 let playerSelected = false;
+let selectedUnit;
+let allUnits = [
+  new unitStats({
+    playerId: 0,
+    name: "Johnny",
+    unitType: "Knight_1",
+    affiliation: 0,
+    row: 1,
+    col: 1,
+  }),
+  new unitStats({
+    playerId: 1,
+    name: "Abram",
+    unitType: "Knight_1",
+    affiliation: 0,
+    row: 2,
+    col: 3,
+  }),
+  new unitStats({
+    playerId: 2,
+    name: "Tyler",
+    unitType: "Knight_2",
+    affiliation: 1,
+    row: 6,
+    col: 4,
+  }),
+];
+
+function initGame() {
+  createBoard(row, col);
+  // createPlayerNode(allUnits);
+
+  placeUnits(allUnits);
+  updateObstacle();
+  // highlightMove(5, 4, 2);
+  // placePlayer(5, 4);
+  showHoverAt(0, 0);
+  board.focus();
+}
+// let enemy = [];
+
+console.log(allUnits[1]);
 
 // Create 8x8 board
 function createBoard(row, col) {
@@ -48,32 +94,70 @@ function removeHover() {
   t.classList.remove("hover");
 }
 
+// function moveHover(dr, dc) {
+//   const r = hover.row + dr;
+//   const c = hover.col + dc;
+//   if (inBounds(r, c) && highlightBounds(r, c) && !playerSelected)
+//     showHoverAt(r, c);
+//   // if (inBounds(r, c) && highlightBounds(r, c)) showHoverAt(r, c);
+// }
+
 function moveHover(dr, dc) {
   const r = hover.row + dr;
   const c = hover.col + dc;
-  if (inBounds(r, c) && highlightBounds(r, c)) showHoverAt(r, c);
+
+  if (!inBounds(r, c)) return false;
+  if (playerSelected) {
+    if (!highlightBounds(r, c)) return false;
+    if (obstacle(r, c)) return false;
+  }
+
+  showHoverAt(r, c);
+  return true;
+}
+
+// && !obstacle(r, c)
+
+function updateObstacle() {
+  obstacles = allUnits.map((e) => [e.row, e.col]);
+  console.log("updateObstacle");
+
+  console.log(obstacles);
+}
+
+function obstacle(r, c) {
+  console.log(obstacle);
+  return allUnits.some((e) => e.row == r && e.col == c && e !== selectedUnit);
 }
 
 // Player Move
-const playerNode = document.createElement("div");
-playerNode.className = "player";
+// const playerNode = document.createElement("div");
+// playerNode.className = "player";
 
 function inBounds(r, c) {
   return r >= 0 && r < row && c >= 0 && c < col;
 }
 
 function placePlayer(r, c) {
-  if (!inBounds) return false;
-  state.player.row = r;
-  state.player.col = c;
+  if (!inBounds(hover.row, hover.col)) return false;
+  selectedUnit.row = r;
+  selectedUnit.col = c;
   const t = tileAt(r, c);
-  if (t && !t.contains(playerNode)) t.appendChild(playerNode);
+  console.log(selectedUnit.node);
+  t.appendChild(selectedUnit.node);
 }
 
 function movePlayer(dr, dc) {
-  const r = state.player.row + dr;
-  const c = state.player.col + dc;
-  if (inBounds(r, c) && highlightBounds(r, c)) placePlayer(r, c);
+  const r = selectedUnit.row + dr;
+  const c = selectedUnit.col + dc;
+  if (
+    inBounds(r, c) &&
+    highlightBounds(r, c) &&
+    playerSelected &&
+    !obstacle(r, c)
+  )
+    placePlayer(r, c);
+  // if (inBounds(r, c) && highlightBounds(r, c) ) placePlayer(r, c);
 }
 
 // Highlight
@@ -120,7 +204,8 @@ function highlightMove(startRow, startCol, moveRange) {
     tileAt(r, c).classList.add("highlight");
   }
 
-  // console.log(highTile);
+  console.log("highlightTiles");
+  console.log(highTile);
 }
 
 //  Remove Highlighted Tiles
@@ -139,6 +224,41 @@ function highlightBounds(r, c) {
   console.log(highTile);
   return highTile.some((arr) => arr[0] == r && arr[1] == c);
 }
+
+// New Unit Code
+function createPlayerNode(unit) {
+  const el = document.createElement("div");
+  el.className = "player";
+  el.id = `player-${unit.playerId}`;
+  el.style.setProperty(
+    "--sprite-url",
+    `url("assets/${unit.unitType}/Idle.png")`
+  );
+  unit.node = el;
+  return el;
+}
+
+function placeUnits(units) {
+  for (const unit of units) {
+    const t = tileAt(unit.row, unit.col);
+    const el = createPlayerNode(unit);
+    t.appendChild(el);
+  }
+}
+
+function unitAt(r, c) {
+  console.log("unitAt");
+
+  return allUnits.find((u) => u.row === r && u.col === c);
+}
+
+function isOccupied(r, c) {
+  console.log("isOccupied");
+
+  if (unitAt(r, c) == null) return;
+  return true;
+}
+
 // Event Listeners
 
 // To move Hover and Player with Arrow Keys
@@ -152,13 +272,14 @@ board.addEventListener("keydown", (e) => {
   };
 
   if (moves[e.key]) {
-    e.preventDefault;
+    e.preventDefault();
     removeHover();
     moveHover(...moves[e.key]);
     // console.log(`${hover.row}:${hover.col}`);
     if (playerSelected) {
       // console.log("pie");
       movePlayer(...moves[e.key]);
+      // removeNode(hover.row, hover.col);
       // removeHighlight();
       // if (tempMovement !== 0) {
       //   highlightMove(state.player.row, state.player.col, (tempMovement -= 1));
@@ -167,29 +288,57 @@ board.addEventListener("keydown", (e) => {
   }
 });
 
+// CHANGE THIS UP
 // Select and Deslect Player with Space
 board.addEventListener("keydown", (e) => {
-  e.preventDefault;
-
-  if (e.key == " ") {
-    if (state.player.col == hover.col && state.player.row == hover.row) {
-      playerSelected = !playerSelected;
-      highlightMove(state.player.row, state.player.col, state.player.movement);
-      // console.log("hehe");
-      if (!playerSelected && highTile.length >= 0) {
-        removeHighlight();
-        clearHighTile();
-
-        console.log("Pizza");
-      }
-    }
+  e.preventDefault();
+  // t = tileAt(hover.row, hover.col);
+  // if (!isOccupied(hover.row, hover.col)) return;
+  if (
+    e.key == " " &&
+    isOccupied(hover.row, hover.col) &&
+    playerSelected == false
+  ) {
+    playerSelected = !playerSelected;
+    selectedUnit = unitAt(hover.row, hover.col);
+    console.log(selectedUnit);
+    highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
+    return;
+    // console.log("hehe");
+  }
+  if (e.key == " " && playerSelected == true) {
+    removeHighlight();
+    clearHighTile();
+    selectedUnit = null;
+    playerSelected = !playerSelected;
+    updateObstacle();
+    console.log("Deslected Unit");
   }
 });
 
-createBoard(row, col);
-// highlightMove(5, 4, 2);
-placePlayer(5, 4);
-showHoverAt(0, 0);
-board.focus();
+// // Select and Deslect Player with Space
+// board.addEventListener("keydown", (e) => {
+//   e.preventDefault;
+// t = tileAt(hover.row, hover.col)
+//   if (e.key == " ") {
+//     if (state.player.col == hover.col && state.player.row == hover.row) {
+//       playerSelected = !playerSelected;
+//       highlightMove(state.player.row, state.player.col, state.player.movement);
+//       // console.log("hehe");
+//       if (!playerSelected && highTile.length >= 0) {
+//         removeHighlight();
+//         clearHighTile();
 
-// tmrw add highlight boundary rule and decrement movement by 1 everyime arrow key is clicked.
+//         console.log("Pizza");
+//       }
+//     }
+//   }
+// });
+
+board.addEventListener("keydown", (e) => {
+  e.preventDefault;
+  if ("Escape") playerTurn = !playerTurn;
+  console.log(playerTurn);
+});
+
+initGame();

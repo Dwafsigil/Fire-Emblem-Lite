@@ -61,7 +61,7 @@ body {
   height: 140%;
 
   /* Use whole spritesheet as the background */
-  background-image: url("assets/Knight_1/Idle.png");
+  background-image: var(--sprite-url);
 
   background-repeat: no-repeat;
 

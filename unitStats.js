@@ -1,19 +1,26 @@
-import { damageCalculation } from "./calculations";
+import { damageCalculation } from "./calculations.js";
 
 export class unitStats {
-  constructor(
+  constructor({
+    playerId,
     name,
-    health,
-    strength,
-    magic,
-    skill,
-    speed,
-    luck,
-    defense,
-    resistance,
-    movement
-  ) {
+    unitType,
+    health = 10,
+    strength = 10,
+    magic = 10,
+    skill = 10,
+    speed = 10,
+    luck = 10,
+    defense = 10,
+    resistance = 10,
+    movement = 2,
+    affiliation = 0,
+    row = 0,
+    col = 0,
+  }) {
+    this.playerId = playerId;
     this.name = name;
+    this.unitType = unitType;
     this.health = health;
     this.strength = strength;
     this.magic = magic;
@@ -23,6 +30,13 @@ export class unitStats {
     this.defense = defense;
     this.resistance = resistance;
     this.movement = movement;
+    this.row = row;
+    this.col = col;
+
+    if (affiliation !== 0 && affiliation !== 1) {
+      throw new Error("Affiliation Value Error");
+    }
+    this.affiliation = affiliation;
   }
 
   //   getStrength() {
