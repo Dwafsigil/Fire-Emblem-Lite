@@ -1,12 +1,17 @@
 import { unitStats } from "./unitStats.js";
 
+const actionBar = document.querySelector(".action-bar");
+const actionButtons = {
+  attack: actionBar.querySelector(`[data-action="attack"]`),
+  ability: actionBar.querySelector(`[data-action="ability"]`),
+  item: actionBar.querySelector(`[data-action="item"]`),
+  wait: actionBar.querySelector(`[data-action="wait"]`),
+};
+
 let obstacles = [];
 const row = 8;
 const col = 8;
 // Holds current state of the player, position
-const state = {
-  player: { row: 0, col: 0, movement: 2 },
-};
 let playerTurn = true;
 // Holds Current hover position
 const hover = { row: 0, col: 0 };
@@ -309,7 +314,7 @@ board.addEventListener("keydown", (e) => {
   if (e.key == " " && playerSelected == true) {
     removeHighlight();
     clearHighTile();
-    selectedUnit = null;
+    // selectedUnit = null;
     playerSelected = !playerSelected;
     updateObstacle();
     console.log("Deslected Unit");
@@ -335,10 +340,24 @@ board.addEventListener("keydown", (e) => {
 //   }
 // });
 
-board.addEventListener("keydown", (e) => {
-  e.preventDefault;
-  if ("Escape") playerTurn = !playerTurn;
-  console.log(playerTurn);
+// board.addEventListener("keydown", (e) => {
+//   e.preventDefault;
+//   if ("Escape") playerTurn = !playerTurn;
+//   console.log(playerTurn);
+// });
+
+// actionButtons.attack.disabled = true;
+actionButtons.attack.addEventListener("click", () => {
+  console.log("Attack");
+});
+actionButtons.ability.addEventListener("click", () => {
+  console.log("Ability");
+});
+actionButtons.item.addEventListener("click", () => {
+  console.log("Item");
+});
+actionButtons.wait.addEventListener("click", () => {
+  console.log("Wait");
 });
 
 initGame();
