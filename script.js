@@ -1,6 +1,8 @@
 import { unitStats } from "./unitStats.js";
 
 const actionBar = document.querySelector(".action-bar");
+const btns = Array.from(document.querySelectorAll("button"));
+// console.log(btns);
 const actionButtons = {
   attack: actionBar.querySelector(`[data-action="attack"]`),
   ability: actionBar.querySelector(`[data-action="ability"]`),
@@ -47,6 +49,36 @@ let allUnits = [
   }),
 ];
 
+// Action Buttons
+let i = btns.findIndex((b) => b.tabIndex == 0);
+if (i < 0) {
+  i = 0;
+  btns[0].tabIndex = 0;
+}
+
+function setActive(index) {
+  btns.forEach((b, j) => (b.tabIndex = j == index ? 0 : -1));
+  btns[index].focus();
+}
+
+function nextIndex(from, dir) {
+  let n = from;
+  let l = btns.length;
+  do {
+    n = (n + dir + l) % l;
+  } while (btns[n].disabled && n !== from);
+  return n;
+}
+
+function openActionBar() {
+  actionBar.classList.remove("hidden");
+  setActive(i);
+}
+
+function closeActionBar() {
+  actionBar.classList.add("hidden");
+}
+
 function initGame() {
   createBoard(row, col);
   // createPlayerNode(allUnits);
@@ -60,7 +92,7 @@ function initGame() {
 }
 // let enemy = [];
 
-console.log(allUnits[1]);
+// console.log(allUnits[1]);
 
 // Create 8x8 board
 function createBoard(row, col) {
@@ -127,11 +159,11 @@ function updateObstacle() {
   obstacles = allUnits.map((e) => [e.row, e.col]);
   console.log("updateObstacle");
 
-  console.log(obstacles);
+  // console.log(obstacles);
 }
 
 function obstacle(r, c) {
-  console.log(obstacle);
+  // console.log(obstacle);
   return allUnits.some((e) => e.row == r && e.col == c && e !== selectedUnit);
 }
 
@@ -148,7 +180,7 @@ function placePlayer(r, c) {
   selectedUnit.row = r;
   selectedUnit.col = c;
   const t = tileAt(r, c);
-  console.log(selectedUnit.node);
+  // console.log(selectedUnit.node);
   t.appendChild(selectedUnit.node);
 }
 
@@ -210,7 +242,7 @@ function highlightMove(startRow, startCol, moveRange) {
   }
 
   console.log("highlightTiles");
-  console.log(highTile);
+  // console.log(highTile);
 }
 
 //  Remove Highlighted Tiles
@@ -226,7 +258,7 @@ function clearHighTile() {
 
 function highlightBounds(r, c) {
   if (highTile.length == 0) return true;
-  console.log(highTile);
+  // console.log(highTile);
   return highTile.some((arr) => arr[0] == r && arr[1] == c);
 }
 
@@ -306,7 +338,7 @@ board.addEventListener("keydown", (e) => {
   ) {
     playerSelected = !playerSelected;
     selectedUnit = unitAt(hover.row, hover.col);
-    console.log(selectedUnit);
+    // console.log(selectedUnit);
     highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
     return;
     // console.log("hehe");
@@ -321,43 +353,71 @@ board.addEventListener("keydown", (e) => {
   }
 });
 
-// // Select and Deslect Player with Space
-// board.addEventListener("keydown", (e) => {
-//   e.preventDefault;
-// t = tileAt(hover.row, hover.col)
-//   if (e.key == " ") {
-//     if (state.player.col == hover.col && state.player.row == hover.row) {
-//       playerSelected = !playerSelected;
-//       highlightMove(state.player.row, state.player.col, state.player.movement);
-//       // console.log("hehe");
-//       if (!playerSelected && highTile.length >= 0) {
-//         removeHighlight();
-//         clearHighTile();
+// actionButtons.attack.disabled = true;
+actionBar.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  if (e.key == "ArrowRight") {
+    i = nextIndex(i, 1);
+    setActive(i);
+  }
+});
 
-//         console.log("Pizza");
-//       }
-//     }
+actionBar.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  if (e.key == "ArrowLeft") {
+    i = nextIndex(i, -1);
+    setActive(i);
+  }
+});
+
+actionBar.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  if (e.key == " ") {
+    console.log("Space");
+    const btn = e.target.closest(`button[data-action]`);
+    doAction(btn.dataset.action);
+  }
+});
+
+actionBar.addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("Space");
+  const btn = e.target.closest(`button[data-action]`);
+  if (!btn) return false;
+  doAction(btn.dataset.action);
+});
+
+function doAction(action) {
+  switch (action) {
+    case "attack":
+      console.log("attack");
+      break;
+    case "ability":
+      console.log("ability");
+
+      break;
+    case "item":
+      console.log("item");
+
+      break;
+    case "wait":
+      console.log("wait");
+
+      break;
+  }
+}
+
+function focusBoard() {
+  board.focus();
+}
+
+// SWAP FOCUS TO ACTIONBAR
+// board.addEventListener("keydown", (e) => {
+//   if (e.key == "p") {
+//     openActionBar();
 //   }
 // });
 
-// board.addEventListener("keydown", (e) => {
-//   e.preventDefault;
-//   if ("Escape") playerTurn = !playerTurn;
-//   console.log(playerTurn);
-// });
-
-// actionButtons.attack.disabled = true;
-actionButtons.attack.addEventListener("click", () => {
-  console.log("Attack");
-});
-actionButtons.ability.addEventListener("click", () => {
-  console.log("Ability");
-});
-actionButtons.item.addEventListener("click", () => {
-  console.log("Item");
-});
-actionButtons.wait.addEventListener("click", () => {
-  console.log("Wait");
-});
-
 initGame();
+
+openActionBar();
