@@ -57,13 +57,14 @@ let allUnits = [
     affiliation: 0,
     row: 2,
     col: 3,
+    strength: 15,
   }),
   new unitStats({
     playerId: 2,
     name: "Tyler",
     unitType: "Knight_2",
     affiliation: 1,
-    row: 6,
+    row: 3,
     col: 4,
   }),
 ];
@@ -82,7 +83,10 @@ async function runBattle() {
       phase = Phase.PLAYER_SELECT;
       await gates[Phase.PLAYER_SELECT].wait();
       console.log("Finished Player_Select");
-      checkAdjacent();
+      if (!checkAdjacent()) {
+        console.log("No adjacent");
+        actionButtons.attack.disabled = true;
+      }
       openActionBar();
 
       // Player Action
@@ -93,6 +97,7 @@ async function runBattle() {
       focusBoard();
       updatePlayable(selectedUnit);
       selectedUnit = null;
+      actionButtons.attack.disabled = false;
     }
     playerTurn = false;
 
@@ -134,8 +139,9 @@ if (i < 0) {
   btns[0].tabIndex = 0;
 }
 
-function setActive(index) {
-  btns.forEach((b, j) => (b.tabIndex = j == index ? 0 : -1));
+function setActive(index = 0) {
+  const enabled = btns.filter((b) => !b.disabled);
+  enabled.forEach((b, j) => (b.tabIndex = j == index ? 0 : -1));
   btns[index].focus();
 }
 
@@ -245,10 +251,12 @@ function checkAdjacent() {
   for (const [dR, dC] of directions) {
     const newRow = selectedUnit.row + dR;
     const newCol = selectedUnit.col + dC;
-    if (isOccupied(newRow, newCol)) {
-      return console.log("It Works");
+    if (enemyNear(newRow, newCol)) {
+      return true;
     }
+    // return false;
   }
+  return false;
   // return;
 }
 
@@ -378,6 +386,19 @@ function placeUnits(units) {
     const el = createPlayerNode(unit);
     t.appendChild(el);
   }
+}
+
+function enemyAt(r, c) {
+  if (playerTurn == true) {
+    return allUnits.find(
+      (u) => u.row === r && u.col === c && u.affiliation === 1
+    );
+  }
+}
+
+function enemyNear(r, c) {
+  if (enemyAt(r, c) == null) return;
+  return true;
 }
 
 function unitAt(r, c) {
@@ -538,10 +559,118 @@ actionBar.addEventListener("click", (e) => {
   doAction(btn.dataset.action);
 });
 
+// board.addEventListener("keydown"){
+//   e.preventDefault();
+//   if(doAction)
+// }
+
+let isTargeting = false;
+let unitHighlighted = false;
+let receivingUnit;
+
+function attack() {
+  selectedUnit.attackPlayer(receivingUnit);
+}
+
+function attackedUnit(r, c) {
+  let matches;
+  // console.log(r, c);
+  // console.log(allUnits);
+  matches = allUnits.filter((u) => u.row === r && u.col === c);
+  receivingUnit = matches[0];
+  // console.log(receivingUnit);
+  // selectedUnit.attackPlayer(receivingUnit);
+}
+
+function attackHighlight() {
+  const directions = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
+
+  for (const [dR, dC] of directions) {
+    const newRow = selectedUnit.row + dR;
+    const newCol = selectedUnit.col + dC;
+    tileAt(newRow, newCol).classList.add("attack");
+  }
+}
+
+function removeAttackHighlight() {
+  const directions = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
+
+  for (const [dR, dC] of directions) {
+    const newRow = selectedUnit.row + dR;
+    const newCol = selectedUnit.col + dC;
+    tileAt(newRow, newCol).classList.remove("attack");
+  }
+}
+
+function confirmHighlight(r, c) {
+  tileAt(r, c).classList.add("attack-confirm");
+}
+
+function removeConfirmHiglight() {
+  tileAt(receivingUnit.row, receivingUnit.col).classList.remove(
+    "attack-confirm"
+  );
+}
+
+board.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  if (!isTargeting) return false;
+  switch (e.key) {
+    case "ArrowUp":
+      if (enemyAt(selectedUnit.row - 1, selectedUnit.col))
+        confirmHighlight(selectedUnit.row - 1, selectedUnit.col);
+      attackedUnit(selectedUnit.row - 1, selectedUnit.col);
+      break;
+    case "ArrowDown":
+      if (enemyAt(selectedUnit.row + 1, selectedUnit.col))
+        confirmHighlight(selectedUnit.row + 1, selectedUnit.col);
+      attackedUnit(selectedUnit.row + 1, selectedUnit.col);
+      break;
+    case "ArrowRight":
+      if (enemyAt(selectedUnit.row, selectedUnit.col + 1))
+        confirmHighlight(selectedUnit.row, selectedUnit.col + 1);
+      attackedUnit(selectedUnit.row, selectedUnit.col + 1);
+      break;
+    case "ArrowLeft":
+      if (enemyAt(selectedUnit.row, selectedUnit.col - 1))
+        confirmHighlight(selectedUnit.row, selectedUnit.col - 1);
+      attackedUnit(selectedUnit.row, selectedUnit.col - 1);
+      break;
+  }
+
+  unitHighlighted = true;
+});
+
+board.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  if (unitHighlighted == false) return false;
+  if (e.key == " ") {
+    attack();
+    removeAttackHighlight();
+    removeConfirmHiglight();
+    unitHighlighted = false;
+    isTargeting = false;
+    gates[Phase.PLAYER_ACTION].done();
+  }
+});
+
 function doAction(action) {
   switch (action) {
     case "attack":
       console.log("attack");
+      isTargeting = true;
+      attackHighlight();
+      focusBoard();
       break;
     case "ability":
       console.log("ability");

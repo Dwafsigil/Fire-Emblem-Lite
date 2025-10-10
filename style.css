@@ -76,6 +76,14 @@ body {
   border: 2px solid green;
 }
 
+.attack {
+  border: 2px solid red;
+}
+
+.attack-confirm {
+  background: rgb(255, 98, 98);
+}
+
 /* The frame */
 .player {
   /* Positions relative to the nearest positioned ancestor */
