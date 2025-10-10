@@ -569,6 +569,7 @@ let unitHighlighted = false;
 let receivingUnit;
 
 function attack() {
+  if (!receivingUnit) return false;
   selectedUnit.attackPlayer(receivingUnit);
 }
 
@@ -617,6 +618,7 @@ function confirmHighlight(r, c) {
 }
 
 function removeConfirmHiglight() {
+  if (!receivingUnit) return false;
   tileAt(receivingUnit.row, receivingUnit.col).classList.remove(
     "attack-confirm"
   );
@@ -654,10 +656,12 @@ board.addEventListener("keydown", (e) => {
 board.addEventListener("keydown", (e) => {
   e.preventDefault();
   if (unitHighlighted == false) return false;
+  if (receivingUnit == null) return false;
   if (e.key == " ") {
     attack();
     removeAttackHighlight();
     removeConfirmHiglight();
+    receivingUnit = null;
     unitHighlighted = false;
     isTargeting = false;
     gates[Phase.PLAYER_ACTION].done();
