@@ -1,13 +1,15 @@
 import { unitStats } from "./unitStats.js";
 
+// Phase Variables ------------------------
 const Phase = {
-  PLAYER_TURN: "player_turn",
-  AWAIT_SELECT: "await_select",
-  AWAIT_ACTION: "await_action",
-  ANIMATING: "animating",
+  PLAYER_SELECT: "player_select",
+  PLAYER_ACTION: "player_action",
   ENEMY_TURN: "enemy_turn",
-  ENEMY_THINKING: "enemy_thinking",
 };
+let phase = Phase.PLAYER_SELECT;
+
+// Referencing UI ------------------------
+const board = document.querySelector(".board");
 const actionBar = document.querySelector(".action-bar");
 const btns = Array.from(document.querySelectorAll("button"));
 // console.log(btns);
@@ -17,21 +19,28 @@ const actionButtons = {
   item: actionBar.querySelector(`[data-action="item"]`),
   wait: actionBar.querySelector(`[data-action="wait"]`),
 };
+
+// Turn Logic Variables ------------------------
 let currentUnitsQueue = [];
 let playedUnits = [];
 
+//  All Obstacles -------------------------
 let obstacles = [];
+
+// Board Dimensions -------------------------
 const row = 8;
 const col = 8;
-// Holds current state of the player, position
-let playerTurn = true;
-// Holds Current hover position
+
+// Holds Current hover position -------------------------
 const hover = { row: 0, col: 0 };
-// Holds all highlighted tiels
+
+// Holds all highlighted tiles
 let highTile = [];
-const board = document.querySelector(".board");
+
+// Player related variables -------------------------
 let playerSelected = false;
 let selectedUnit;
+let playerTurn = true;
 let allUnits = [
   new unitStats({
     playerId: 0,
@@ -58,6 +67,63 @@ let allUnits = [
     col: 4,
   }),
 ];
+const gates = {
+  [Phase.PLAYER_SELECT]: makeGate(),
+  [Phase.PLAYER_ACTION]: makeGate(),
+  [Phase.ENEMY_TURN]: makeGate(),
+};
+async function runBattle() {
+  initGame();
+
+  while (true) {
+    initPlayerTurn();
+    while (hasPlayableUnits()) {
+      // Player Select
+      phase = Phase.PLAYER_SELECT;
+      await gates[Phase.PLAYER_SELECT].wait();
+      console.log("Finished Player_Select");
+      checkAdjacent();
+      openActionBar();
+
+      // Player Action
+      phase = Phase.PLAYER_ACTION;
+      await gates[Phase.PLAYER_ACTION].wait();
+
+      closeActionBar();
+      focusBoard();
+      updatePlayable(selectedUnit);
+      selectedUnit = null;
+    }
+    playerTurn = false;
+
+    phase = Phase.ENEMY_TURN;
+    await runEnemyTurn(); // ← waits until enemy finished
+    playerTurn = true;
+    console.log("No code for this yet lol");
+    if (isBattleOver()) break;
+  }
+}
+
+function isBattleOver() {}
+
+async function runEnemyTurn() {
+  console.log("inside the runEnemyTurn");
+  await initEnemyTurn();
+}
+
+function makeGate() {
+  let resolve = null;
+  return {
+    wait: () =>
+      new Promise((res) => {
+        resolve = res;
+      }),
+    done: (v) => {
+      resolve?.(v);
+      resolve = null;
+    },
+  };
+}
 
 console.log(allUnits);
 
@@ -103,17 +169,6 @@ function initGame() {
   board.focus();
 }
 
-function playGame() {
-  initGame();
-
-  // Per Turn
-  do {
-    initTurn();
-    if (checkExhaustedUnits) {
-      playerTurn = !playerTurn;
-    }
-  } while (true);
-}
 // let enemy = [];
 
 // console.log(allUnits[1]);
@@ -178,6 +233,24 @@ function moveHover(dr, dc) {
 }
 
 // && !obstacle(r, c)
+
+function checkAdjacent() {
+  const directions = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
+
+  for (const [dR, dC] of directions) {
+    const newRow = selectedUnit.row + dR;
+    const newCol = selectedUnit.col + dC;
+    if (isOccupied(newRow, newCol)) {
+      return console.log("It Works");
+    }
+  }
+  // return;
+}
 
 function updateObstacle() {
   obstacles = allUnits.map((e) => [e.row, e.col]);
@@ -308,13 +381,13 @@ function placeUnits(units) {
 }
 
 function unitAt(r, c) {
-  console.log("unitAt");
+  // console.log("unitAt");
 
   return allUnits.find((u) => u.row === r && u.col === c);
 }
 
 function isOccupied(r, c) {
-  console.log("isOccupied");
+  // console.log("isOccupied");
 
   if (unitAt(r, c) == null) return;
   return true;
@@ -325,10 +398,13 @@ function isOccupied(r, c) {
 
 // }
 
-function initTurn() {
+function initPlayerTurn() {
   currentUnitsQueue = allUnits.filter((u) => u.affiliation == 0);
 }
-// initTurn();
+
+function initEnemyTurn() {
+  currentUnitsQueue = allUnits.filter((u) => u.affiliation == 1);
+}
 
 function updatePlayable(unit) {
   if (playerTurn) {
@@ -356,6 +432,10 @@ function endTurn() {
       playerTurn = true;
     }
   }
+}
+
+function hasPlayableUnits() {
+  return currentUnitsQueue.length > 0;
 }
 
 // Event Listeners
@@ -396,6 +476,7 @@ console.log(currentUnitsQueue);
 // Select and Deslect Player with Space
 board.addEventListener("keydown", (e) => {
   e.preventDefault();
+  if (phase !== Phase.PLAYER_SELECT) return;
   // t = tileAt(hover.row, hover.col);
   // if (!isOccupied(hover.row, hover.col)) return;
   if (e.key == " " && isOccupied(hover.row, hover.col) && !playerSelected) {
@@ -419,6 +500,7 @@ board.addEventListener("keydown", (e) => {
     playerSelected = false;
     updateObstacle();
     console.log("Deselected Unit");
+    gates[Phase.PLAYER_SELECT].done();
   }
 });
 
@@ -471,6 +553,8 @@ function doAction(action) {
       break;
     case "wait":
       console.log("wait");
+      selectedUnit.playerWait();
+      gates[Phase.PLAYER_ACTION].done();
 
       break;
   }
@@ -487,6 +571,6 @@ function focusBoard() {
 //   }
 // });
 
-initGame();
+runBattle();
 
-openActionBar();
+// openActionBar();

@@ -57,4 +57,8 @@ export class unitStats {
     this.health -= damage;
     console.log(`${this.name} is now ${this.health} HP! `);
   }
+
+  playerWait() {
+    console.log("I'm chillin rn gang");
+  }
 }
