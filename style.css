@@ -41,9 +41,14 @@ body {
   box-shadow: 0 0 0;
 }
 
-.action-bar button:disabled {
+button[button-disabled="true"] {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+button[button-disabled="true"]:hover,
+button[button-disabled="true"]:focus {
+  outline: 2px solid #7aa2ff; /* example focus ring */
 }
 
 .board {

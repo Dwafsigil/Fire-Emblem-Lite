@@ -57,7 +57,7 @@ let allUnits = [
     affiliation: 0,
     row: 2,
     col: 3,
-    strength: 15,
+    strength: 20,
   }),
   new unitStats({
     playerId: 2,
@@ -85,19 +85,19 @@ async function runBattle() {
       console.log("Finished Player_Select");
       if (!checkAdjacent()) {
         console.log("No adjacent");
-        actionButtons.attack.disabled = true;
+        setDisabled(actionButtons.attack, true);
       }
       openActionBar();
 
       // Player Action
       phase = Phase.PLAYER_ACTION;
       await gates[Phase.PLAYER_ACTION].wait();
-
+      if (isBattleOver()) break;
       closeActionBar();
       focusBoard();
       updatePlayable(selectedUnit);
       selectedUnit = null;
-      actionButtons.attack.disabled = false;
+      setDisabled(actionButtons.attack, false);
     }
     playerTurn = false;
 
@@ -107,9 +107,28 @@ async function runBattle() {
     console.log("No code for this yet lol");
     if (isBattleOver()) break;
   }
+
+  console.log("Battle is Over!");
+}
+// Making Buttons Disabled
+function setDisabled(btn, disabled) {
+  btn.setAttribute("button-disabled", String(disabled));
 }
 
-function isBattleOver() {}
+function isBattleOver() {
+  console.log("isBattleOver");
+  let friendlyUnit = allUnits.filter((e) => {
+    e.affiliation == 0;
+  });
+  let enemyUnit = allUnits.filter((e) => {
+    e.affiliation == 1;
+  });
+  if (friendlyUnit.length == 0 || enemyUnit.length == 0) {
+    // console.log("Battle is over");
+    return true;
+  }
+  return false;
+}
 
 async function runEnemyTurn() {
   console.log("inside the runEnemyTurn");
@@ -236,6 +255,15 @@ function moveHover(dr, dc) {
 
   showHoverAt(r, c);
   return true;
+}
+
+function removeDead() {
+  // el.id = `player-${receivingUnit.playerId}`
+  console.log("Remove Dead");
+  allUnits = allUnits.filter((e) => e !== receivingUnit);
+  let t = tileAt(receivingUnit.row, receivingUnit.col);
+  t.removeChild(receivingUnit.node);
+  console.log(allUnits);
 }
 
 // && !obstacle(r, c)
@@ -659,6 +687,7 @@ board.addEventListener("keydown", (e) => {
   if (receivingUnit == null) return false;
   if (e.key == " ") {
     attack();
+    if (receivingUnit.checkDead()) removeDead();
     removeAttackHighlight();
     removeConfirmHiglight();
     receivingUnit = null;
@@ -671,6 +700,8 @@ board.addEventListener("keydown", (e) => {
 function doAction(action) {
   switch (action) {
     case "attack":
+      if (actionButtons.attack.getAttribute("button-disabled") === "true")
+        return;
       console.log("attack");
       isTargeting = true;
       attackHighlight();

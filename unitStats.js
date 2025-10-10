@@ -61,4 +61,9 @@ export class unitStats {
   playerWait() {
     console.log("I'm chillin rn gang");
   }
+
+  checkDead() {
+    if (this.health == 0) console.log(`${this.name} has fallen`);
+    return true;
+  }
 }
