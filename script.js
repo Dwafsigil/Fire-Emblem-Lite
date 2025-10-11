@@ -1,4 +1,5 @@
 import { unitStats } from "./unitStats.js";
+import { startMusic, playSfx, btnClick, hoverSound } from "./audio.js";
 
 // Phase Variables ------------------------
 const Phase = {
@@ -79,6 +80,9 @@ const gates = {
   [Phase.PLAYER_ACTION]: makeGate(),
   [Phase.ENEMY_TURN]: makeGate(),
 };
+
+// startMusic(10000);
+
 async function runBattle() {
   initGame();
 
@@ -131,6 +135,7 @@ function isBattleOver() {
   let friendlyUnit = allUnits.filter((e) => e.affiliation == 0);
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
   if (friendlyUnit.length == 0 || enemyUnit.length == 0) {
+    phaseText.textContent = "Game Over!";
     return true;
   }
   return false;
@@ -367,6 +372,7 @@ function moveHover(dr, dc) {
     if (obstacle(r, c)) return false;
   }
 
+  playSfx(hoverSound, 0.2, 0);
   showHoverAt(r, c);
   return true;
 }
@@ -639,6 +645,9 @@ board.addEventListener("keydown", (e) => {
       updatePlayable(selectedUnit);
 
       highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
+      // playSfx(btnClick, 0.5, 0);
+      playSfx(btnClick, 0.5, 0);
+
       return;
     }
   }
@@ -648,7 +657,10 @@ board.addEventListener("keydown", (e) => {
     // selectedUnit = null;
     playerSelected = false;
     updateObstacle();
+    playSfx(btnClick, 0.5, 0);
+
     gates[Phase.PLAYER_SELECT].done();
+    // playSfx(btnClick, 0.5, 0);
   }
 });
 
@@ -658,6 +670,7 @@ actionBar.addEventListener("keydown", (e) => {
   if (e.key == "ArrowRight") {
     i = nextIndex(i, 1);
     setActive(i);
+    playSfx(btnClick, 0.5, 0);
   }
 });
 
@@ -666,6 +679,7 @@ actionBar.addEventListener("keydown", (e) => {
   if (e.key == "ArrowLeft") {
     i = nextIndex(i, -1);
     setActive(i);
+    playSfx(btnClick, 0.5, 0);
   }
 });
 
@@ -674,6 +688,7 @@ actionBar.addEventListener("keydown", (e) => {
   if (e.key == " ") {
     const btn = e.target.closest(`button[data-action]`);
     doAction(btn.dataset.action);
+    playSfx(btnClick, 0.5, 0);
   }
 });
 
@@ -719,7 +734,8 @@ function attackHighlight() {
   for (const [dR, dC] of directions) {
     const newRow = selectedUnit.row + dR;
     const newCol = selectedUnit.col + dC;
-    tileAt(newRow, newCol).classList.add("attack");
+    if (tileAt(newRow, newCol) !== null)
+      tileAt(newRow, newCol).classList.add("attack");
   }
 }
 
@@ -734,7 +750,8 @@ function removeAttackHighlight() {
   for (const [dR, dC] of directions) {
     const newRow = selectedUnit.row + dR;
     const newCol = selectedUnit.col + dC;
-    tileAt(newRow, newCol).classList.remove("attack");
+    if (tileAt(newRow, newCol) !== null)
+      tileAt(newRow, newCol).classList.remove("attack");
   }
 }
 
@@ -790,6 +807,8 @@ board.addEventListener("keydown", (e) => {
     receivingUnit = null;
     unitHighlighted = false;
     isTargeting = false;
+    playSfx(btnClick, 0.5, 0);
+
     gates[Phase.PLAYER_ACTION].done();
   }
 });

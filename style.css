@@ -116,8 +116,42 @@ button[button-disabled="true"]:focus {
 
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
   transform: translate(-2px, -16px);
-  transform: translate;
+  /* transform: translate; */
+  animation: idle-discrete 0.9s steps(1, end) infinite;
 }
+
+@keyframes idle-discrete {
+  0% {
+    background-position-x: 0px;
+  }
+  25% {
+    background-position-x: -120px;
+  }
+  50% {
+    background-position-x: -240px;
+  }
+  75% {
+    background-position-x: -360px;
+  }
+  100% {
+    background-position-x: 0;
+  }
+}
+
+/* 
+} 
+  75% {
+    background-position-x: -690px;
+  }
+  100% {
+    background-position-x: 0px;
+  }} 
+  75% {
+    background-position-x: -690px;
+  }
+  100% {
+    background-position-x: 0px;
+  } */
 
 .highlight {
   background-color: rgb(190, 255, 190);
