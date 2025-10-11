@@ -12,7 +12,6 @@ let phase = Phase.PLAYER_SELECT;
 const board = document.querySelector(".board");
 const actionBar = document.querySelector(".action-bar");
 const btns = Array.from(document.querySelectorAll("button"));
-// console.log(btns);
 const actionButtons = {
   attack: actionBar.querySelector(`[data-action="attack"]`),
   ability: actionBar.querySelector(`[data-action="ability"]`),
@@ -49,6 +48,8 @@ let allUnits = [
     affiliation: 0,
     row: 1,
     col: 1,
+    strength: 15,
+    movement: 1,
   }),
   new unitStats({
     playerId: 1,
@@ -66,6 +67,7 @@ let allUnits = [
     affiliation: 1,
     row: 3,
     col: 4,
+    movement: 1,
   }),
 ];
 const gates = {
@@ -92,19 +94,19 @@ async function runBattle() {
       // Player Action
       phase = Phase.PLAYER_ACTION;
       await gates[Phase.PLAYER_ACTION].wait();
-      if (isBattleOver()) break;
       closeActionBar();
       focusBoard();
       updatePlayable(selectedUnit);
       selectedUnit = null;
       setDisabled(actionButtons.attack, false);
+      if (isBattleOver()) break;
     }
     playerTurn = false;
 
     phase = Phase.ENEMY_TURN;
-    await runEnemyTurn(); // ← waits until enemy finished
+    await runEnemyTurn();
     playerTurn = true;
-    console.log("No code for this yet lol");
+    console.log("Enemy Turn Phase");
     if (isBattleOver()) break;
   }
 
@@ -117,12 +119,9 @@ function setDisabled(btn, disabled) {
 
 function isBattleOver() {
   console.log("isBattleOver");
-  let friendlyUnit = allUnits.filter((e) => {
-    e.affiliation == 0;
-  });
-  let enemyUnit = allUnits.filter((e) => {
-    e.affiliation == 1;
-  });
+  let friendlyUnit = allUnits.filter((e) => e.affiliation == 0);
+  let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
+  console.log(friendlyUnit, enemyUnit);
   if (friendlyUnit.length == 0 || enemyUnit.length == 0) {
     // console.log("Battle is over");
     return true;
@@ -130,9 +129,133 @@ function isBattleOver() {
   return false;
 }
 
+// async function runEnemyTurn() {
+//   console.log("inside the runEnemyTurn");
+//   await initEnemyTurn();
+// }
+
+let enemyMoves = [];
+let closestFriendly;
+let optimalMove;
+
+const delay = (delayInms) => {
+  return new Promise((resolve) => setTimeout(resolve, delayInms));
+};
+
 async function runEnemyTurn() {
-  console.log("inside the runEnemyTurn");
-  await initEnemyTurn();
+  let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
+  for (const u of enemyUnit) {
+    enemyPossibleMoves(u.row, u.col, u.movement);
+    console.log(enemyMoves);
+    findClosestFriendly(u);
+    console.log(closestFriendly);
+    checkOptimalMove();
+    console.log(optimalMove);
+    console.log(enemyUnit);
+    enemyMove(u);
+    console.log(`Ran Enemy Turn ${u.name}`);
+    await delay(1200);
+    enemyMoves = [];
+    closestFriendly = null;
+    optimalMove = [];
+  }
+}
+
+function enemyMove(enemyUnit) {
+  console.log("Inside enemyMove");
+  console.log(enemyUnit);
+  const [[r, c]] = optimalMove;
+  console.log(r, c);
+  let t = tileAt(r, c);
+  console.log(t);
+  t.appendChild(enemyUnit.node);
+  enemyUnit.row = r;
+  enemyUnit.col = c;
+}
+
+function checkOptimalMove() {
+  console.log("Check Optimal Move");
+
+  let closestDistance = 1000;
+  let tempDistance;
+  for (const [r, c] of enemyMoves) {
+    console.log(r, c);
+    tempDistance = Math.sqrt(
+      Math.pow(closestFriendly.row - r, 2) +
+        Math.pow(closestFriendly.col - c, 2)
+    );
+    console.log(tempDistance);
+
+    if (tempDistance < closestDistance) {
+      closestDistance = tempDistance;
+      optimalMove = [[r, c]];
+    }
+  }
+  console.log(closestDistance);
+  console.log(`optimalMove: ${optimalMove}`);
+}
+
+function findClosestFriendly(enemyUnit) {
+  console.log("findClosestFriendly");
+
+  let friendlyUnit = allUnits.filter((e) => e.affiliation == 0);
+  let closestDistance = 1000;
+  let tempDistance;
+  for (const u of friendlyUnit) {
+    tempDistance = Math.sqrt(
+      Math.pow(u.row - enemyUnit.row, 2) + Math.pow(u.col - enemyUnit.col, 2)
+    );
+    if (tempDistance < closestDistance) {
+      closestDistance = tempDistance;
+      closestFriendly = u;
+    }
+  }
+}
+// Get possible moves for an enemy and push into an array. r,c values are pushed in to enemy Moves
+function enemyPossibleMoves(startRow, startCol, moveRange) {
+  console.log("Enemy Possible Moves");
+  const reachable = new Set();
+  const queue = [[startRow, startCol, moveRange]];
+  const visited = new Set();
+
+  while (queue.length > 0) {
+    const [r, c, movementLeft] = queue.shift();
+    reachable.add(`${r},${c}`);
+    if (movementLeft === 0) continue;
+
+    const directions = [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+    ];
+
+    for (const [dR, dC] of directions) {
+      const newRow = r + dR;
+      const newCol = c + dC;
+      const key = `${newRow},${newCol}`;
+
+      if (
+        newRow >= 0 &&
+        newRow < row &&
+        newCol >= 0 &&
+        newCol < col &&
+        !visited.has(key)
+      ) {
+        visited.add(key);
+        queue.push([newRow, newCol, movementLeft - 1]);
+      }
+    }
+  }
+
+  for (const key of reachable) {
+    let [r, c] = key.split(",").map(Number);
+    enemyMoves.push([r, c]);
+    // tileAt(r, c).classList.add("highlight");
+  }
+
+  console.log("enemyPossibleMoves");
+  // console.log(highTile);
 }
 
 function makeGate() {
@@ -471,16 +594,6 @@ function checkPlayable(unit) {
   console.log(currentUnitsQueue);
   console.log(unit);
   return currentUnitsQueue.some((e) => e.playerId == unit.playerId);
-}
-
-function endTurn() {
-  if (currentUnitsQueue.length == 0) {
-    if (playerTurn) {
-      playerTurn = false;
-    } else {
-      playerTurn = true;
-    }
-  }
 }
 
 function hasPlayableUnits() {
