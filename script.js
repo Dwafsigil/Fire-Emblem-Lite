@@ -152,6 +152,10 @@ async function runEnemyTurn() {
     checkOptimalMove();
     console.log(optimalMove);
     console.log(enemyUnit);
+    if (checkAdjacent(u)) {
+      enemyAttack(u);
+      continue;
+    }
     enemyMove(u);
     console.log(`Ran Enemy Turn ${u.name}`);
     await delay(1200);
@@ -159,6 +163,11 @@ async function runEnemyTurn() {
     closestFriendly = null;
     optimalMove = [];
   }
+}
+
+function enemyAttack(enemyUnit) {
+  console.log("attacked");
+  enemyUnit.attackPlayer(closestFriendly);
 }
 
 function enemyMove(enemyUnit) {
@@ -178,6 +187,9 @@ function checkOptimalMove() {
 
   let closestDistance = 1000;
   let tempDistance;
+
+  console.log(enemyMoves);
+
   for (const [r, c] of enemyMoves) {
     console.log(r, c);
     tempDistance = Math.sqrt(
@@ -250,6 +262,7 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
 
   for (const key of reachable) {
     let [r, c] = key.split(",").map(Number);
+    if (isOccupied(r, c)) continue;
     enemyMoves.push([r, c]);
     // tileAt(r, c).classList.add("highlight");
   }
@@ -391,21 +404,31 @@ function removeDead() {
 
 // && !obstacle(r, c)
 
-function checkAdjacent() {
+function checkAdjacent(unit = null) {
   const directions = [
     [-1, 0],
     [1, 0],
     [0, -1],
     [0, 1],
   ];
-
-  for (const [dR, dC] of directions) {
-    const newRow = selectedUnit.row + dR;
-    const newCol = selectedUnit.col + dC;
-    if (enemyNear(newRow, newCol)) {
-      return true;
+  if (playerTurn == true) {
+    for (const [dR, dC] of directions) {
+      const newRow = selectedUnit.row + dR;
+      const newCol = selectedUnit.col + dC;
+      if (enemyNear(newRow, newCol)) {
+        return true;
+      }
+      // return false;
     }
-    // return false;
+  } else {
+    for (const [dR, dC] of directions) {
+      const newRow = unit.row + dR;
+      const newCol = unit.col + dC;
+      if (enemyNear(newRow, newCol)) {
+        return true;
+      }
+      // return false;
+    }
   }
   return false;
   // return;
@@ -543,6 +566,11 @@ function enemyAt(r, c) {
   if (playerTurn == true) {
     return allUnits.find(
       (u) => u.row === r && u.col === c && u.affiliation === 1
+    );
+  }
+  if (playerTurn == false) {
+    return allUnits.find(
+      (u) => u.row === r && u.col === c && u.affiliation === 0
     );
   }
 }
