@@ -122,3 +122,30 @@ button[button-disabled="true"]:focus {
 .highlight {
   background-color: rgb(190, 255, 190);
 }
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.heading {
+  display: flex;
+  gap: 12px;
+  background: #374151;
+  color: white;
+  padding: 8px 10px;
+  /* border-radius: 10px; */
+  position: static;
+  width: 400px;
+  height: 30px;
+  justify-content: space-between;
+}
+
+.phase {
+  color: white;
+}
+
+.turn {
+  color: white;
+}

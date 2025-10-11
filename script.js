@@ -18,6 +18,8 @@ const actionButtons = {
   item: actionBar.querySelector(`[data-action="item"]`),
   wait: actionBar.querySelector(`[data-action="wait"]`),
 };
+const phaseText = document.querySelector(".phase");
+const turnText = document.querySelector(".turn");
 
 // Turn Logic Variables ------------------------
 let currentUnitsQueue = [];
@@ -25,6 +27,7 @@ let playedUnits = [];
 
 //  All Obstacles -------------------------
 let obstacles = [];
+let turnCounter = 1;
 
 // Board Dimensions -------------------------
 const row = 8;
@@ -82,12 +85,14 @@ async function runBattle() {
   while (true) {
     initPlayerTurn();
     while (hasPlayableUnits()) {
+      turnText.textContent = `Turn: ${turnCounter}`;
       // Player Select
       phase = Phase.PLAYER_SELECT;
+      phaseText.textContent = "Player Turn";
       await gates[Phase.PLAYER_SELECT].wait();
+
       console.log("Finished Player_Select");
       if (!checkAdjacent()) {
-        console.log("No adjacent");
         setDisabled(actionButtons.attack, true);
       }
       openActionBar();
@@ -100,15 +105,19 @@ async function runBattle() {
       updatePlayable(selectedUnit);
       selectedUnit = null;
       setDisabled(actionButtons.attack, false);
+      console.log("Finished Player_Action");
       if (isBattleOver()) break;
     }
     playerTurn = false;
 
     phase = Phase.ENEMY_TURN;
+    phaseText.textContent = "Enemy Turn";
+
     await runEnemyTurn();
     playerTurn = true;
-    console.log("Enemy Turn Phase");
+    console.log("Finished Enemy Turn");
     if (isBattleOver()) break;
+    turnCounter++;
   }
 
   console.log("Battle is Over!");
@@ -119,21 +128,13 @@ function setDisabled(btn, disabled) {
 }
 
 function isBattleOver() {
-  console.log("isBattleOver");
   let friendlyUnit = allUnits.filter((e) => e.affiliation == 0);
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
-  console.log(friendlyUnit, enemyUnit);
   if (friendlyUnit.length == 0 || enemyUnit.length == 0) {
-    // console.log("Battle is over");
     return true;
   }
   return false;
 }
-
-// async function runEnemyTurn() {
-//   console.log("inside the runEnemyTurn");
-//   await initEnemyTurn();
-// }
 
 let enemyMoves = [];
 let closestFriendly;
@@ -147,12 +148,8 @@ async function runEnemyTurn() {
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
   for (const u of enemyUnit) {
     enemyPossibleMoves(u.row, u.col, u.movement);
-    console.log(enemyMoves);
     findClosestFriendly(u);
-    console.log(closestFriendly);
     checkOptimalMove();
-    console.log(optimalMove);
-    console.log(enemyUnit);
     if (checkAdjacent(u)) {
       enemyAttack(u);
       if (closestFriendly.checkDead()) removeDead();
@@ -168,50 +165,37 @@ async function runEnemyTurn() {
 }
 
 function enemyAttack(enemyUnit) {
-  console.log("attacked");
   enemyUnit.attackPlayer(closestFriendly);
 }
 
 function enemyMove(enemyUnit) {
-  console.log("Inside enemyMove");
-  console.log(enemyUnit);
   const [[r, c]] = optimalMove;
-  console.log(r, c);
+
   let t = tileAt(r, c);
-  console.log(t);
+
   t.appendChild(enemyUnit.node);
   enemyUnit.row = r;
   enemyUnit.col = c;
 }
 
 function checkOptimalMove() {
-  console.log("Check Optimal Move");
-
   let closestDistance = 1000;
   let tempDistance;
 
-  console.log(enemyMoves);
-
   for (const [r, c] of enemyMoves) {
-    console.log(r, c);
     tempDistance = Math.sqrt(
       Math.pow(closestFriendly.row - r, 2) +
         Math.pow(closestFriendly.col - c, 2)
     );
-    console.log(tempDistance);
 
     if (tempDistance < closestDistance) {
       closestDistance = tempDistance;
       optimalMove = [[r, c]];
     }
   }
-  console.log(closestDistance);
-  console.log(`optimalMove: ${optimalMove}`);
 }
 
 function findClosestFriendly(enemyUnit) {
-  console.log("findClosestFriendly");
-
   let friendlyUnit = allUnits.filter((e) => e.affiliation == 0);
   let closestDistance = 1000;
   let tempDistance;
@@ -227,7 +211,6 @@ function findClosestFriendly(enemyUnit) {
 }
 // Get possible moves for an enemy and push into an array. r,c values are pushed in to enemy Moves
 function enemyPossibleMoves(startRow, startCol, moveRange) {
-  console.log("Enemy Possible Moves");
   const reachable = new Set();
   const queue = [[startRow, startCol, moveRange]];
   const visited = new Set();
@@ -268,9 +251,6 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
     enemyMoves.push([r, c]);
     // tileAt(r, c).classList.add("highlight");
   }
-
-  console.log("enemyPossibleMoves");
-  // console.log(highTile);
 }
 
 function makeGate() {
@@ -286,8 +266,6 @@ function makeGate() {
     },
   };
 }
-
-console.log(allUnits);
 
 // Action Buttons
 let i = btns.findIndex((b) => b.tabIndex == 0);
@@ -333,8 +311,6 @@ function initGame() {
 }
 
 // let enemy = [];
-
-// console.log(allUnits[1]);
 
 // Create 8x8 board
 function createBoard(row, col) {
@@ -397,7 +373,6 @@ function moveHover(dr, dc) {
 
 function removeDead() {
   // el.id = `player-${receivingUnit.playerId}`
-  console.log("Remove Dead");
 
   if (playerTurn == true) {
     allUnits = allUnits.filter((e) => e !== receivingUnit);
@@ -408,7 +383,6 @@ function removeDead() {
     let t = tileAt(closestFriendly.row, closestFriendly.col);
     t.removeChild(closestFriendly.node);
   }
-  console.log(allUnits);
 }
 
 // && !obstacle(r, c)
@@ -445,13 +419,9 @@ function checkAdjacent(unit = null) {
 
 function updateObstacle() {
   obstacles = allUnits.map((e) => [e.row, e.col]);
-  console.log("updateObstacle");
-
-  // console.log(obstacles);
 }
 
 function obstacle(r, c) {
-  // console.log(obstacle);
   return allUnits.some((e) => e.row == r && e.col == c && e !== selectedUnit);
 }
 
@@ -468,7 +438,7 @@ function placePlayer(r, c) {
   selectedUnit.row = r;
   selectedUnit.col = c;
   const t = tileAt(r, c);
-  // console.log(selectedUnit.node);
+
   t.appendChild(selectedUnit.node);
 }
 
@@ -528,9 +498,6 @@ function highlightMove(startRow, startCol, moveRange) {
     highTile.push([r, c]);
     tileAt(r, c).classList.add("highlight");
   }
-
-  console.log("highlightTiles");
-  // console.log(highTile);
 }
 
 //  Remove Highlighted Tiles
@@ -546,7 +513,7 @@ function clearHighTile() {
 
 function highlightBounds(r, c) {
   if (highTile.length == 0) return true;
-  // console.log(highTile);
+
   return highTile.some((arr) => arr[0] == r && arr[1] == c);
 }
 
@@ -590,14 +557,10 @@ function enemyNear(r, c) {
 }
 
 function unitAt(r, c) {
-  // console.log("unitAt");
-
   return allUnits.find((u) => u.row === r && u.col === c);
 }
 
 function isOccupied(r, c) {
-  // console.log("isOccupied");
-
   if (unitAt(r, c) == null) return;
   return true;
 }
@@ -622,14 +585,10 @@ function updatePlayable(unit) {
         (u) => u.playerId !== unit.playerId
       );
     }
-
-    console.log(currentUnitsQueue);
   }
 }
 
 function checkPlayable(unit) {
-  console.log(currentUnitsQueue);
-  console.log(unit);
   return currentUnitsQueue.some((e) => e.playerId == unit.playerId);
 }
 
@@ -641,7 +600,6 @@ function hasPlayableUnits() {
 
 // To move Hover and Player with Arrow Keys
 board.addEventListener("keydown", (e) => {
-  console.log(e.key);
   const moves = {
     ArrowUp: [-1, 0],
     ArrowDown: [1, 0],
@@ -653,9 +611,8 @@ board.addEventListener("keydown", (e) => {
     e.preventDefault();
     removeHover();
     moveHover(...moves[e.key]);
-    // console.log(`${hover.row}:${hover.col}`);
+
     if (playerSelected) {
-      // console.log("pie");
       movePlayer(...moves[e.key]);
       // removeNode(hover.row, hover.col);
       // removeHighlight();
@@ -667,9 +624,6 @@ board.addEventListener("keydown", (e) => {
 });
 
 updatePlayable();
-console.log(currentUnitsQueue);
-
-// console.log(currentUnitsQueue);
 
 // CHANGE THIS UP
 // Select and Deslect Player with Space
@@ -683,13 +637,9 @@ board.addEventListener("keydown", (e) => {
     if (checkPlayable(selectedUnit)) {
       playerSelected = true;
       updatePlayable(selectedUnit);
-      // console.log(checkPlayable());
-      console.log(currentUnitsQueue);
 
-      // console.log(selectedUnit);
       highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
       return;
-      // console.log("hehe");
     }
   }
   if (e.key == " " && playerSelected == true) {
@@ -698,7 +648,6 @@ board.addEventListener("keydown", (e) => {
     // selectedUnit = null;
     playerSelected = false;
     updateObstacle();
-    console.log("Deselected Unit");
     gates[Phase.PLAYER_SELECT].done();
   }
 });
@@ -723,7 +672,6 @@ actionBar.addEventListener("keydown", (e) => {
 actionBar.addEventListener("keydown", (e) => {
   e.preventDefault();
   if (e.key == " ") {
-    console.log("Space");
     const btn = e.target.closest(`button[data-action]`);
     doAction(btn.dataset.action);
   }
@@ -731,7 +679,7 @@ actionBar.addEventListener("keydown", (e) => {
 
 actionBar.addEventListener("click", (e) => {
   e.preventDefault();
-  console.log("Space");
+
   const btn = e.target.closest(`button[data-action]`);
   if (!btn) return false;
   doAction(btn.dataset.action);
@@ -753,11 +701,10 @@ function attack() {
 
 function attackedUnit(r, c) {
   let matches;
-  // console.log(r, c);
-  // console.log(allUnits);
+
   matches = allUnits.filter((u) => u.row === r && u.col === c);
   receivingUnit = matches[0];
-  // console.log(receivingUnit);
+
   // selectedUnit.attackPlayer(receivingUnit);
 }
 
