@@ -68,6 +68,7 @@ let allUnits = [
     row: 3,
     col: 4,
     movement: 1,
+    strength: 20,
   }),
 ];
 const gates = {
@@ -154,6 +155,7 @@ async function runEnemyTurn() {
     console.log(enemyUnit);
     if (checkAdjacent(u)) {
       enemyAttack(u);
+      if (closestFriendly.checkDead()) removeDead();
       continue;
     }
     enemyMove(u);
@@ -396,9 +398,16 @@ function moveHover(dr, dc) {
 function removeDead() {
   // el.id = `player-${receivingUnit.playerId}`
   console.log("Remove Dead");
-  allUnits = allUnits.filter((e) => e !== receivingUnit);
-  let t = tileAt(receivingUnit.row, receivingUnit.col);
-  t.removeChild(receivingUnit.node);
+
+  if (playerTurn == true) {
+    allUnits = allUnits.filter((e) => e !== receivingUnit);
+    let t = tileAt(receivingUnit.row, receivingUnit.col);
+    t.removeChild(receivingUnit.node);
+  } else {
+    allUnits = allUnits.filter((e) => e !== closestFriendly);
+    let t = tileAt(closestFriendly.row, closestFriendly.col);
+    t.removeChild(closestFriendly.node);
+  }
   console.log(allUnits);
 }
 
