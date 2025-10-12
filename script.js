@@ -79,6 +79,16 @@ let allUnits = [
     affiliation: 1,
     row: 3,
     col: 4,
+    movement: 2,
+    strength: 20,
+  }),
+  new unitStats({
+    playerId: 2,
+    name: "Emi",
+    unitType: "Knight_2",
+    affiliation: 1,
+    row: 5,
+    col: 4,
     movement: 1,
     strength: 20,
   }),
@@ -172,6 +182,9 @@ const delay = (delayInms) => {
 async function runEnemyTurn() {
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
   for (const u of enemyUnit) {
+    enemyMoves = [];
+    closestFriendly = null;
+    optimalMove = [];
     enemyPossibleMoves(u.row, u.col, u.movement);
     findClosestFriendly(u);
     checkOptimalMove();
@@ -187,18 +200,8 @@ async function runEnemyTurn() {
       }
     }
 
-    // enemyMove(u);
-    // if (checkAdjacent(u)) {
-    //   enemyAttack(u);
-    //   if (closestFriendly.checkDead()) {
-    //     removeDead();
-    //   }
-    //   continue;
-    // }
     console.log(`Ran Enemy Turn ${u.name}`);
-    enemyMoves = [];
-    closestFriendly = null;
-    optimalMove = [];
+    await delay(2000);
   }
 }
 
@@ -211,6 +214,8 @@ function enemyAttack(enemyUnit) {
 }
 
 function enemyMove(enemyUnit) {
+  if (!closestFriendly) return;
+
   const [[r, c]] = optimalMove;
 
   let t = tileAt(r, c);
@@ -223,7 +228,7 @@ function enemyMove(enemyUnit) {
 function checkOptimalMove() {
   let closestDistance = 1000;
   let tempDistance;
-
+  if (!closestFriendly) return;
   for (const [r, c] of enemyMoves) {
     tempDistance = Math.sqrt(
       Math.pow(closestFriendly.row - r, 2) +
