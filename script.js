@@ -1,5 +1,13 @@
 import { unitStats } from "./unitStats.js";
-import { startMusic, playSfx, btnClick, hoverSound } from "./audio.js";
+import {
+  startMusic,
+  playSfx,
+  btnClick,
+  hoverSound,
+  swordHit,
+  hurtGrunt,
+  deadGrunt,
+} from "./audio.js";
 
 // Phase Variables ------------------------
 const Phase = {
@@ -81,7 +89,7 @@ const gates = {
   [Phase.ENEMY_TURN]: makeGate(),
 };
 
-// startMusic(10000);
+startMusic(1000);
 
 async function runBattle() {
   initGame();
@@ -114,10 +122,9 @@ async function runBattle() {
       if (isBattleOver()) break;
     }
     playerTurn = false;
-
-    phase = Phase.ENEMY_TURN;
     phaseText.textContent = "Enemy Turn";
-
+    await delay(1500);
+    phase = Phase.ENEMY_TURN;
     await runEnemyTurn();
     playerTurn = true;
     console.log("Finished Enemy Turn");
@@ -150,7 +157,7 @@ const delay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
 };
 
-function runEnemyTurn() {
+async function runEnemyTurn() {
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
   for (const u of enemyUnit) {
     enemyPossibleMoves(u.row, u.col, u.movement);
@@ -746,10 +753,12 @@ function playAnim(unit, className, delay) {
 
 function attackAnimation(unit) {
   playAnim(unit, "attack3", 600);
+  playSfx(swordHit, 0.5, 0);
 }
 
 function hurtAnimation(unit) {
   playAnim(unit, "hurt", 500);
+  playSfx(hurtGrunt, 0.3, 200);
 }
 
 async function deadAnimation(unit) {
@@ -759,7 +768,7 @@ async function deadAnimation(unit) {
     `url("assets/${unit.unitType}/dead.png")`
   );
   unit.node.classList.add("dead");
-
+  playSfx(deadGrunt, 0.2, 200);
   // removeDead();
 }
 

@@ -1,6 +1,10 @@
 const bgm = document.querySelector("#bgm");
 export const btnClick = new Audio("sounds/button_click.wav");
 export const hoverSound = new Audio("sounds/hover_tile.mp3");
+export const swordHit = new Audio("sounds/sword_hit.wav");
+export const hurtGrunt = new Audio("sounds/hurt_sound.wav");
+export const deadGrunt = new Audio("sounds/dead_sound.wav");
+
 bgm.volume = 0.06;
 bgm.loop = true;
 
