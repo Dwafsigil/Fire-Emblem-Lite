@@ -163,6 +163,7 @@ async function runEnemyTurn() {
     enemyPossibleMoves(u.row, u.col, u.movement);
     findClosestFriendly(u);
     checkOptimalMove();
+    enemyMove(u);
     if (checkAdjacent(u)) {
       enemyAttack(u);
       if (closestFriendly.checkDead()) {
@@ -170,7 +171,6 @@ async function runEnemyTurn() {
       }
       continue;
     }
-    enemyMove(u);
     console.log(`Ran Enemy Turn ${u.name}`);
     enemyMoves = [];
     closestFriendly = null;
