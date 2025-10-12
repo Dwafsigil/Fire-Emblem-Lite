@@ -84,42 +84,54 @@ let allUnits = [
   }),
 ];
 const gates = {
-  [Phase.PLAYER_SELECT]: makeGate(),
-  [Phase.PLAYER_ACTION]: makeGate(),
-  [Phase.ENEMY_TURN]: makeGate(),
+  [Phase.PLAYER_SELECT]: createGate(),
+  [Phase.PLAYER_ACTION]: createGate(),
+  [Phase.ENEMY_TURN]: createGate(),
 };
 
-startMusic(1000);
+// startMusic(1000);
 
 async function runBattle() {
   initGame();
 
   while (true) {
-    initPlayerTurn();
-    while (hasPlayableUnits()) {
-      turnText.textContent = `Turn: ${turnCounter}`;
-      // Player Select
-      if (isBattleOver()) break;
-      phase = Phase.PLAYER_SELECT;
-      phaseText.textContent = "Player Turn";
-      await gates[Phase.PLAYER_SELECT].wait();
-
-      console.log("Finished Player_Select");
-      if (!checkAdjacent()) {
-        setDisabled(actionButtons.attack, true);
-      }
-      openActionBar();
-
-      // Player Action
-      phase = Phase.PLAYER_ACTION;
-      await gates[Phase.PLAYER_ACTION].wait();
-      closeActionBar();
-      focusBoard();
-      updatePlayable(selectedUnit);
-      selectedUnit = null;
+    try {
       setDisabled(actionButtons.attack, false);
-      console.log("Finished Player_Action");
-      if (isBattleOver()) break;
+      initPlayerTurn();
+      while (hasPlayableUnits()) {
+        turnText.textContent = `Turn: ${turnCounter}`;
+        // Player Select
+        if (isBattleOver()) break;
+        phase = Phase.PLAYER_SELECT;
+        phaseText.textContent = "Player Select";
+        await gates[Phase.PLAYER_SELECT].wait();
+        if (!checkAdjacent(selectedUnit)) {
+          setDisabled(actionButtons.attack, true);
+        }
+        console.log("Finished Player_Select");
+        // if (!checkAdjacent()) {
+        //   setDisabled(actionButtons.attack, true);
+        // }
+        // openActionBar();
+
+        // Player Action
+        phase = Phase.PLAYER_ACTION;
+        phaseText.textContent = "Player Action";
+
+        await gates[Phase.PLAYER_ACTION].wait();
+        closeActionBar();
+        focusBoard();
+        updatePlayable(selectedUnit);
+        selectedUnit = null;
+        setDisabled(actionButtons.attack, false);
+        console.log("Finished Player_Action");
+        if (isBattleOver()) break;
+      }
+    } catch (e) {
+      if (e == CANCEL) {
+        continue;
+      }
+      throw e;
     }
     playerTurn = false;
     phaseText.textContent = "Enemy Turn";
@@ -163,6 +175,7 @@ async function runEnemyTurn() {
     enemyPossibleMoves(u.row, u.col, u.movement);
     findClosestFriendly(u);
     checkOptimalMove();
+
     enemyMove(u);
     if (checkAdjacent(u)) {
       enemyAttack(u);
@@ -271,19 +284,61 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
   }
 }
 
-function makeGate() {
-  let resolve = null;
+export const CANCEL = Symbol("CANCEL");
+
+export function createGate() {
+  let resolve, reject;
+  // one outstanding promise per gate
+  let promise = new Promise((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+
+  const reset = () => {
+    promise = new Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+  };
+
   return {
-    wait: () =>
-      new Promise((res) => {
-        resolve = res;
-      }),
-    done: (v) => {
-      resolve?.(v);
-      resolve = null;
+    // Wait for this phase to complete; always returns the same promise
+    wait() {
+      return promise;
     },
+
+    // Resolve the current wait (advance phase)
+    open(value) {
+      resolve?.(value);
+      reset();
+    },
+
+    // Reject the current wait (backtrack/abort this phase)
+    cancel(reason = CANCEL) {
+      reject?.(reason);
+      reset();
+    },
+
+    // Optional helpers
+    isWaiting() {
+      return !!resolve;
+    }, // true when a wait is in-flight
   };
 }
+
+// function makeGate() {
+//   let resolve = null;
+//   return {
+//     wait: () =>
+//       new Promise((res) => {
+//         resolve = res;
+//       }),
+//     done: (v) => {
+//       resolve?.(v);
+//       resolve = null;
+//     },
+//   };
+// }
 
 // Action Buttons
 let i = btns.findIndex((b) => b.tabIndex == 0);
@@ -466,6 +521,7 @@ function inBounds(r, c) {
 }
 
 function placePlayer(r, c) {
+  console.log("placePlayer");
   if (!inBounds(hover.row, hover.col)) return false;
   selectedUnit.row = r;
   selectedUnit.col = c;
@@ -491,6 +547,7 @@ function movePlayer(dr, dc) {
 
 // Highlight possible moves
 function highlightMove(startRow, startCol, moveRange) {
+  highTile = [];
   const reachable = new Set();
   const queue = [[startRow, startCol, moveRange]];
   const visited = new Set();
@@ -584,7 +641,7 @@ function enemyAt(r, c) {
 }
 
 function enemyNear(r, c) {
-  if (enemyAt(r, c) == null) return;
+  if (enemyAt(r, c) == null) return false;
   return true;
 }
 
@@ -639,6 +696,7 @@ board.addEventListener("keydown", (e) => {
     ArrowLeft: [0, -1],
   };
 
+  if (attackOn == true) return;
   if (moves[e.key]) {
     e.preventDefault();
     removeHover();
@@ -657,9 +715,12 @@ board.addEventListener("keydown", (e) => {
 
 updatePlayable();
 
+let startRow;
+let startCol;
 // CHANGE THIS UP
 // Select and Deslect Player with Space
 board.addEventListener("keydown", (e) => {
+  console.log("detecting spacebar");
   e.preventDefault();
   if (phase !== Phase.PLAYER_SELECT) return;
   // t = tileAt(hover.row, hover.col);
@@ -667,30 +728,31 @@ board.addEventListener("keydown", (e) => {
   if (e.key == " " && isOccupied(hover.row, hover.col) && !playerSelected) {
     selectedUnit = unitAt(hover.row, hover.col);
     if (checkPlayable(selectedUnit)) {
+      startRow = hover.row;
+      startCol = hover.col;
       playerSelected = true;
       updatePlayable(selectedUnit);
-
       highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
-      // playSfx(btnClick, 0.5, 0);
       playSfx(btnClick, 0.5, 0);
 
       return;
     }
   }
   if (e.key == " " && playerSelected == true) {
+    console.log("Inside deselect");
     removeHighlight();
     clearHighTile();
     // selectedUnit = null;
     playerSelected = false;
     updateObstacle();
     playSfx(btnClick, 0.5, 0);
-
-    gates[Phase.PLAYER_SELECT].done();
+    openActionBar();
+    console.log(selectedUnit.row, selectedUnit.col);
+    gates[Phase.PLAYER_SELECT].open(selectedUnit);
     // playSfx(btnClick, 0.5, 0);
   }
 });
 
-// actionButtons.attack.disabled = true;
 actionBar.addEventListener("keydown", (e) => {
   e.preventDefault();
   if (e.key == "ArrowRight") {
@@ -711,6 +773,7 @@ actionBar.addEventListener("keydown", (e) => {
 
 actionBar.addEventListener("keydown", (e) => {
   e.preventDefault();
+  // console.log(e.key);
   if (e.key == " ") {
     const btn = e.target.closest(`button[data-action]`);
     doAction(btn.dataset.action);
@@ -785,7 +848,9 @@ function attack() {
 
 function attackedUnit(r, c) {
   let matches;
-  matches = allUnits.filter((u) => u.row === r && u.col === c);
+  matches = allUnits.filter(
+    (u) => u.row === r && u.col === c && u.affiliation === 1
+  );
   receivingUnit = matches[0];
 
   // selectedUnit.attackPlayer(receivingUnit);
@@ -837,6 +902,7 @@ function removeConfirmHiglight() {
 board.addEventListener("keydown", (e) => {
   e.preventDefault();
   if (!isTargeting) return false;
+  removeConfirmHiglight();
   switch (e.key) {
     case "ArrowUp":
       if (enemyAt(selectedUnit.row - 1, selectedUnit.col))
@@ -863,12 +929,15 @@ board.addEventListener("keydown", (e) => {
   unitHighlighted = true;
 });
 
+// To attack
 board.addEventListener("keydown", (e) => {
   e.preventDefault();
   if (unitHighlighted == false) return false;
   if (receivingUnit == null) return false;
+  if (isTargeting == false) return false;
   if (e.key == " ") {
     attack();
+    attackOn = false;
     if (receivingUnit.checkDead()) {
       removeDead();
     }
@@ -884,16 +953,23 @@ board.addEventListener("keydown", (e) => {
     isTargeting = false;
     playSfx(btnClick, 0.5, 0);
 
-    gates[Phase.PLAYER_ACTION].done();
+    gates[Phase.PLAYER_ACTION].open();
   }
 });
 
+let tempRecievingUnit;
+let attackOn = false;
 function doAction(action) {
   switch (action) {
     case "attack":
       if (actionButtons.attack.getAttribute("button-disabled") === "true")
         return;
+      attackOn = true;
       console.log("attack");
+      tempRecievingUnit = receivingUnit;
+      console.log("tempRecievingUnit", tempRecievingUnit);
+      console.log("playerSelected", receivingUnit);
+
       isTargeting = true;
       attackHighlight();
       focusBoard();
@@ -909,11 +985,68 @@ function doAction(action) {
     case "wait":
       console.log("wait");
       selectedUnit.playerWait();
-      gates[Phase.PLAYER_ACTION].done();
+      gates[Phase.PLAYER_ACTION].open("wait");
 
       break;
   }
 }
+// When selected a unit
+board.addEventListener("keydown", (e) => {
+  // console.log(e.key);
+  if (e.key == "x") {
+    if (playerSelected && phase == "player_select") {
+      console.log("Inside board x");
+      placePlayer(startRow, startCol);
+      currentUnitsQueue.push(selectedUnit);
+      playerSelected = false;
+      selectedUnit = null;
+      // actionButtons.attack.disabled = false;
+
+      removeHighlight();
+    }
+    if (phase == "player_action") {
+      console.log("Inside attack reset");
+      removeAttackHighlight();
+      removeConfirmHiglight();
+      openActionBar();
+      attackOn = false;
+      isTargeting = false;
+      // showHoverAt(selectedUnit.r, selectedUnit.c);
+    }
+  }
+});
+
+// When action bar is pulled up
+actionBar.addEventListener("keydown", (e) => {
+  // console.log(e.key);
+  e.preventDefault();
+  if (e.key == "x") {
+    if ((playerSelected = true && phase == "player_action")) {
+      closeActionBar();
+      focusBoard();
+      console.log(selectedUnit);
+      // highTile = null;
+      highlightMove(startRow, startCol, selectedUnit.movement);
+      console.log(highTile);
+      console.log("Inside X actionbar");
+      // phase = phase.PLAYER_SELECT;
+      playerSelected = true;
+      // actionButtons.attack.disabled = false;
+
+      gates[Phase.PLAYER_ACTION].cancel();
+    }
+  }
+});
+
+// actionBar.addEventListener("keydown", (e) => {
+//   e.preventDefault();
+//
+//   if (e.key == " ") {
+//     const btn = e.target.closest(`button[data-action]`);
+//     doAction(btn.dataset.action);
+//     playSfx(btnClick, 0.5, 0);
+//   }
+// });
 
 function focusBoard() {
   board.focus();
