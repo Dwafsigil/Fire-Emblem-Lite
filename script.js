@@ -176,14 +176,25 @@ async function runEnemyTurn() {
     findClosestFriendly(u);
     checkOptimalMove();
 
-    enemyMove(u);
     if (checkAdjacent(u)) {
       enemyAttack(u);
-      if (closestFriendly.checkDead()) {
-        removeDead();
+      if (closestFriendly.checkDead()) removeDead();
+    } else {
+      enemyMove(u);
+      if (checkAdjacent(u)) {
+        enemyAttack(u);
+        if (closestFriendly.checkDead()) removeDead();
       }
-      continue;
     }
+
+    // enemyMove(u);
+    // if (checkAdjacent(u)) {
+    //   enemyAttack(u);
+    //   if (closestFriendly.checkDead()) {
+    //     removeDead();
+    //   }
+    //   continue;
+    // }
     console.log(`Ran Enemy Turn ${u.name}`);
     enemyMoves = [];
     closestFriendly = null;
