@@ -52,7 +52,7 @@ let allUnits = [
     affiliation: 0,
     row: 1,
     col: 1,
-    strength: 15,
+    strength: 20,
     movement: 1,
   }),
   new unitStats({
@@ -62,7 +62,7 @@ let allUnits = [
     affiliation: 0,
     row: 2,
     col: 3,
-    strength: 20,
+    strength: 15,
   }),
   new unitStats({
     playerId: 2,
@@ -91,6 +91,7 @@ async function runBattle() {
     while (hasPlayableUnits()) {
       turnText.textContent = `Turn: ${turnCounter}`;
       // Player Select
+      if (isBattleOver()) break;
       phase = Phase.PLAYER_SELECT;
       phaseText.textContent = "Player Turn";
       await gates[Phase.PLAYER_SELECT].wait();
@@ -149,7 +150,7 @@ const delay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
 };
 
-async function runEnemyTurn() {
+function runEnemyTurn() {
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
   for (const u of enemyUnit) {
     enemyPossibleMoves(u.row, u.col, u.movement);
@@ -157,12 +158,13 @@ async function runEnemyTurn() {
     checkOptimalMove();
     if (checkAdjacent(u)) {
       enemyAttack(u);
-      if (closestFriendly.checkDead()) removeDead();
+      if (closestFriendly.checkDead()) {
+        removeDead();
+      }
       continue;
     }
     enemyMove(u);
     console.log(`Ran Enemy Turn ${u.name}`);
-    await delay(1200);
     enemyMoves = [];
     closestFriendly = null;
     optimalMove = [];
@@ -171,6 +173,10 @@ async function runEnemyTurn() {
 
 function enemyAttack(enemyUnit) {
   enemyUnit.attackPlayer(closestFriendly);
+  if (!closestFriendly.checkDead()) {
+    hurtAnimation(closestFriendly);
+  }
+  attackAnimation(enemyUnit);
 }
 
 function enemyMove(enemyUnit) {
@@ -377,17 +383,30 @@ function moveHover(dr, dc) {
   return true;
 }
 
-function removeDead() {
-  // el.id = `player-${receivingUnit.playerId}`
-
+async function removeDead() {
+  let tempUnit;
   if (playerTurn == true) {
-    allUnits = allUnits.filter((e) => e !== receivingUnit);
-    let t = tileAt(receivingUnit.row, receivingUnit.col);
-    t.removeChild(receivingUnit.node);
+    tempUnit = receivingUnit;
+    deadAnimation(receivingUnit);
+    // allUnits = allUnits.filter((e) => e !== tempUnit);
+    // let t = tileAt(tempUnit.row, tempUnit.col);
+    // t.removeChild(tempUnit.node);
+    allUnits = allUnits.filter((e) => e !== tempUnit);
+    let t = tileAt(tempUnit.row, tempUnit.col);
+    setTimeout(() => {
+      t.removeChild(tempUnit.node);
+    }, 2000);
   } else {
-    allUnits = allUnits.filter((e) => e !== closestFriendly);
-    let t = tileAt(closestFriendly.row, closestFriendly.col);
-    t.removeChild(closestFriendly.node);
+    tempUnit = closestFriendly;
+    deadAnimation(closestFriendly);
+    // allUnits = allUnits.filter((e) => e !== tempUnit);
+    // let t = tileAt(tempUnit.row, tempUnit.col);
+    // t.removeChild(tempUnit.node);
+    allUnits = allUnits.filter((e) => e !== tempUnit);
+    let t = tileAt(tempUnit.row, tempUnit.col);
+    setTimeout(() => {
+      t.removeChild(tempUnit.node);
+    }, 2000);
   }
 }
 
@@ -709,14 +728,54 @@ let isTargeting = false;
 let unitHighlighted = false;
 let receivingUnit;
 
+function playAnim(unit, className, delay) {
+  unit.node.classList.remove(className);
+  unit.node.style.setProperty(
+    "--sprite-url",
+    `url("assets/${unit.unitType}/${className}.png")`
+  );
+  unit.node.classList.add(className);
+  setTimeout(() => {
+    unit.node.classList.remove(className);
+    unit.node.style.setProperty(
+      "--sprite-url",
+      `url("assets/${unit.unitType}/Idle.png")`
+    );
+  }, delay);
+}
+
+function attackAnimation(unit) {
+  playAnim(unit, "attack3", 600);
+}
+
+function hurtAnimation(unit) {
+  playAnim(unit, "hurt", 500);
+}
+
+async function deadAnimation(unit) {
+  unit.node.classList.remove("dead");
+  unit.node.style.setProperty(
+    "--sprite-url",
+    `url("assets/${unit.unitType}/dead.png")`
+  );
+  unit.node.classList.add("dead");
+
+  // removeDead();
+}
+
 function attack() {
-  if (!receivingUnit) return false;
   selectedUnit.attackPlayer(receivingUnit);
+
+  // let tempUnit = selectedUnit;
+  if (!receivingUnit) return false;
+
+  attackAnimation(selectedUnit);
+  // selectedUnit.node.classList.remove("attack");
+  // selectedUnit.attackPlayer(receivingUnit);
 }
 
 function attackedUnit(r, c) {
   let matches;
-
   matches = allUnits.filter((u) => u.row === r && u.col === c);
   receivingUnit = matches[0];
 
@@ -801,9 +860,16 @@ board.addEventListener("keydown", (e) => {
   if (receivingUnit == null) return false;
   if (e.key == " ") {
     attack();
-    if (receivingUnit.checkDead()) removeDead();
+    if (receivingUnit.checkDead()) {
+      removeDead();
+    }
+    if (!receivingUnit.checkDead()) {
+      hurtAnimation(receivingUnit);
+    }
+
     removeAttackHighlight();
     removeConfirmHiglight();
+
     receivingUnit = null;
     unitHighlighted = false;
     isTargeting = false;

@@ -63,7 +63,7 @@ export class unitStats {
   }
 
   checkDead() {
-    if (this.health == 0) {
+    if (this.health <= 0) {
       console.log(`${this.name} has fallen`);
       return true;
     }
