@@ -82,16 +82,16 @@ let allUnits = [
     movement: 4,
     strength: 20,
   }),
-  // new unitStats({
-  //   playerId: 2,
-  //   name: "Emi",
-  //   unitType: "Knight_2",
-  //   affiliation: 1,
-  //   row: 5,
-  //   col: 4,
-  //   movement: 3,
-  //   strength: 20,
-  // }),
+  new unitStats({
+    playerId: 2,
+    name: "Emi",
+    unitType: "Knight_2",
+    affiliation: 1,
+    row: 5,
+    col: 4,
+    movement: 3,
+    strength: 20,
+  }),
 ];
 const gates = {
   [Phase.PLAYER_SELECT]: createGate(),
@@ -224,7 +224,7 @@ async function runEnemyTurn() {
     }
 
     console.log(`Ran Enemy Turn ${u.name}`);
-    await delay(2000);
+    await delay(1000);
   }
 }
 
@@ -254,14 +254,19 @@ async function enemyMove(enemyUnit) {
   let t;
   for (const { r, c } of path) {
     // console.log(r, c);
+    runAnimation(enemyUnit);
     t = tileAt(r, c);
     // console.log(t);
     t.appendChild(enemyUnit.node);
     enemyUnit.row = r;
     enemyUnit.col = c;
-
-    await delay(1000);
+    await delay(500);
   }
+  enemyUnit.node.classList.remove("run");
+  enemyUnit.node.style.setProperty(
+    "--sprite-url",
+    `url("assets/${enemyUnit.unitType}/Idle.png")`
+  );
   // console.log(enemyUnit);
 }
 
@@ -350,14 +355,14 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
 
 function buildPath(parent, endRow, endCol) {
   const endKey = key(endRow, endCol);
-  if (!(endKey in parent)) return []; // unreachable
+  if (!(endKey in parent)) return [];
 
   const path = [];
   for (let k = endKey; k != null; k = parent[k]) {
     const [r, c] = k.split(",").map(Number);
     path.push({ r, c });
   }
-  return path.reverse(); // start → end
+  return path.reverse();
 }
 
 export const CANCEL = Symbol("CANCEL");
@@ -898,6 +903,16 @@ function hurtAnimation(unit) {
   playSfx(hurtGrunt, 0.3, 200);
 }
 
+function runAnimation(unit) {
+  unit.node.classList.remove("run");
+  unit.node.style.setProperty(
+    "--sprite-url",
+    `url("assets/${unit.unitType}/Run.png")`
+  );
+  unit.node.classList.add("run");
+  // playSfx(deadGrunt, 0.2, 200);
+}
+
 async function deadAnimation(unit) {
   unit.node.classList.remove("dead");
   unit.node.style.setProperty(
@@ -1075,6 +1090,7 @@ board.addEventListener("keydown", (e) => {
       currentUnitsQueue.push(selectedUnit);
       playerSelected = false;
       selectedUnit = null;
+      playSfx(btnClick, 0.5, 0);
       // actionButtons.attack.disabled = false;
 
       removeHighlight();
@@ -1086,6 +1102,7 @@ board.addEventListener("keydown", (e) => {
       openActionBar();
       attackOn = false;
       isTargeting = false;
+      playSfx(btnClick, 0.5, 0);
       // showHoverAt(selectedUnit.r, selectedUnit.c);
     }
   }

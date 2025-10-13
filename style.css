@@ -138,6 +138,12 @@ button[button-disabled="true"]:focus {
   background-size: 600% 100%;
 }
 
+.player.run::before {
+  background-image: var(--sprite-url);
+  animation: run 0.7s steps(1, end) infinite;
+  background-size: 700% 100%;
+}
+
 @keyframes idle {
   0% {
     background-position-x: 0px;
@@ -204,20 +210,26 @@ button[button-disabled="true"]:focus {
   }
 }
 
-/* 
-} 
-  75% {
-    background-position-x: -690px;
+@keyframes run {
+  0% {
+    background-position-x: 0px;
+  }
+  20% {
+    background-position-x: -110px;
+  }
+  40% {
+    background-position-x: -223px;
+  }
+  60% {
+    background-position-x: -350px;
+  }
+  80% {
+    background-position-x: -480px;
   }
   100% {
     background-position-x: 0px;
-  }} 
-  75% {
-    background-position-x: -690px;
   }
-  100% {
-    background-position-x: 0px;
-  } */
+}
 
 .highlight {
   background-color: rgb(190, 255, 190);
