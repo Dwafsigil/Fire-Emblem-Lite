@@ -36,6 +36,36 @@ let playedUnits = [];
 
 //  All Obstacles -------------------------
 let obstacles = [];
+let mapObstacles = [
+  [1, 0],
+  [2, 0],
+  [7, 0],
+  [8, 0],
+  [9, 0],
+  [10, 0],
+  [11, 0],
+  [8, 1],
+  [9, 1],
+  [10, 1],
+  [11, 1],
+  [9, 2],
+  [10, 2],
+  [11, 2],
+  [11, 3],
+  [4, 4],
+  [5, 4],
+  [6, 4],
+  [4, 5],
+  [5, 5],
+  [6, 5],
+  [4, 6],
+  [5, 6],
+  [6, 6],
+  [1, 9],
+  [2, 9],
+  [1, 10],
+  [2, 10],
+];
 let turnCounter = 1;
 
 // Board Dimensions -------------------------
@@ -61,7 +91,7 @@ let allUnits = [
     row: 1,
     col: 1,
     strength: 20,
-    movement: 1,
+    movement: 10,
   }),
   new unitStats({
     playerId: 1,
@@ -77,8 +107,8 @@ let allUnits = [
     name: "Tyler",
     unitType: "Knight_2",
     affiliation: 1,
-    row: 4,
-    col: 4,
+    row: 7,
+    col: 9,
     movement: 4,
     strength: 20,
   }),
@@ -275,6 +305,7 @@ function checkOptimalMove() {
   let tempDistance;
   if (!closestFriendly) return;
   for (const [r, c] of enemyMoves) {
+    if (ifObstacle(r, c)) continue;
     tempDistance = Math.sqrt(
       Math.pow(closestFriendly.row - r, 2) +
         Math.pow(closestFriendly.col - c, 2)
@@ -330,6 +361,7 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
       if (
         !inBounds(newRow, newCol) ||
         visited.has(k) ||
+        ifObstacle(newRow, newCol) ||
         isOccupied(newRow, newCol)
       )
         continue;
@@ -340,12 +372,15 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
     }
   }
 
-  console.log(parent);
-  console.log(reachable);
+  // console.log(parent);
+  // console.log(reachable);
   for (const { r, c } of reachable) {
     // let [r, c] = key.map(Number);
-    if (isOccupied(r, c)) continue;
+    // console.log(obstacles);
+    if (ifObstacle(r, c)) continue;
     enemyMoves.push([r, c]);
+    console.log("enemyMove", enemyMoves);
+    console.log("parent list", parent);
     // tileAt(r, c).classList.add("highlight");
   }
 
@@ -516,9 +551,13 @@ function moveHover(dr, dc) {
   const c = hover.col + dc;
 
   if (!inBounds(r, c)) return false;
+  console.log("playerselected?", playerSelected);
   if (playerSelected) {
+    console.log("In Bounds?", highlightBounds(r, c));
     if (!highlightBounds(r, c)) return false;
-    if (obstacle(r, c)) return false;
+    console.log("In obstacles?", ifObstacle(r, c));
+    console.log(obstacles);
+    if (ifObstacle(r, c)) return false;
   }
 
   playSfx(hoverSound, 0.2, 0);
@@ -586,11 +625,26 @@ function checkAdjacent(unit = null) {
 }
 
 function updateObstacle() {
-  obstacles = allUnits.map((e) => [e.row, e.col]);
+  // console.log(mapObstacles);
+
+  if (playerSelected) {
+    let unitObstacles = allUnits.map((e) => [e.row, e.col]);
+    unitObstacles = unitObstacles.filter(
+      (e) => e[0] !== selectedUnit.row && e[1] !== selectedUnit.col
+    );
+    obstacles = unitObstacles;
+    obstacles = [...unitObstacles, ...mapObstacles];
+  } else {
+    let unitObstacles = allUnits.map((e) => [e.row, e.col]);
+    obstacles = unitObstacles;
+    obstacles = [...unitObstacles, ...mapObstacles];
+  }
 }
 
-function obstacle(r, c) {
-  return allUnits.some((e) => e.row == r && e.col == c && e !== selectedUnit);
+function ifObstacle(r, c) {
+  return obstacles.some((e) => e[0] == r && e[1] == c);
+
+  // allUnits.some((e) => e.row == r && e.col == c && e !== selectedUnit);
 }
 
 // Player Move
@@ -618,7 +672,7 @@ function movePlayer(dr, dc) {
     inBounds(r, c) &&
     highlightBounds(r, c) &&
     playerSelected &&
-    !obstacle(r, c)
+    !ifObstacle(r, c)
   )
     placePlayer(r, c);
   // if (inBounds(r, c) && highlightBounds(r, c) ) placePlayer(r, c);
@@ -666,6 +720,7 @@ function highlightMove(startRow, startCol, moveRange) {
   for (const key of reachable) {
     let [r, c] = key.split(",").map(Number);
     highTile.push([r, c]);
+    if (ifObstacle(r, c)) continue;
     tileAt(r, c).classList.add("highlight");
   }
 }
@@ -809,6 +864,7 @@ board.addEventListener("keydown", (e) => {
       startRow = hover.row;
       startCol = hover.col;
       playerSelected = true;
+      updateObstacle();
       updatePlayable(selectedUnit);
       highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
       playSfx(btnClick, 0.5, 0);
