@@ -77,21 +77,21 @@ let allUnits = [
     name: "Tyler",
     unitType: "Knight_2",
     affiliation: 1,
-    row: 3,
+    row: 4,
     col: 4,
-    movement: 2,
+    movement: 4,
     strength: 20,
   }),
-  new unitStats({
-    playerId: 2,
-    name: "Emi",
-    unitType: "Knight_2",
-    affiliation: 1,
-    row: 5,
-    col: 4,
-    movement: 3,
-    strength: 20,
-  }),
+  // new unitStats({
+  //   playerId: 2,
+  //   name: "Emi",
+  //   unitType: "Knight_2",
+  //   affiliation: 1,
+  //   row: 5,
+  //   col: 4,
+  //   movement: 3,
+  //   strength: 20,
+  // }),
 ];
 const gates = {
   [Phase.PLAYER_SELECT]: createGate(),
@@ -106,18 +106,20 @@ async function runBattle() {
 
   while (true) {
     try {
-      initPlayerTurn();
-
       console.log("Initlaized Turn");
       setDisabled(actionButtons.attack, false);
+      console.log(playerSelected);
+      initPlayerTurn();
+
       while (hasPlayableUnits()) {
         turnText.textContent = `Turn: ${turnCounter}`;
+
         // Player Select
         if (isBattleOver()) break;
         phase = Phase.PLAYER_SELECT;
         phaseText.textContent = "Player Select";
         let player = await gates[Phase.PLAYER_SELECT].wait();
-        console.log(player);
+        // console.log(player);
 
         if (!checkAdjacent(selectedUnit)) {
           setDisabled(actionButtons.attack, true);
@@ -131,16 +133,16 @@ async function runBattle() {
         // Player Action
         phase = Phase.PLAYER_ACTION;
         phaseText.textContent = "Player Action";
-        updatePlayable(player);
+        updatePlayable(selectedUnit);
         // currentUnitsQueue = currentUnitsQueue.filter(
         //   (e) => e.playerId !== player.playerId
         // );
 
-        console.log(currentUnitsQueue);
+        // console.log(currentUnitsQueue);
 
         await gates[Phase.PLAYER_ACTION].wait();
         console.log("After phase action");
-        console.log(playerSelected);
+        // console.log(playerSelected);
         closeActionBar();
         focusBoard();
         selectedUnit = null;
@@ -199,13 +201,23 @@ async function runEnemyTurn() {
     enemyPossibleMoves(u.row, u.col, u.movement);
     findClosestFriendly(u);
     checkOptimalMove();
+    // const path = buildPath(optimalMove[0], optimalMove[1]);
+
+    // console.log(r, c);
+    // console.log(parent);
+    // console.log(optimalMove);
+    // console.log(reachable);
+    // console.log(path);
 
     if (checkAdjacent(u)) {
       enemyAttack(u);
       if (closestFriendly.checkDead()) removeDead();
     } else {
-      enemyMove(u);
+      await enemyMove(u);
+      console.log("No adjacent, moving");
+      console.log(checkAdjacent(u));
       if (checkAdjacent(u)) {
+        console.log("Found a guy");
         enemyAttack(u);
         if (closestFriendly.checkDead()) removeDead();
       }
@@ -224,16 +236,33 @@ function enemyAttack(enemyUnit) {
   attackAnimation(enemyUnit);
 }
 
-function enemyMove(enemyUnit) {
+async function enemyMove(enemyUnit) {
   if (!closestFriendly) return;
+  const [oR, oC] = optimalMove[0];
+  const { _, parent } = enemyPossibleMoves(
+    enemyUnit.row,
+    enemyUnit.col,
+    enemyUnit.movement
+  );
+  // console.log(enemyUnit.node);
+  // console.log(optimalMove);
 
-  const [[r, c]] = optimalMove;
+  const path = buildPath(parent, oR, oC);
+  // console.log(r, c);
+  // console.log(path);
 
-  let t = tileAt(r, c);
+  let t;
+  for (const { r, c } of path) {
+    // console.log(r, c);
+    t = tileAt(r, c);
+    // console.log(t);
+    t.appendChild(enemyUnit.node);
+    enemyUnit.row = r;
+    enemyUnit.col = c;
 
-  t.appendChild(enemyUnit.node);
-  enemyUnit.row = r;
-  enemyUnit.col = c;
+    await delay(1000);
+  }
+  // console.log(enemyUnit);
 }
 
 function checkOptimalMove() {
@@ -267,14 +296,17 @@ function findClosestFriendly(enemyUnit) {
     }
   }
 }
-// Get possible moves for an enemy and push into an array. r,c values are pushed in to enemy Moves
+
+const key = (r, c) => `${r},${c}`;
 function enemyPossibleMoves(startRow, startCol, moveRange) {
+  const parent = {};
   const reachable = [];
   const queue = [[startRow, startCol, moveRange]];
   const visited = new Set([`${startRow},${startCol}`]);
-  const parent = {};
 
-  while (queue.length > 0) {
+  parent[key(startRow, startCol)] = null;
+
+  while (queue.length) {
     const [r, c, movementLeft] = queue.shift();
     reachable.push({ r, c });
     if (movementLeft === 0) continue;
@@ -289,20 +321,21 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
     for (const [dR, dC] of directions) {
       const newRow = r + dR;
       const newCol = c + dC;
-      const key = `${newRow},${newCol}`;
+      const k = key(newRow, newCol);
       if (
         !inBounds(newRow, newCol) ||
-        visited.has(key) ||
+        visited.has(k) ||
         isOccupied(newRow, newCol)
       )
         continue;
 
-      visited.add(key);
-      parent[key] = `${r},${c}`;
+      visited.add(k);
+      parent[k] = key(r, c);
       queue.push([newRow, newCol, movementLeft - 1]);
     }
   }
 
+  console.log(parent);
   console.log(reachable);
   for (const { r, c } of reachable) {
     // let [r, c] = key.map(Number);
@@ -311,8 +344,20 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
     // tileAt(r, c).classList.add("highlight");
   }
 
-  console.log(parent);
+  // console.log(parent);
   return { reachable, parent };
+}
+
+function buildPath(parent, endRow, endCol) {
+  const endKey = key(endRow, endCol);
+  if (!(endKey in parent)) return []; // unreachable
+
+  const path = [];
+  for (let k = endKey; k != null; k = parent[k]) {
+    const [r, c] = k.split(",").map(Number);
+    path.push({ r, c });
+  }
+  return path.reverse(); // start → end
 }
 
 export const CANCEL = Symbol("CANCEL");
@@ -552,7 +597,7 @@ function inBounds(r, c) {
 }
 
 function placePlayer(r, c) {
-  console.log("placePlayer");
+  // console.log("placePlayer");
   if (!inBounds(hover.row, hover.col)) return false;
   selectedUnit.row = r;
   selectedUnit.col = c;
@@ -986,7 +1031,7 @@ board.addEventListener("keydown", (e) => {
   }
 });
 
-let tempRecievingUnit;
+// let tempRecievingUnit;
 let attackOn = false;
 function doAction(action) {
   switch (action) {
@@ -995,9 +1040,9 @@ function doAction(action) {
         return;
       attackOn = true;
       console.log("attack");
-      tempRecievingUnit = receivingUnit;
-      console.log("tempRecievingUnit", tempRecievingUnit);
-      console.log("playerSelected", receivingUnit);
+      // tempRecievingUnit = receivingUnit;
+      // console.log("tempRecievingUnit", tempRecievingUnit);
+      // console.log("playerSelected", receivingUnit);
 
       isTargeting = true;
       attackHighlight();
@@ -1047,26 +1092,26 @@ board.addEventListener("keydown", (e) => {
 });
 
 // When action bar is pulled up
-actionBar.addEventListener("keydown", (e) => {
-  // console.log(e.key);
-  e.preventDefault();
-  if (e.key == "x") {
-    if ((playerSelected = true && phase == "player_action")) {
-      closeActionBar();
-      focusBoard();
-      console.log(selectedUnit);
-      // highTile = null;
-      highlightMove(startRow, startCol, selectedUnit.movement);
-      console.log(highTile);
-      console.log("Inside X actionbar");
-      // phase = phase.PLAYER_SELECT;
-      playerSelected = true;
-      // actionButtons.attack.disabled = false;
+// actionBar.addEventListener("keydown", (e) => {
+//   // console.log(e.key);
+//   e.preventDefault();
+//   if (e.key == "x") {
+//     if ((playerSelected = true && phase == "player_action")) {
+//       closeActionBar();
+//       focusBoard();
+//       console.log(selectedUnit);
+//       // highTile = null;
+//       highlightMove(startRow, startCol, selectedUnit.movement);
+//       console.log(highTile);
+//       console.log("Inside X actionbar");
+//       // phase = phase.PLAYER_SELECT;
+//       playerSelected = true;
+//       // actionButtons.attack.disabled = false;
 
-      gates[Phase.PLAYER_ACTION].cancel();
-    }
-  }
-});
+//       gates[Phase.PLAYER_ACTION].cancel();
+//     }
+//   }
+// });
 
 // actionBar.addEventListener("keydown", (e) => {
 //   e.preventDefault();
