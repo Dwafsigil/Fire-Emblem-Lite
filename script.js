@@ -89,7 +89,7 @@ let allUnits = [
     affiliation: 1,
     row: 5,
     col: 4,
-    movement: 1,
+    movement: 3,
     strength: 20,
   }),
 ];
@@ -106,15 +106,19 @@ async function runBattle() {
 
   while (true) {
     try {
-      setDisabled(actionButtons.attack, false);
       initPlayerTurn();
+
+      console.log("Initlaized Turn");
+      setDisabled(actionButtons.attack, false);
       while (hasPlayableUnits()) {
         turnText.textContent = `Turn: ${turnCounter}`;
         // Player Select
         if (isBattleOver()) break;
         phase = Phase.PLAYER_SELECT;
         phaseText.textContent = "Player Select";
-        await gates[Phase.PLAYER_SELECT].wait();
+        let player = await gates[Phase.PLAYER_SELECT].wait();
+        console.log(player);
+
         if (!checkAdjacent(selectedUnit)) {
           setDisabled(actionButtons.attack, true);
         }
@@ -127,11 +131,18 @@ async function runBattle() {
         // Player Action
         phase = Phase.PLAYER_ACTION;
         phaseText.textContent = "Player Action";
+        updatePlayable(player);
+        // currentUnitsQueue = currentUnitsQueue.filter(
+        //   (e) => e.playerId !== player.playerId
+        // );
+
+        console.log(currentUnitsQueue);
 
         await gates[Phase.PLAYER_ACTION].wait();
+        console.log("After phase action");
+        console.log(playerSelected);
         closeActionBar();
         focusBoard();
-        updatePlayable(selectedUnit);
         selectedUnit = null;
         setDisabled(actionButtons.attack, false);
         console.log("Finished Player_Action");
@@ -258,13 +269,14 @@ function findClosestFriendly(enemyUnit) {
 }
 // Get possible moves for an enemy and push into an array. r,c values are pushed in to enemy Moves
 function enemyPossibleMoves(startRow, startCol, moveRange) {
-  const reachable = new Set();
+  const reachable = [];
   const queue = [[startRow, startCol, moveRange]];
-  const visited = new Set();
+  const visited = new Set([`${startRow},${startCol}`]);
+  const parent = {};
 
   while (queue.length > 0) {
     const [r, c, movementLeft] = queue.shift();
-    reachable.add(`${r},${c}`);
+    reachable.push({ r, c });
     if (movementLeft === 0) continue;
 
     const directions = [
@@ -278,26 +290,29 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
       const newRow = r + dR;
       const newCol = c + dC;
       const key = `${newRow},${newCol}`;
-
       if (
-        newRow >= 0 &&
-        newRow < row &&
-        newCol >= 0 &&
-        newCol < col &&
-        !visited.has(key)
-      ) {
-        visited.add(key);
-        queue.push([newRow, newCol, movementLeft - 1]);
-      }
+        !inBounds(newRow, newCol) ||
+        visited.has(key) ||
+        isOccupied(newRow, newCol)
+      )
+        continue;
+
+      visited.add(key);
+      parent[key] = `${r},${c}`;
+      queue.push([newRow, newCol, movementLeft - 1]);
     }
   }
 
-  for (const key of reachable) {
-    let [r, c] = key.split(",").map(Number);
+  console.log(reachable);
+  for (const { r, c } of reachable) {
+    // let [r, c] = key.map(Number);
     if (isOccupied(r, c)) continue;
     enemyMoves.push([r, c]);
     // tileAt(r, c).classList.add("highlight");
   }
+
+  console.log(parent);
+  return { reachable, parent };
 }
 
 export const CANCEL = Symbol("CANCEL");
@@ -685,11 +700,10 @@ function initEnemyTurn() {
 
 function updatePlayable(unit) {
   if (playerTurn) {
-    if (playerSelected) {
-      currentUnitsQueue = currentUnitsQueue.filter(
-        (u) => u.playerId !== unit.playerId
-      );
-    }
+    currentUnitsQueue = currentUnitsQueue.filter(
+      (u) => u.playerId !== unit.playerId
+    );
+    console.log("updated");
   }
 }
 
@@ -729,14 +743,11 @@ board.addEventListener("keydown", (e) => {
   }
 });
 
-updatePlayable();
-
 let startRow;
 let startCol;
 // CHANGE THIS UP
 // Select and Deslect Player with Space
 board.addEventListener("keydown", (e) => {
-  console.log("detecting spacebar");
   e.preventDefault();
   if (phase !== Phase.PLAYER_SELECT) return;
   // t = tileAt(hover.row, hover.col);
@@ -744,6 +755,7 @@ board.addEventListener("keydown", (e) => {
   if (e.key == " " && isOccupied(hover.row, hover.col) && !playerSelected) {
     selectedUnit = unitAt(hover.row, hover.col);
     if (checkPlayable(selectedUnit)) {
+      console.log("Inside Select");
       startRow = hover.row;
       startCol = hover.col;
       playerSelected = true;
@@ -761,6 +773,7 @@ board.addEventListener("keydown", (e) => {
     // selectedUnit = null;
     playerSelected = false;
     updateObstacle();
+    updatePlayable(selectedUnit);
     playSfx(btnClick, 0.5, 0);
     openActionBar();
     console.log(selectedUnit.row, selectedUnit.col);
@@ -1000,6 +1013,7 @@ function doAction(action) {
       break;
     case "wait":
       console.log("wait");
+      updatePlayable(selectedUnit);
       selectedUnit.playerWait();
       gates[Phase.PLAYER_ACTION].open("wait");
 
