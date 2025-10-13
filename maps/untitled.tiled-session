@@ -3,15 +3,43 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "Fire Emblem Map.tmx",
     "expandedProjectPaths": [
+        "."
     ],
-    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "Fire Emblem Lite.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Fire Emblem Map.tmx": {
+            "scale": 6.432291666666666,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 96,
+                "y": 95.92226720647774
+            }
+        },
+        "Fire Emblem Set.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
     },
+    "last.imagePath": "C:/Users/Yench/OneDrive/Desktop",
+    "map.height": 12,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 12,
     "openFiles": [
+        "Fire Emblem Lite.tsx",
+        "Fire Emblem Map.tmx"
     ],
     "project": "untitled.tiled-project",
     "recentFiles": [
-    ]
+        "Fire Emblem Map.tmx",
+        "Fire Emblem Lite.tsx",
+        "Fire Emblem Set.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
 }

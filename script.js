@@ -39,8 +39,8 @@ let obstacles = [];
 let turnCounter = 1;
 
 // Board Dimensions -------------------------
-const row = 8;
-const col = 8;
+const row = 12;
+const col = 12;
 
 // Holds Current hover position -------------------------
 const hover = { row: 0, col: 0 };
@@ -87,8 +87,8 @@ let allUnits = [
     name: "Emi",
     unitType: "Knight_2",
     affiliation: 1,
-    row: 5,
-    col: 4,
+    row: 8,
+    col: 7,
     movement: 3,
     strength: 20,
   }),
