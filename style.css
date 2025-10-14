@@ -40,6 +40,22 @@ body {
   height: 390px;
   width: 200px;
 }
+.toggle-bgm {
+  /* padding: 8px 12px; */
+  /* border-style: none; */
+  border-radius: 10px;
+  /* background: #374151; */
+  color: #fff;
+  height: 12px;
+  width: 20px;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  position: fixed;
+  /* right: 100px; */
+  top: 10px;
+  right: 10px;
+}
 
 .action-bar {
   position: fixed;
@@ -60,7 +76,7 @@ body {
   padding: 8px 12px;
   /* border-style: none; */
   border-radius: 10px;
-  background: #374151; /* slate-700 */
+  background: #374151;
   color: #fff;
   cursor: pointer;
 }

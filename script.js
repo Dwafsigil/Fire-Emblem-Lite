@@ -1,5 +1,6 @@
 import { unitStats } from "./unitStats.js";
 import {
+  bgm,
   startMusic,
   playSfx,
   btnClick,
@@ -20,6 +21,8 @@ const Phase = {
 let phase = Phase.PLAYER_SELECT;
 
 // Referencing UI ------------------------
+// const bgmMusic = document.querySelector("#bgm");
+const toggleBGM = document.querySelector(".toggle-bgm");
 export let consoleTextField = document.querySelector(".text-container");
 export let consoleLog = document.querySelector(".console-log");
 const gamePhase = document.querySelector(".current-phase");
@@ -1314,4 +1317,13 @@ container.addEventListener("click", (e) => {
   }
 });
 
-// openActionBar();
+let bgmMuted = false;
+toggleBGM.addEventListener("click", () => {
+  console.log("toggle");
+  bgmMuted = !bgmMuted;
+  if (bgmMuted == true) {
+    bgm.pause();
+  } else {
+    bgm.play();
+  }
+});

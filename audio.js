@@ -1,4 +1,4 @@
-const bgm = document.querySelector("#bgm");
+export const bgm = document.querySelector("#bgm");
 export const btnClick = new Audio("sounds/button_click.wav");
 export const hoverSound = new Audio("sounds/hover_tile.mp3");
 export const swordHit = new Audio("sounds/sword_hit.wav");
