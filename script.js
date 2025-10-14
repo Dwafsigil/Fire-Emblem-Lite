@@ -9,6 +9,7 @@ import {
   deadGrunt,
 } from "./audio.js";
 
+let gameStart = false;
 // Phase Variables ------------------------
 const Phase = {
   PLAYER_SELECT: "player_select",
@@ -21,6 +22,8 @@ let phase = Phase.PLAYER_SELECT;
 const board = document.querySelector(".board");
 const actionBar = document.querySelector(".action-bar");
 const btns = Array.from(document.querySelectorAll("button"));
+const container = document.querySelector(".container");
+const startCover = document.querySelector(".start-cover");
 const actionButtons = {
   attack: actionBar.querySelector(`[data-action="attack"]`),
   ability: actionBar.querySelector(`[data-action="ability"]`),
@@ -1225,6 +1228,15 @@ function focusBoard() {
 //   }
 // });
 
-runBattle();
+container.addEventListener("click", (e) => {
+  console.log("click");
+  console.log(gameStart);
+  e.preventDefault();
+  if (gameStart == false) {
+    gameStart = true;
+    startCover.classList.add("hidden");
+    runBattle();
+  }
+});
 
 // openActionBar();
