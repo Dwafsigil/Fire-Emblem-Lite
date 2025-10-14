@@ -117,8 +117,8 @@ let allUnits = [
     name: "Emi",
     unitType: "Knight_2",
     affiliation: 1,
-    row: 8,
-    col: 7,
+    row: 3,
+    col: 3,
     movement: 3,
     strength: 20,
   }),
@@ -191,6 +191,8 @@ async function runBattle() {
     await delay(1500);
     phase = Phase.ENEMY_TURN;
     await runEnemyTurn();
+    updateObstacle();
+
     playerTurn = true;
     console.log("Finished Enemy Turn");
     if (isBattleOver()) break;
@@ -379,8 +381,6 @@ function enemyPossibleMoves(startRow, startCol, moveRange) {
     // console.log(obstacles);
     if (ifObstacle(r, c)) continue;
     enemyMoves.push([r, c]);
-    console.log("enemyMove", enemyMoves);
-    console.log("parent list", parent);
     // tileAt(r, c).classList.add("highlight");
   }
 
@@ -751,7 +751,25 @@ function createPlayerNode(unit) {
     "--sprite-url",
     `url("assets/${unit.unitType}/Idle.png")`
   );
+
+  const healthBarContainer = document.createElement("div");
+  healthBarContainer.classList.add("health-bar-container");
+
+  const healthBarBackground = document.createElement("div");
+  healthBarBackground.classList.add("health-bar-background");
+
+  const healthBarFill = document.createElement("div");
+  healthBarFill.classList.add("health-bar-fill");
+  healthBarFill.style.width = "100%";
+
+  healthBarBackground.appendChild(healthBarFill);
+  healthBarContainer.appendChild(healthBarBackground);
+
+  el.appendChild(healthBarContainer);
   unit.node = el;
+
+  unit.setHealthBar(healthBarFill);
+
   return el;
 }
 

@@ -5,7 +5,9 @@ export class unitStats {
     playerId,
     name,
     unitType,
+    maxHealth = 10,
     health = 10,
+    healthBarFill = null,
     strength = 10,
     magic = 10,
     skill = 10,
@@ -22,6 +24,8 @@ export class unitStats {
     this.name = name;
     this.unitType = unitType;
     this.health = health;
+    this.maxHealth = maxHealth;
+    this.healthBarFill = healthBarFill;
     this.strength = strength;
     this.magic = magic;
     this.skill = skill;
@@ -39,6 +43,11 @@ export class unitStats {
     this.affiliation = affiliation;
   }
 
+  setHealthBar(el) {
+    this.healthBarFill = el;
+    this.updateHealthBar();
+  }
+
   //   getStrength() {
   //     return this.strength;
   //   }
@@ -54,7 +63,8 @@ export class unitStats {
   }
 
   takeDamage(damage) {
-    this.health -= damage;
+    this.health = Math.max(0, this.health - damage);
+    this.updateHealthBar();
     console.log(`${this.name} is now ${this.health} HP! `);
   }
 
@@ -68,5 +78,13 @@ export class unitStats {
       return true;
     }
     return false;
+  }
+
+  updateHealthBar() {
+    const pct = Math.max(
+      0,
+      Math.min(100, (this.health / this.maxHealth) * 100)
+    );
+    this.healthBarFill.style.width = `${pct}%`;
   }
 }

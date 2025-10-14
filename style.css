@@ -59,6 +59,32 @@ button[button-disabled="true"]:focus {
   background: url("maps/Fire-Emblem-Map.png") top left / 100% 100%;
 }
 
+.health-bar-container {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-45%);
+  width: 90%;
+  z-index: 1;
+}
+
+.health-bar-background {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(0, 0, 0, 0.3);
+
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.health-bar-fill {
+  height: 100%;
+  background-color: #4ade80; /* Green */
+
+  border-radius: 2px;
+}
+
 /* .map {
   position: absolute;
   height: 408px;
