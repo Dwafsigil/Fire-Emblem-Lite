@@ -1,4 +1,5 @@
 import { damageCalculation } from "./calculations.js";
+// import { consoleContent, consoleLog, consoleTextField } from "./script.js";
 
 export class unitStats {
   constructor({
@@ -60,6 +61,7 @@ export class unitStats {
     let damage = damageCalculation(this, target);
     target.takeDamage(damage);
     console.log(`${this.name} attacked ${target.name} for ${damage} damage!`);
+    // consoleContent = `\n${this.name} attacked ${target.name} for ${damage} damage!`;
   }
 
   takeDamage(damage) {

@@ -13,6 +13,34 @@ body {
   color: #e5e7eb;
 }
 
+.console-log {
+  position: fixed;
+  right: 10px;
+  transform: translatey(10%);
+  display: flex;
+  gap: 12px;
+  background: #1f2937;
+  color: #fff;
+  padding: 8px 10px;
+  /* border-radius: 10px; */
+  height: 410px;
+  width: 150px;
+}
+
+/* .console-log.hidden {
+  display: none;
+} */
+
+.text-container {
+  font-size: 8px;
+  margin: 1px 1px;
+  padding: 5px 5px;
+  font-size: 7px;
+  background-color: #374151;
+  height: 390px;
+  width: 200px;
+}
+
 .action-bar {
   position: fixed;
   bottom: 20px;
@@ -23,6 +51,7 @@ body {
   color: #fff;
   padding: 8px 10px;
   border-radius: 10px;
+  z-index: 100;
 }
 .action-bar.hidden {
   display: none;

@@ -9,6 +9,7 @@ import {
   deadGrunt,
 } from "./audio.js";
 
+export let consoleContent;
 let gameStart = false;
 // Phase Variables ------------------------
 const Phase = {
@@ -19,6 +20,8 @@ const Phase = {
 let phase = Phase.PLAYER_SELECT;
 
 // Referencing UI ------------------------
+export let consoleTextField = document.querySelector(".text-container");
+export let consoleLog = document.querySelector(".console-log");
 const board = document.querySelector(".board");
 const actionBar = document.querySelector(".action-bar");
 const btns = Array.from(document.querySelectorAll("button"));
@@ -93,8 +96,8 @@ let allUnits = [
     affiliation: 0,
     row: 1,
     col: 1,
-    strength: 20,
-    movement: 10,
+    strength: 12,
+    movement: 3,
   }),
   new unitStats({
     playerId: 1,
@@ -103,7 +106,7 @@ let allUnits = [
     affiliation: 0,
     row: 2,
     col: 3,
-    strength: 15,
+    strength: 14,
   }),
   new unitStats({
     playerId: 2,
@@ -112,18 +115,38 @@ let allUnits = [
     affiliation: 1,
     row: 7,
     col: 9,
-    movement: 4,
-    strength: 20,
+    movement: 5,
+    strength: 11,
   }),
   new unitStats({
-    playerId: 2,
+    playerId: 3,
     name: "Emi",
     unitType: "Knight_2",
     affiliation: 1,
-    row: 3,
-    col: 3,
-    movement: 3,
-    strength: 20,
+    row: 10,
+    col: 8,
+    movement: 2,
+    strength: 14,
+  }),
+  new unitStats({
+    playerId: 4,
+    name: "David",
+    unitType: "Knight_2",
+    affiliation: 1,
+    row: 8,
+    col: 7,
+    movement: 1,
+    strength: 16,
+  }),
+  new unitStats({
+    playerId: 5,
+    name: "Esmy",
+    unitType: "Knight_1",
+    affiliation: 0,
+    row: 4,
+    col: 1,
+    movement: 4,
+    strength: 14,
   }),
 ];
 const gates = {
@@ -132,10 +155,9 @@ const gates = {
   [Phase.ENEMY_TURN]: createGate(),
 };
 
-// startMusic(1000);
-
 async function runBattle() {
   initGame();
+  startMusic(0);
 
   while (true) {
     try {
@@ -146,12 +168,12 @@ async function runBattle() {
 
       while (hasPlayableUnits()) {
         turnText.textContent = `Turn: ${turnCounter}`;
-
+        // consoleTextField.textContent = "";
         // Player Select
         if (isBattleOver()) break;
         phase = Phase.PLAYER_SELECT;
         phaseText.textContent = "Player Select";
-        let player = await gates[Phase.PLAYER_SELECT].wait();
+        await gates[Phase.PLAYER_SELECT].wait();
         // console.log(player);
 
         if (!checkAdjacent(selectedUnit)) {
@@ -1003,7 +1025,8 @@ async function deadAnimation(unit) {
 
 function attack() {
   selectedUnit.attackPlayer(receivingUnit);
-
+  // consoleContent += `\n${selectedUnit.name} attacked ${receivingUnit.name} `;
+  // consoleTextField.textContent = consoleContent;
   // let tempUnit = selectedUnit;
   if (!receivingUnit) return false;
 
