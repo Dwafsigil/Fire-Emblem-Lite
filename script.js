@@ -22,6 +22,7 @@ let phase = Phase.PLAYER_SELECT;
 // Referencing UI ------------------------
 export let consoleTextField = document.querySelector(".text-container");
 export let consoleLog = document.querySelector(".console-log");
+const gamePhase = document.querySelector(".current-phase");
 const board = document.querySelector(".board");
 const actionBar = document.querySelector(".action-bar");
 const btns = Array.from(document.querySelectorAll("button"));
@@ -165,6 +166,7 @@ async function runBattle() {
       setDisabled(actionButtons.attack, false);
       console.log(playerSelected);
       initPlayerTurn();
+      showPhase("Player Phase");
 
       while (hasPlayableUnits()) {
         turnText.textContent = `Turn: ${turnCounter}`;
@@ -172,7 +174,7 @@ async function runBattle() {
         // Player Select
         if (isBattleOver()) break;
         phase = Phase.PLAYER_SELECT;
-        phaseText.textContent = "Player Select";
+        // phaseText.textContent = "Player Select";
         await gates[Phase.PLAYER_SELECT].wait();
         // console.log(player);
 
@@ -187,7 +189,7 @@ async function runBattle() {
 
         // Player Action
         phase = Phase.PLAYER_ACTION;
-        phaseText.textContent = "Player Action";
+        // phaseText.textContent = "Player Action";
         updatePlayable(selectedUnit);
         // currentUnitsQueue = currentUnitsQueue.filter(
         //   (e) => e.playerId !== player.playerId
@@ -212,8 +214,9 @@ async function runBattle() {
       throw e;
     }
     playerTurn = false;
-    phaseText.textContent = "Enemy Turn";
+    // phaseText.textContent = "Enemy Turn";
     await delay(1500);
+    showPhase("Enemy Phase");
     phase = Phase.ENEMY_TURN;
     await runEnemyTurn();
     updateObstacle();
@@ -248,6 +251,25 @@ let optimalMove;
 const delay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
 };
+
+function showPhase(text) {
+  gamePhase.textContent = text;
+
+  if (text == "Player Phase") {
+    gamePhase.classList.remove("hidden");
+    gamePhase.classList.remove("animate");
+    void gamePhase.offsetWidth;
+    gamePhase.classList.add("animate");
+    gamePhase.style.background = "linear-gradient(to right, #07688f, #1e068b)";
+  }
+  if (text == "Enemy Phase") {
+    gamePhase.classList.remove("animate");
+    void gamePhase.offsetWidth;
+    gamePhase.classList.add("animate");
+    gamePhase.style.background =
+      "linear-gradient(to right, #ff4a4aff, #680000ff)";
+  }
+}
 
 async function runEnemyTurn() {
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
@@ -652,16 +674,17 @@ function checkAdjacent(unit = null) {
 function updateObstacle() {
   // console.log(mapObstacles);
 
+  let unitObstacles = allUnits.map((e) => [e.row, e.col]);
   if (playerSelected) {
-    let unitObstacles = allUnits.map((e) => [e.row, e.col]);
-    unitObstacles = unitObstacles.filter(
-      (e) => e[0] !== selectedUnit.row && e[1] !== selectedUnit.col
-    );
-    obstacles = unitObstacles;
+    unitObstacles = allUnits
+      .filter((e) => e.affiliation == 1)
+      .map((e) => [e.row, e.col]);
+    // unitObstacles = unitObstacles.filter(
+    //   ([r, c]) => !(r === selectedUnit.row && c === selectedUnit.col)
+    // );
     obstacles = [...unitObstacles, ...mapObstacles];
   } else {
-    let unitObstacles = allUnits.map((e) => [e.row, e.col]);
-    obstacles = unitObstacles;
+    // unitObstacles = allUnits.map((e) => [e.row, e.col]);
     obstacles = [...unitObstacles, ...mapObstacles];
   }
 }
@@ -707,6 +730,9 @@ function movePlayer(dr, dc) {
 
 // Highlight possible moves
 function highlightMove(startRow, startCol, moveRange) {
+  updateObstacle();
+  console.log(allUnits);
+  console.log(obstacles);
   highTile = [];
   const reachable = new Set();
   const queue = [[startRow, startCol, moveRange]];
@@ -728,6 +754,7 @@ function highlightMove(startRow, startCol, moveRange) {
       const newRow = r + dR;
       const newCol = c + dC;
       const key = `${newRow},${newCol}`;
+      if (ifObstacle(newRow, newCol)) continue;
 
       if (
         newRow >= 0 &&
@@ -777,23 +804,36 @@ function createPlayerNode(unit) {
     `url("assets/${unit.unitType}/Idle.png")`
   );
 
+  const strengthValue = document.createElement("div");
+  strengthValue.classList.add("strength-value");
+  strengthValue.classList.add("hidden");
+  // strengthValue.textContent = "STR  20";
+
   const healthBarContainer = document.createElement("div");
   healthBarContainer.classList.add("health-bar-container");
 
   const healthBarBackground = document.createElement("div");
   healthBarBackground.classList.add("health-bar-background");
 
+  const healthValue = document.createElement("div");
+  healthValue.classList.add("health-value");
+  healthValue.textContent = "30/40";
+
   const healthBarFill = document.createElement("div");
   healthBarFill.classList.add("health-bar-fill");
   healthBarFill.style.width = "100%";
 
+  healthBarContainer.appendChild(healthValue);
   healthBarBackground.appendChild(healthBarFill);
   healthBarContainer.appendChild(healthBarBackground);
 
   el.appendChild(healthBarContainer);
+  el.appendChild(strengthValue);
   unit.node = el;
 
   unit.setHealthBar(healthBarFill);
+  unit.setStrength(strengthValue);
+  unit.setHealthValue(healthValue);
 
   return el;
 }
@@ -911,11 +951,19 @@ board.addEventListener("keydown", (e) => {
       updatePlayable(selectedUnit);
       highlightMove(selectedUnit.row, selectedUnit.col, selectedUnit.movement);
       playSfx(btnClick, 0.5, 0);
+      console.log(selectedUnit);
+      selectedUnit.strengthValue.classList.remove("hidden");
 
       return;
     }
   }
   if (e.key == " " && playerSelected == true) {
+    if (
+      allUnits.some(
+        (u) => u.row == hover.row && u.col == hover.col && u !== selectedUnit
+      )
+    )
+      return;
     console.log("Inside deselect");
     removeHighlight();
     clearHighTile();
@@ -1175,6 +1223,8 @@ function doAction(action) {
       console.log("wait");
       updatePlayable(selectedUnit);
       selectedUnit.playerWait();
+      // selectedUnit.strengthValue.classList.add("hidden");
+
       gates[Phase.PLAYER_ACTION].open("wait");
 
       break;
@@ -1188,6 +1238,8 @@ board.addEventListener("keydown", (e) => {
       console.log("Inside board x");
       placePlayer(startRow, startCol);
       currentUnitsQueue.push(selectedUnit);
+      selectedUnit.strengthValue.classList.add("hidden");
+
       playerSelected = false;
       selectedUnit = null;
       playSfx(btnClick, 0.5, 0);

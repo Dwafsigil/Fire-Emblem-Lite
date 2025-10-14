@@ -44,11 +44,36 @@ export class unitStats {
     this.affiliation = affiliation;
   }
 
+  setHealthValue(el) {
+    this.healthValue = el;
+    this.updateHealthValue();
+  }
+
+  updateHealthValue() {
+    this.healthValue.textContent = `${this.health}/${this.maxHealth}`;
+  }
+
   setHealthBar(el) {
     this.healthBarFill = el;
     this.updateHealthBar();
   }
 
+  updateHealthBar() {
+    const pct = Math.max(
+      0,
+      Math.min(100, (this.health / this.maxHealth) * 100)
+    );
+    this.healthBarFill.style.width = `${pct}%`;
+  }
+
+  setStrength(el) {
+    this.strengthValue = el;
+    this.updateStrength();
+  }
+
+  updateStrength() {
+    this.strengthValue.textContent = `STR ${this.strength}`;
+  }
   //   getStrength() {
   //     return this.strength;
   //   }
@@ -61,6 +86,8 @@ export class unitStats {
     let damage = damageCalculation(this, target);
     target.takeDamage(damage);
     console.log(`${this.name} attacked ${target.name} for ${damage} damage!`);
+    this.strengthValue.classList.add("hidden");
+
     // consoleContent = `\n${this.name} attacked ${target.name} for ${damage} damage!`;
   }
 
@@ -68,10 +95,12 @@ export class unitStats {
     this.health = Math.max(0, this.health - damage);
     this.updateHealthBar();
     console.log(`${this.name} is now ${this.health} HP! `);
+    this.updateHealthValue();
   }
 
   playerWait() {
     console.log("I'm chillin rn gang");
+    this.strengthValue.classList.add("hidden");
   }
 
   checkDead() {
@@ -80,13 +109,5 @@ export class unitStats {
       return true;
     }
     return false;
-  }
-
-  updateHealthBar() {
-    const pct = Math.max(
-      0,
-      Math.min(100, (this.health / this.maxHealth) * 100)
-    );
-    this.healthBarFill.style.width = `${pct}%`;
   }
 }
