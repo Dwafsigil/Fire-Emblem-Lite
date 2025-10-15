@@ -45,7 +45,7 @@ body {
   /* border-style: none; */
   border-radius: 10px;
   /* background: #374151; */
-  color: #fff;
+  background: white;
   height: 12px;
   width: 20px;
   font-size: 10px;
@@ -55,6 +55,23 @@ body {
   /* right: 100px; */
   top: 10px;
   right: 10px;
+}
+
+.reset-game {
+  /* padding: 8px 12px; */
+  /* border-style: none; */
+  border-radius: 10px;
+  background: #374151;
+  /* color: #223553; */
+  height: 12px;
+  width: 20px;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  position: fixed;
+  /* right: 100px; */
+  top: 10px;
+  right: 32px;
 }
 
 .action-bar {

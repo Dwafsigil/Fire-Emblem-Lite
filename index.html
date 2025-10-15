@@ -8,13 +8,16 @@
     <link rel="icon" type="image/x-icon" href="/favicon/favicon-small.png" />
   </head>
   <body>
-    <button class="toggle-bgm"></button>
+    <button class="toggle-bgm" tabindex="-1"></button>
+    <button class="reset-game" tabindex="-1"></button>
     <div class="container">
       <div class="action-bar hidden" tabindex="0">
-        <button data-action="attack" button-disabled="false">Attack</button>
-        <button data-action="ability">Ability</button>
-        <button data-action="item">Item</button>
-        <button data-action="wait">Wait</button>
+        <button class="action-btn" data-action="attack" button-disabled="false">
+          Attack
+        </button>
+        <button class="action-btn" data-action="ability">Ability</button>
+        <button class="action-btn" data-action="item">Item</button>
+        <button class="action-btn" data-action="wait">Wait</button>
       </div>
       <!-- <div class="console-log hidden">
         <div class="text-container">

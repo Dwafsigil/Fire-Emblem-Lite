@@ -22,13 +22,14 @@ let phase = Phase.PLAYER_SELECT;
 
 // Referencing UI ------------------------
 // const bgmMusic = document.querySelector("#bgm");
+const resetGame = document.querySelector(".reset-game");
 const toggleBGM = document.querySelector(".toggle-bgm");
 export let consoleTextField = document.querySelector(".text-container");
 export let consoleLog = document.querySelector(".console-log");
 const gamePhase = document.querySelector(".current-phase");
 const board = document.querySelector(".board");
 const actionBar = document.querySelector(".action-bar");
-const btns = Array.from(document.querySelectorAll("button"));
+const btns = Array.from(document.querySelectorAll(".action-btn"));
 const container = document.querySelector(".container");
 const startCover = document.querySelector(".start-cover");
 const actionButtons = {
@@ -153,6 +154,8 @@ let allUnits = [
     strength: 14,
   }),
 ];
+
+// let allUnits;
 const gates = {
   [Phase.PLAYER_SELECT]: createGate(),
   [Phase.PLAYER_ACTION]: createGate(),
@@ -162,6 +165,7 @@ const gates = {
 async function runBattle() {
   initGame();
   startMusic(0);
+  // allUnits = createdUnits;
 
   while (true) {
     try {
@@ -1319,7 +1323,7 @@ container.addEventListener("click", (e) => {
 
 let bgmMuted = false;
 toggleBGM.addEventListener("click", () => {
-  console.log("toggle");
+  // console.log("toggle");
   bgmMuted = !bgmMuted;
   if (bgmMuted == true) {
     bgm.pause();
@@ -1327,3 +1331,8 @@ toggleBGM.addEventListener("click", () => {
     bgm.play();
   }
 });
+
+// resetGame.addEventListener("click", () => {
+//   console.log("toggle");
+//   // runBattle();
+// });
