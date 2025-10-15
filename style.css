@@ -280,7 +280,7 @@ button[button-disabled="true"]:focus {
 }
 
 .attack-confirm {
-  background: rgb(255, 98, 98);
+  background: rgb(255, 98, 98, 0.6);
   z-index: 4;
 }
 
@@ -429,7 +429,7 @@ button[button-disabled="true"]:focus {
 }
 
 .highlight {
-  background-color: rgb(190, 255, 190);
+  background-color: rgb(190, 255, 190, 0.6);
 }
 
 .content {
