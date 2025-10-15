@@ -141,7 +141,7 @@ let allUnits = [
     row: 8,
     col: 7,
     movement: 1,
-    strength: 16,
+    strength: 20,
   }),
   new unitStats({
     playerId: 5,
@@ -245,7 +245,7 @@ function isBattleOver() {
   let friendlyUnit = allUnits.filter((e) => e.affiliation == 0);
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
   if (friendlyUnit.length == 0 || enemyUnit.length == 0) {
-    phaseText.textContent = "Game Over!";
+    // phaseText.textContent = "Game Over!";
     return true;
   }
   return false;
@@ -1332,7 +1332,8 @@ toggleBGM.addEventListener("click", () => {
   }
 });
 
-// resetGame.addEventListener("click", () => {
-//   console.log("toggle");
-//   // runBattle();
-// });
+resetGame.addEventListener("click", () => {
+  console.log("toggle");
+  // Refresh the browser
+  window.location.reload();
+});
