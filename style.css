@@ -9,6 +9,7 @@ body {
   min-height: 100vh;
   place-items: center;
   display: grid;
+  /* background: white; */
   background: #0b0f17;
   color: #e5e7eb;
 }
@@ -53,8 +54,9 @@ body {
   display: flex;
   position: fixed;
   /* right: 100px; */
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
+  transform: scale(1.8);
 }
 
 .reset-game {
@@ -70,14 +72,16 @@ body {
   display: flex;
   position: fixed;
   /* right: 100px; */
-  top: 10px;
-  right: 32px;
+  top: 20px;
+  right: 60px;
+  transform: scale(1.8);
 }
 
 .action-bar {
   position: fixed;
-  bottom: 20px;
-  transform: translateX(26%);
+  bottom: 24px;
+  /* right: px; */
+  transform: translateX(22%) scale(1.8);
   display: flex;
   gap: 12px;
   background: #1f2937;
@@ -120,6 +124,7 @@ button[button-disabled="true"]:focus {
   image-rendering: pixelated;
   background: url("maps/Fire-Emblem-Map.png") top left / 100% 100%;
   overflow: hidden;
+  transform: scale(1.8);
 }
 
 .strength-value {
@@ -164,7 +169,6 @@ button[button-disabled="true"]:focus {
 
 .health-value {
   position: absolute;
-  top: 0.5px;
   left: 60%;
   transform: translateX(-33%);
   width: 100%;
@@ -438,6 +442,7 @@ button[button-disabled="true"]:focus {
   align-items: center;
   gap: 12px;
 }
+
 .heading {
   display: flex;
   gap: 12px;
