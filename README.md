@@ -1,14 +1,6 @@
 # Fire Emblem Lite
 A browser-based tactical RPG inspired by Fire Emblem, featuring grid-based movement, sprite animations, and turn-based combat - all built from JavaScript, HTML, and CSS.
 
-# Features
-- Grid-based movement with BFS pathfinding.
-- Turn-based combat with player and enemy phases.
-- Enemy AI targets the closest player unit (BFS and Manhattan distance)
-- Selectable units highlight move range.
-- Sprite animations (attack, move, idle, hurt, death)
-- Single map with terrain
-
 # Demo
 
 ## Snapshot
@@ -23,6 +15,14 @@ https://fire-emblem-lite.netlify.app/
 3. Choose a unit action (attack or wait)
 4. If an enemy unit is adjacent, the friendly unit will attack the enemy unit via the attack action.
 5. Once all friendly units act, the player phase will end, beginning the enemy phase.
+
+# Features
+- Grid-based movement with BFS pathfinding.
+- Turn-based combat with player and enemy phases.
+- Enemy AI targets the closest player unit (BFS and Manhattan distance)
+- Selectable units highlight move range.
+- Sprite animations (attack, move, idle, hurt, death)
+- Single map with terrain
 
 # Future Plans
 - More unit variety with animations (Wizard and Archer).
