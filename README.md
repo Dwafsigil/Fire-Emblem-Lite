@@ -18,7 +18,7 @@ https://fire-emblem-lite.netlify.app/
 - Single map with terrain
 
 # How to Play
-1. Use the arrow keys to traverse the board and the space bar to select a unit. "Z" will allow the player to revert their input.
+1. Use the arrow keys to traverse the board and the space bar to select a unit. "X" will allow the player to revert their input.
 2. With a unit selected, move the unit to a highlighted tile.
 3. Choose a unit action (attack or wait)
 4. If an enemy unit is adjacent, the friendly unit will attack the enemy unit via the attack action.
