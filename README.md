@@ -9,6 +9,9 @@ A browser-based tactical RPG inspired by Fire Emblem, featuring grid-based movem
 - Sprite animations (attack, move, idle, hurt, death)
 - Single map with terrain
 
+# Demo
+<img width="709" height="531" alt="cropped-fire_emblem_lite (1)" src="https://github.com/user-attachments/assets/b3f36f7c-a28c-4b51-9d6d-e7a4f344a57d" />
+
 # How to Play
 1. Use the arrow keys to traverse the board and the space bar to select a unit. "Z" will allow the player to revert their input.
 2. With a unit selected, move the unit to a highlighted tile.
