@@ -10,6 +10,8 @@ A browser-based tactical RPG inspired by Fire Emblem, featuring grid-based movem
 - Single map with terrain
 
 # Demo
+
+## Snapshot
 <img width="709" height="531" alt="cropped-fire_emblem_lite (1)" src="https://github.com/user-attachments/assets/b3f36f7c-a28c-4b51-9d6d-e7a4f344a57d" />
 
 ## Game Link
