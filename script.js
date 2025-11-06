@@ -40,6 +40,7 @@ const actionButtons = {
 };
 const phaseText = document.querySelector(".phase");
 const turnText = document.querySelector(".turn");
+const gameOverCover = document.querySelector(".game-over-cover");
 
 // Turn Logic Variables ------------------------
 let currentUnitsQueue = [];
@@ -101,7 +102,7 @@ let allUnits = [
     affiliation: 0,
     row: 1,
     col: 1,
-    strength: 12,
+    strength: 3,
     movement: 3,
   }),
   new unitStats({
@@ -111,17 +112,17 @@ let allUnits = [
     affiliation: 0,
     row: 2,
     col: 3,
-    strength: 14,
+    strength: 4,
   }),
   new unitStats({
     playerId: 2,
     name: "Tyler",
     unitType: "Knight_2",
     affiliation: 1,
-    row: 7,
-    col: 9,
+    row: 8,
+    col: 10,
     movement: 5,
-    strength: 11,
+    strength: 5,
   }),
   new unitStats({
     playerId: 3,
@@ -131,7 +132,7 @@ let allUnits = [
     row: 10,
     col: 8,
     movement: 2,
-    strength: 14,
+    strength: 4,
   }),
   new unitStats({
     playerId: 4,
@@ -141,7 +142,7 @@ let allUnits = [
     row: 8,
     col: 7,
     movement: 1,
-    strength: 20,
+    strength: 10,
   }),
   new unitStats({
     playerId: 5,
@@ -151,7 +152,7 @@ let allUnits = [
     row: 4,
     col: 1,
     movement: 4,
-    strength: 14,
+    strength: 4,
   }),
 ];
 
@@ -179,7 +180,7 @@ async function runBattle() {
         turnText.textContent = `Turn: ${turnCounter}`;
         // consoleTextField.textContent = "";
         // Player Select
-        if (isBattleOver()) break;
+        if (await isBattleOver()) break;
         phase = Phase.PLAYER_SELECT;
         // phaseText.textContent = "Player Select";
         await gates[Phase.PLAYER_SELECT].wait();
@@ -212,7 +213,7 @@ async function runBattle() {
         selectedUnit = null;
         setDisabled(actionButtons.attack, false);
         console.log("Finished Player_Action");
-        if (isBattleOver()) break;
+        if (await isBattleOver()) break;
       }
     } catch (e) {
       if (e == CANCEL) {
@@ -230,7 +231,7 @@ async function runBattle() {
 
     playerTurn = true;
     console.log("Finished Enemy Turn");
-    if (isBattleOver()) break;
+    if (await isBattleOver()) break;
     turnCounter++;
   }
 
@@ -241,13 +242,28 @@ function setDisabled(btn, disabled) {
   btn.setAttribute("button-disabled", String(disabled));
 }
 
-function isBattleOver() {
+async function isBattleOver() {
   let friendlyUnit = allUnits.filter((e) => e.affiliation == 0);
   let enemyUnit = allUnits.filter((e) => e.affiliation == 1);
-  if (friendlyUnit.length == 0 || enemyUnit.length == 0) {
-    // phaseText.textContent = "Game Over!";
+  // if (friendlyUnit.length == 0 || enemyUnit.length == 0) {
+  //   // phaseText.textContent = "Game Over!";
+  //   return true;
+  // }
+
+  if (friendlyUnit.length == 0) {
+    gameOverCover.textContent = "You Lose";
+    await delay(1500);
+    gameOverCover.classList.remove("hidden");
     return true;
   }
+
+  if (enemyUnit.length == 0) {
+    gameOverCover.textContent = "You Win";
+    await delay(1500);
+    gameOverCover.classList.remove("hidden");
+    return true;
+  }
+
   return false;
 }
 

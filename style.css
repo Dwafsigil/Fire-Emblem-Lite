@@ -243,6 +243,24 @@ button[button-disabled="true"]:focus {
   display: none;
 }
 
+.game-over-cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  position: relative;
+  height: 408px;
+  width: 408px;
+  z-index: 999;
+  color: #e0e0e0;
+  letter-spacing: 2px;
+  word-spacing: 2px;
+}
+
+.game-over-cover.hidden {
+  display: none;
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(12, 32px);

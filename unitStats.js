@@ -14,7 +14,7 @@ export class unitStats {
     skill = 10,
     speed = 10,
     luck = 10,
-    defense = 10,
+    defense = 0,
     resistance = 10,
     movement = 2,
     affiliation = 0,
@@ -72,7 +72,7 @@ export class unitStats {
   }
 
   updateStrength() {
-    this.strengthValue.textContent = `STR ${this.strength}`;
+    this.strengthValue.textContent = `ATK ${this.strength}`;
   }
   //   getStrength() {
   //     return this.strength;
