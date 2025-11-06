@@ -252,14 +252,14 @@ async function isBattleOver() {
 
   if (friendlyUnit.length == 0) {
     gameOverCover.textContent = "You Lose";
-    await delay(1500);
+    await delay(1000);
     gameOverCover.classList.remove("hidden");
     return true;
   }
 
   if (enemyUnit.length == 0) {
     gameOverCover.textContent = "You Win";
-    await delay(1500);
+    await delay(1000);
     gameOverCover.classList.remove("hidden");
     return true;
   }
