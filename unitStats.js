@@ -1,3 +1,5 @@
+// unit class
+
 import { damageCalculation } from "./calculations.js";
 // import { consoleContent, consoleLog, consoleTextField } from "./script.js";
 
@@ -61,7 +63,7 @@ export class unitStats {
   updateHealthBar() {
     const pct = Math.max(
       0,
-      Math.min(100, (this.health / this.maxHealth) * 100)
+      Math.min(100, (this.health / this.maxHealth) * 100),
     );
     this.healthBarFill.style.width = `${pct}%`;
   }
@@ -85,7 +87,7 @@ export class unitStats {
   attackPlayer(target) {
     let damage = damageCalculation(this, target);
     target.takeDamage(damage);
-    console.log(`${this.name} attacked ${target.name} for ${damage} damage!`);
+
     this.strengthValue.classList.add("hidden");
 
     // consoleContent = `\n${this.name} attacked ${target.name} for ${damage} damage!`;
@@ -94,18 +96,15 @@ export class unitStats {
   takeDamage(damage) {
     this.health = Math.max(0, this.health - damage);
     this.updateHealthBar();
-    console.log(`${this.name} is now ${this.health} HP! `);
     this.updateHealthValue();
   }
 
   playerWait() {
-    console.log("I'm chillin rn gang");
     this.strengthValue.classList.add("hidden");
   }
 
   checkDead() {
     if (this.health <= 0) {
-      console.log(`${this.name} has fallen`);
       return true;
     }
     return false;

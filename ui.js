@@ -1,0 +1,29 @@
+// ui references and dom
+
+export function createUI() {
+  const boardEl = document.querySelector(".board");
+  const actionBarEl = document.querySelector(".action-bar");
+
+  return {
+    boardEl,
+    actionBarEl,
+
+    phaseText: document.querySelector(".phase"),
+    turnText: document.querySelector(".turn"),
+    gameOverCover: document.querySelector(".game-over-cover"),
+    consoleTextField: document.querySelector(".text-container"),
+    consoleLog: document.querySelector(".console-log"),
+    gamePhase: document.querySelector(".current-phase"),
+    btns: Array.from(document.querySelectorAll(".action-btn")),
+    container: document.querySelector(".container"),
+    startCover: document.querySelector(".start-cover"),
+    actionButtons: {
+      attack: actionBarEl.querySelector(`[data-action="attack"]`),
+      ability: actionBarEl.querySelector(`[data-action="ability"]`),
+      item: actionBarEl.querySelector(`[data-action="item"]`),
+      wait: actionBarEl.querySelector(`[data-action="wait"]`),
+    },
+    resetGame: document.querySelector(".reset-game"),
+    toggleBGM: document.querySelector(".toggle-bgm"),
+  };
+}
