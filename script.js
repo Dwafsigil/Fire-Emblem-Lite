@@ -62,40 +62,48 @@ export const gates = {
   [Phase.ENEMY_TURN]: createGate(),
 };
 
-// To move Hover and Player with Arrow Keys ✅
 ui.boardEl.addEventListener("keydown", (e) => {
-  const moves = {
-    ArrowUp: [-1, 0],
-    ArrowDown: [1, 0],
-    ArrowRight: [0, 1],
-    ArrowLeft: [0, -1],
-  };
+  const handleKeys = new Set([
+    "ArrowUp",
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "z",
+    "x",
+    " ",
+  ]);
 
-  if (state.attackOn == true) return;
+  if (handleKeys.has(e.key)) e.preventDefault();
 
-  if (moves[e.key]) {
-    e.preventDefault();
-    removeHover(state, ui);
-    moveHover(state, ui, ...moves[e.key]);
+  // 1. x go back
 
-    if (state.playerSelected) {
-      console.log("Moving Player");
-      movePlayer(state, ui, ...moves[e.key]);
+  if (e.key == "x") {
+    if (state.playerSelected && state.phase === Phase.PLAYER_SELECT) {
+      placePlayer(state, ui, state.startRow, state.startCol);
+      state.currentUnitsQueue.push(state.selectedUnit);
+      state.selectedUnit.strengthValue.classList.add("hidden");
+
+      state.playerSelected = false;
+      state.selectedUnit = null;
+      playSfx(btnClick, 0.5, 0);
+
+      removeHighlight(ui.boardEl, state.highTile);
     }
+    if (state.phase === Phase.PLAYER_ACTION) {
+      removeAttackHighlight(state, ui);
+      removeConfirmHiglight(state, ui);
+      openActionBar(ui.actionBarEl);
+      state.attackOn = false;
+      state.isTargeting = false;
+      playSfx(btnClick, 0.5, 0);
+    }
+
+    return;
   }
-});
 
-// CHANGE THIS UP
-// Select and Deslect Player with Space
-// might be good check ✅
-ui.boardEl.addEventListener("keydown", (e) => {
-  e.preventDefault();
-
-  // if it's the player phase
-  if (state.phase !== Phase.PLAYER_SELECT) return;
-
-  // if selecting a player
+  // 2. z selecting and deselecting player
   if (
+    state.phase === Phase.PLAYER_SELECT &&
     e.key == "z" &&
     isOccupied(state.units, state.hover.row, state.hover.col) &&
     !state.playerSelected
@@ -156,130 +164,113 @@ ui.boardEl.addEventListener("keydown", (e) => {
 
     gates[Phase.PLAYER_SELECT].open(state.selectedUnit);
     // playSfx(btnClick, 0.5, 0);
+
+    return;
   }
-});
 
-// move action bar to right
-ui.actionBarEl.addEventListener("keydown", (e) => {
-  e.preventDefault();
-  if (e.key == "ArrowRight") {
-    state.i = nextIndex(state.i, 1);
-    setActive(state.i);
-    playSfx(btnClick, 0.5, 0);
+  // 3. Arrow Keys move and hover in 4 directions
+  const moves = {
+    ArrowUp: [-1, 0],
+    ArrowDown: [1, 0],
+    ArrowRight: [0, 1],
+    ArrowLeft: [0, -1],
+  };
+
+  // if (state.attackOn == true) return;
+
+  if (moves[e.key] && state.attackOn !== true) {
+    e.preventDefault();
+    removeHover(state, ui);
+    moveHover(state, ui, ...moves[e.key]);
+
+    if (state.playerSelected) {
+      console.log("Moving Player");
+      movePlayer(state, ui, ...moves[e.key]);
+    }
   }
-});
 
-// move action bar to left
-
-ui.actionBarEl.addEventListener("keydown", (e) => {
-  e.preventDefault();
-  if (e.key == "ArrowLeft") {
-    state.i = nextIndex(state.i, -1);
-    setActive(state.i);
-    playSfx(btnClick, 0.5, 0);
-  }
-});
-
-// confirm action bar button
-ui.actionBarEl.addEventListener("keydown", (e) => {
-  e.preventDefault();
-
-  if (e.key == "z") {
-    const btn = e.target.closest(`button[data-action]`);
-    doAction(state, ui, btn.dataset.action);
-    playSfx(btnClick, 0.5, 0);
-  }
-});
-
-ui.actionBarEl.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  const btn = e.target.closest(`button[data-action]`);
-  if (!btn) return false;
-  doAction(state, ui, btn.dataset.action);
-});
-
-ui.boardEl.addEventListener("keydown", (e) => {
-  e.preventDefault();
-  if (!state.isTargeting) return false;
-  removeConfirmHiglight(state, ui);
-  switch (e.key) {
-    case "ArrowUp":
-      if (
-        enemyAt(
-          state.playerTurn,
-          state.units,
-          state.selectedUnit.row - 1,
-          state.selectedUnit.col,
+  // 4. move attack hover onto enemy
+  if (state.isTargeting) {
+    removeConfirmHiglight(state, ui);
+    switch (e.key) {
+      case "ArrowUp":
+        if (
+          enemyAt(
+            state.playerTurn,
+            state.units,
+            state.selectedUnit.row - 1,
+            state.selectedUnit.col,
+          )
         )
-      )
-        confirmHighlight(
-          ui,
-          state.selectedUnit.row - 1,
-          state.selectedUnit.col,
-        );
-      attackedUnit(state, state.selectedUnit.row - 1, state.selectedUnit.col);
-      break;
-    case "ArrowDown":
-      if (
-        enemyAt(
-          state.playerTurn,
-          state.units,
-          state.selectedUnit.row + 1,
-          state.selectedUnit.col,
+          confirmHighlight(
+            ui,
+            state.selectedUnit.row - 1,
+            state.selectedUnit.col,
+          );
+        attackedUnit(state, state.selectedUnit.row - 1, state.selectedUnit.col);
+        break;
+      case "ArrowDown":
+        if (
+          enemyAt(
+            state.playerTurn,
+            state.units,
+            state.selectedUnit.row + 1,
+            state.selectedUnit.col,
+          )
         )
-      )
-        confirmHighlight(
-          ui,
-          state.selectedUnit.row + 1,
-          state.selectedUnit.col,
-        );
-      attackedUnit(state, state.selectedUnit.row + 1, state.selectedUnit.col);
-      break;
-    case "ArrowRight":
-      if (
-        enemyAt(
-          state.playerTurn,
-          state.units,
-          state.selectedUnit.row,
-          state.selectedUnit.col + 1,
+          confirmHighlight(
+            ui,
+            state.selectedUnit.row + 1,
+            state.selectedUnit.col,
+          );
+        attackedUnit(state, state.selectedUnit.row + 1, state.selectedUnit.col);
+        break;
+      case "ArrowRight":
+        if (
+          enemyAt(
+            state.playerTurn,
+            state.units,
+            state.selectedUnit.row,
+            state.selectedUnit.col + 1,
+          )
         )
-      )
-        confirmHighlight(
-          ui,
-          state.selectedUnit.row,
-          state.selectedUnit.col + 1,
-        );
-      attackedUnit(state, state.selectedUnit.row, state.selectedUnit.col + 1);
-      break;
-    case "ArrowLeft":
-      if (
-        enemyAt(
-          state.playerTurn,
-          state.units,
-          state.selectedUnit.row,
-          state.selectedUnit.col - 1,
+          confirmHighlight(
+            ui,
+            state.selectedUnit.row,
+            state.selectedUnit.col + 1,
+          );
+        attackedUnit(state, state.selectedUnit.row, state.selectedUnit.col + 1);
+        break;
+      case "ArrowLeft":
+        if (
+          enemyAt(
+            state.playerTurn,
+            state.units,
+            state.selectedUnit.row,
+            state.selectedUnit.col - 1,
+          )
         )
-      )
-        confirmHighlight(
-          ui,
-          state.selectedUnit.row,
-          state.selectedUnit.col - 1,
-        );
-      attackedUnit(state, state.selectedUnit.row, state.selectedUnit.col - 1);
-      break;
+          confirmHighlight(
+            ui,
+            state.selectedUnit.row,
+            state.selectedUnit.col - 1,
+          );
+        attackedUnit(state, state.selectedUnit.row, state.selectedUnit.col - 1);
+        break;
+    }
+
+    state.unitHighlighted = true;
   }
 
-  state.unitHighlighted = true;
-});
+  // 5. z confirm attack
 
-// To attack
-ui.boardEl.addEventListener("keydown", (e) => {
-  e.preventDefault();
-  if (state.unitHighlighted == false) return false;
-  if (state.receivingUnit == null) return false;
-  if (state.isTargeting == false) return false;
-  if (e.key == "z") {
+  if (
+    state.unitHighlighted == true &&
+    state.receivingUnit !== null &&
+    state.isTargeting == true &&
+    e.key == "z"
+  ) {
+    console.log("inside attacking");
     attack(state);
     state.attackOn = false;
     if (state.receivingUnit.checkDead()) {
@@ -298,34 +289,48 @@ ui.boardEl.addEventListener("keydown", (e) => {
     playSfx(btnClick, 0.5, 0);
 
     gates[Phase.PLAYER_ACTION].open();
+    return;
   }
 });
 
-// When selected a unit
-ui.boardEl.addEventListener("keydown", (e) => {
-  if (e.key == "x") {
-    if (state.playerSelected && state.phase == "player_select") {
-      placePlayer(state, ui, state.startRow, state.startCol);
-      state.currentUnitsQueue.push(state.selectedUnit);
-      state.selectedUnit.strengthValue.classList.add("hidden");
+ui.actionBarEl.addEventListener("keydown", (e) => {
+  const handleKeys = new Set(["ArrowLeft", "ArrowRight", "z", "x", " "]);
 
-      state.playerSelected = false;
-      state.selectedUnit = null;
-      playSfx(btnClick, 0.5, 0);
+  if (handleKeys.has(e.key)) e.preventDefault();
 
-      removeHighlight(ui.boardEl, state.highTile);
-    }
-    if (state.phase == "player_action") {
-      removeAttackHighlight(state, ui);
-      removeConfirmHiglight(state, ui);
-      openActionBar(ui.actionBarEl);
-      state.attackOn = false;
-      state.isTargeting = false;
-      playSfx(btnClick, 0.5, 0);
-    }
+  // Move action bar to the left
+  if (e.key == "ArrowLeft") {
+    state.i = nextIndex(state.i, -1);
+    setActive(state.i);
+    playSfx(btnClick, 0.5, 0);
+  }
+
+  // Move action bar to the right
+  if (e.key == "ArrowRight") {
+    state.i = nextIndex(state.i, 1);
+    setActive(state.i);
+    playSfx(btnClick, 0.5, 0);
+  }
+
+  // confirm button
+  if (e.key == "z") {
+    const btn = e.target.closest(`button[data-action]`);
+    doAction(state, ui, btn.dataset.action);
+    playSfx(btnClick, 0.5, 0);
   }
 });
 
+// this allows you to mouse click on the actionbar
+
+// ui.actionBarEl.addEventListener("click", (e) => {
+//   e.preventDefault();
+
+//   const btn = e.target.closest(`button[data-action]`);
+//   if (!btn) return false;
+//   doAction(state, ui, btn.dataset.action);
+// });
+
+// mouse click to run battle
 ui.container.addEventListener("click", (e) => {
   e.preventDefault();
   if (state.gameStart == false) {
@@ -335,6 +340,7 @@ ui.container.addEventListener("click", (e) => {
   }
 });
 
+// handle the bgm
 let bgmMuted = false;
 // toggleBGM.addEventListener("click", () => {
 //   // console.log("toggle");
@@ -345,6 +351,7 @@ let bgmMuted = false;
 //     bgm.play();
 //   }
 // });
+
 ui.boardEl.addEventListener("keydown", (e) => {
   // console.log("toggle");
 
@@ -358,6 +365,7 @@ ui.boardEl.addEventListener("keydown", (e) => {
   }
 });
 
+// resets the game
 ui.resetGame.addEventListener("click", () => {
   // Refresh the browser
   window.location.reload();
