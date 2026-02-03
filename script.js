@@ -21,5 +21,5 @@ export const gates = {
 
 initUIControls(ui);
 activateBoardInput(state, ui, gates);
-activateActionbarInput(state, ui, gates);
+activateActionbarInput(state, ui);
 activateGlobalInput(state, ui, gates);
