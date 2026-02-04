@@ -4,6 +4,7 @@ import { unitStats } from "./unitStats.js";
 
 //
 export const Phase = {
+  MENU: "menu",
   PLAYER_SELECT: "player_select",
   PLAYER_ACTION: "player_action",
   ENEMY_TURN: "enemy_turn",
@@ -75,6 +76,7 @@ export function createInitialUnits() {
 
 export function createInitialState() {
   return {
+    currentMenu: "startCover",
     enemyMoves: [],
     closestFriendly: null,
     optimalMove: null,
@@ -83,7 +85,7 @@ export function createInitialState() {
     units: createInitialUnits(),
 
     gameStart: false,
-    phase: Phase.PLAYER_SELECT,
+    phase: Phase.MENU,
     turnCounter: 1,
     playerTurn: true,
 

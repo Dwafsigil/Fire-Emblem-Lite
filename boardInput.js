@@ -1,5 +1,5 @@
 import { Phase } from "./state.js";
-import { updatePlayable, checkPlayable } from "./turn.js";
+import { updatePlayable, checkPlayable, isBattleOver } from "./turn.js";
 import { isOccupied, enemyAt, unitAt } from "./unitQueries.js";
 import { openActionBar } from "./uiControls.js";
 import { removeHover, moveHover } from "./hoverView.js";

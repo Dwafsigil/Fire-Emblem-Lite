@@ -61,6 +61,8 @@ export async function runBattle(state, ui, gates) {
       }
       throw e;
     }
+
+    if (await isBattleOver(state, ui)) break;
     state.playerTurn = false;
 
     await delay(1500);

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -11,6 +11,7 @@
     <button class="toggle-bgm" tabindex="-1"></button>
     <button class="reset-game" tabindex="-1"></button>
     <div class="container">
+      <!-- Action Bar -->
       <div class="action-bar hidden" tabindex="0">
         <button class="action-btn" data-action="attack" button-disabled="false">
           Attack
@@ -23,35 +24,42 @@
         <div class="stage">
           <div class="turn">Turn: 1</div>
           <div class="current-phase hidden">Player Phase</div>
-          <div class="start-cover">Click to Start</div>
+
+          <!-- Menu -->
+          <div class="start-cover">
+            <h1>Fire Emblem Lite</h1>
+
+            <button data-action="start">Start</button>
+
+            <button data-action="controls">Controls</button>
+
+            <button data-action="credits">Credits</button>
+          </div>
+
+          <!-- Controls -->
+          <div class="controls hidden">
+            <ul>
+              <li class="control-title">
+                <strong>Controls </strong>
+              </li>
+              <li>→ / ← / ↑ / ↓ - Move</li>
+              <li>z - Confirm</li>
+              <li>X - Undo Action</li>
+              <li>Gray Button - Reset Game</li>
+              <li>White Button - Background Music</li>
+            </ul>
+
+            <button data-action="back">Back</button>
+          </div>
+
+          <!-- Credits -->
+          <div class="credits hidden">
+            Johnny Tu
+
+            <button data-action="back">Back</button>
+          </div>
           <div class="game-over-cover hidden">Place Holder Text</div>
           <div class="board" tabindex="-1"></div>
-        </div>
-        <div class="controls">
-          <ul>
-            <ol>
-              <strong>Note </strong
-              >: No mobile support yet.
-            </ol>
-            <ol class="control-title">
-              <strong>Controls </strong>
-            </ol>
-            <ol>
-              → / ← / ↑ / ↓ - Move
-            </ol>
-            <ol>
-              Space - Confirm
-            </ol>
-            <ol>
-              X - Undo Action
-            </ol>
-            <ol>
-              Gray Button - Reset Game
-            </ol>
-            <ol>
-              White Button - Background Music
-            </ol>
-          </ul>
         </div>
       </div>
       <script type="module" src="script.js" defer></script>

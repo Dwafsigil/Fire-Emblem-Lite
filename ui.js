@@ -25,5 +25,11 @@ export function createUI() {
     },
     resetGame: document.querySelector(".reset-game"),
     toggleBGM: document.querySelector(".toggle-bgm"),
+    startCover: document.querySelector(".start-cover"),
+    startBtn: document.querySelector(".start-Btn"),
+    controlsBtn: document.querySelector(".controls-Btn"),
+    creditsBtn: document.querySelector(".credits-Btn"),
+    controls: document.querySelector(".controls"),
+    credits: document.querySelector(".credits"),
   };
 }

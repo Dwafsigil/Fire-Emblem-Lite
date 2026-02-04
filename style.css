@@ -59,11 +59,8 @@ body {
   transform: scale(1.8);
 }
 
-.controls {
-  /* position: fixed; */
-  /* top: 150px; */
-  /* right: 175px; */
-  /* background: #1f2937; */
+/* .controls {
+
   height: 100px;
   width: 240px;
   color: white;
@@ -75,7 +72,7 @@ body {
 
 .controls ol {
   margin-top: 10px;
-}
+} */
 
 .reset-game {
   /* padding: 8px 12px; */
@@ -243,11 +240,13 @@ button[button-disabled="true"]:focus {
   }
 }
 
+/* Menu */
 .start-cover {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgb(0, 0, 0);
   position: relative;
   height: 408px;
   width: 408px;
@@ -255,9 +254,80 @@ button[button-disabled="true"]:focus {
   color: #e0e0e0;
   letter-spacing: 2px;
   word-spacing: 2px;
+  gap: 6px;
+}
+
+.start-cover h1 {
+  font-size: 40px;
+  margin-bottom: 50px;
+}
+
+.start-cover button {
+  padding: 8px 12px;
+  font-size: 20px;
+  /* border-style: none; */
+  border-radius: 0px;
+  background: #ffffff;
+  height: 50px;
+  width: 200px;
+  color: #7b5214;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+.start-cover button.pressed {
+  transform: scale(0.96);
+  box-shadow: 0 0 0;
 }
 
 .start-cover.hidden {
+  display: none;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 0);
+  position: relative;
+  height: 408px;
+  width: 408px;
+  z-index: 10;
+  color: #e0e0e0;
+  letter-spacing: 2px;
+  word-spacing: 2px;
+  gap: 6px;
+}
+
+.controls.hidden {
+  display: none;
+}
+
+.controls li {
+  list-style-type: none;
+}
+
+/* Credits */
+.credits {
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 0);
+  position: relative;
+  height: 408px;
+  width: 408px;
+  z-index: 10;
+  color: #e0e0e0;
+  letter-spacing: 2px;
+  word-spacing: 2px;
+  gap: 6px;
+}
+
+.credits.hidden {
   display: none;
 }
 
