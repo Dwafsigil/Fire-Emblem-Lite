@@ -22,6 +22,7 @@ import {
 } from "./movement.js";
 
 import { showUnitStats } from "./unitStatsUI.js";
+import { items } from "./items.js";
 
 export function activateBoardInput(state, ui, gates) {
   ui.boardEl.addEventListener("keydown", (e) => {
@@ -190,9 +191,8 @@ export function activateBoardInput(state, ui, gates) {
           ui.terrainStat.textContent = "Grass";
           break;
       }
-      console.log(terrain);
 
-      // TURN INTO A FUNCTION LATER UPDATES UNIT STATS
+      // TURN INTO A FUNCTION LATER UPDATES UNIT STATS + POPULATE ITEM LIST
       if (
         isOccupied(state.units, state.hover.row, state.hover.col) ||
         state.playerSelected
@@ -200,6 +200,20 @@ export function activateBoardInput(state, ui, gates) {
         const hoveredUnit =
           unitAt(state.units, state.hover.row, state.hover.col) ||
           state.selectedUnit;
+
+        if (!state.playerSelected) {
+          hoveredUnit.inventory.forEach((item, index) => {
+            console.log(item, index);
+            const el = document.createElement("button");
+            el.className = item;
+            el.dataset.index = index;
+            el.dataset.id = item.id;
+            el.textContent = items[item.id].name;
+            ui.itemList.appendChild(el);
+          });
+        }
+
+        console.log(hoveredUnit.inventory);
 
         ui.unitName.textContent = `${hoveredUnit.name}`;
         ui.unitHealthStat.textContent = `HP: ${hoveredUnit.health}`;
@@ -211,6 +225,8 @@ export function activateBoardInput(state, ui, gates) {
         console.log(hoveredUnit.name);
       } else {
         ui.statList.classList.add("hidden");
+        // removes all children of an element
+        ui.itemList.replaceChildren();
       }
 
       if (state.playerSelected) {

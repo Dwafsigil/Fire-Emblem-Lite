@@ -21,6 +21,8 @@ export function createInitialUnits() {
       col: 2,
       strength: 10,
       movement: 5,
+      inventory: [{ id: "potion" }, { id: "potion" }],
+      health: 5,
     }),
     // new unitStats({
     //   playerId: 1,
@@ -40,6 +42,7 @@ export function createInitialUnits() {
       col: 4,
       movement: 5,
       strength: 5,
+      inventory: [{ id: "potion" }],
     }),
     // new unitStats({
     //   playerId: 3,

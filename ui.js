@@ -38,5 +38,6 @@ export function createUI() {
     unitMovementStat: document.querySelector(".unit-movement-stat"),
     statList: document.querySelector(".stat-list"),
     terrainStat: document.querySelector(".terrain-stat"),
+    itemList: document.querySelector(".item-list"),
   };
 }

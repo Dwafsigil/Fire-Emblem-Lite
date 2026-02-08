@@ -580,6 +580,20 @@ button[button-disabled="true"]:focus {
   display: none;
 }
 
+.item-list {
+  position: absolute;
+  top: calc(30% + 8px);
+  right: calc(100% + 8px);
+  width: clamp(150px, 6vw, 240px);
+
+  /* font-size: 10px; */
+
+  background: #111;
+  color: #eee;
+  border: 2px solid #444;
+  padding: 12px;
+}
+
 .terrain-stat {
   position: absolute;
   top: calc(88% + 2px);

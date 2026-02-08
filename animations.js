@@ -71,6 +71,10 @@ export function doAction(state, ui, action) {
     case "ability":
       break;
     case "item":
+      console.log("item");
+      const firstItem = ui.itemList.querySelector("button");
+      firstItem?.focus();
+
       break;
     case "wait":
       updatePlayable(

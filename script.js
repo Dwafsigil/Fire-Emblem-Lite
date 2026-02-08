@@ -8,6 +8,7 @@ import { initUIControls } from "./uiControls.js";
 import { activateBoardInput } from "./boardInput.js";
 import { activateActionbarInput } from "./actionbarInput.js";
 import { activateGlobalInput } from "./globalInput.js";
+import { itemListControls } from "./itemListControls.js";
 
 export const state = createInitialState();
 export const ui = createUI();
@@ -20,6 +21,7 @@ export const gates = {
 };
 
 initUIControls(ui);
+itemListControls(ui, state, gates);
 activateBoardInput(state, ui, gates);
 activateActionbarInput(state, ui);
 activateGlobalInput(state, ui, gates);
@@ -27,3 +29,9 @@ activateGlobalInput(state, ui, gates);
 runGame(state, ui, gates);
 
 // leveling, weapon triangle, terrain bonus, objectives, classes, items, skills, saves
+
+// you need to turn some code in hover move into functions
+
+// buttons for the action bar is screwed up
+
+// make the ui box sizes constant
