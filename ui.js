@@ -31,5 +31,11 @@ export function createUI() {
     creditsBtn: document.querySelector(".credits-Btn"),
     controls: document.querySelector(".controls"),
     credits: document.querySelector(".credits"),
+    unitName: document.querySelector(".unit-name"),
+    unitHealthStat: document.querySelector(".unit-health-stat"),
+    unitAttackStat: document.querySelector(".unit-attack-stat"),
+    unitDefenseStat: document.querySelector(".unit-defense-stat"),
+    unitMovementStat: document.querySelector(".unit-movement-stat"),
+    statList: document.querySelector(".stat-list"),
   };
 }

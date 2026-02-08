@@ -7,7 +7,7 @@ export class unitStats {
   constructor({
     playerId,
     name,
-    unitType,
+    unitType = "Knight",
     maxHealth = 10,
     health = 10,
     healthBarFill = null,
@@ -22,6 +22,7 @@ export class unitStats {
     affiliation = 0,
     row = 0,
     col = 0,
+    items = null,
   }) {
     this.playerId = playerId;
     this.name = name;
@@ -39,6 +40,7 @@ export class unitStats {
     this.movement = movement;
     this.row = row;
     this.col = col;
+    this.items = items;
 
     if (affiliation !== 0 && affiliation !== 1) {
       throw new Error("Affiliation Value Error");

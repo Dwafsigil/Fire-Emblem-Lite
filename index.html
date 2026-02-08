@@ -21,45 +21,58 @@
         <button class="action-btn" data-action="wait">Wait</button>
       </div>
       <div class="content">
-        <div class="stage">
-          <div class="turn">Turn: 1</div>
-          <div class="current-phase hidden">Player Phase</div>
-
-          <!-- Menu -->
-          <div class="start-cover">
-            <h1>Fire Emblem Lite</h1>
-
-            <button data-action="start">Start</button>
-
-            <button data-action="controls">Controls</button>
-
-            <button data-action="credits">Credits</button>
-          </div>
-
-          <!-- Controls -->
-          <div class="controls hidden">
-            <ul>
-              <li class="control-title">
-                <strong>Controls </strong>
-              </li>
-              <li>→ / ← / ↑ / ↓ - Move</li>
-              <li>z - Confirm</li>
-              <li>X - Undo Action</li>
-              <li>Gray Button - Reset Game</li>
-              <li>White Button - Background Music</li>
+        <div class="game-shell">
+          <aside class="unit-stats">
+            <ul class="stat-list hidden">
+              <li class="unit-name">Name</li>
+              <li class="unit-health-stat">Health</li>
+              <li class="unit-attack-stat">Attack</li>
+              <li class="unit-defense-stat">Defense</li>
+              <li class="unit-movement-stat">Movement</li>
             </ul>
+          </aside>
+          <aside class="terrain-stat">terrain</aside>
+          <div class="stage">
+            <div class="turn">Turn: 1</div>
+            <div class="current-phase hidden">Player Phase</div>
 
-            <button data-action="back">Back</button>
+            <!-- Menu -->
+            <div class="start-cover">
+              <h1>Fire Emblem Lite</h1>
+
+              <button data-action="start">Start</button>
+
+              <button data-action="controls">Controls</button>
+
+              <button data-action="credits">Credits</button>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls hidden">
+              <ul>
+                <li class="control-title">
+                  <strong>Controls </strong>
+                </li>
+                <li>→ / ← / ↑ / ↓ - Move</li>
+                <li>z - Confirm</li>
+                <li>X - Undo Action</li>
+                <li>Gray Button - Reset Game</li>
+                <li>White Button - Background Music</li>
+              </ul>
+
+              <button data-action="back">Back</button>
+            </div>
+
+            <!-- Credits -->
+            <div class="credits hidden">
+              Johnny Tu
+
+              <button data-action="back">Back</button>
+            </div>
+            <div class="game-over-cover hidden">Place Holder Text</div>
+            <div class="board" tabindex="-1"></div>
           </div>
-
-          <!-- Credits -->
-          <div class="credits hidden">
-            Johnny Tu
-
-            <button data-action="back">Back</button>
-          </div>
-          <div class="game-over-cover hidden">Place Holder Text</div>
-          <div class="board" tabindex="-1"></div>
+          <!-- <div class = "right-spacer"><div> -->
         </div>
       </div>
       <script type="module" src="script.js" defer></script>

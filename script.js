@@ -4,9 +4,7 @@ import { createInitialState, Phase } from "./state.js";
 import { createUI } from "./ui.js";
 import { createGate } from "./gates.js";
 import { runGame } from "./runGame.js";
-
 import { initUIControls } from "./uiControls.js";
-
 import { activateBoardInput } from "./boardInput.js";
 import { activateActionbarInput } from "./actionbarInput.js";
 import { activateGlobalInput } from "./globalInput.js";
@@ -28,4 +26,4 @@ activateGlobalInput(state, ui, gates);
 
 runGame(state, ui, gates);
 
-// leveling, weapon triangle, terrain bonus, objectives, classes, items, skills, saves, menu (Start, control, credits)
+// leveling, weapon triangle, terrain bonus, objectives, classes, items, skills, saves

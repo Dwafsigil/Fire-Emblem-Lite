@@ -21,6 +21,8 @@ import {
   movePlayer,
 } from "./movement.js";
 
+import { showUnitStats } from "./unitStatsUI.js";
+
 export function activateBoardInput(state, ui, gates) {
   ui.boardEl.addEventListener("keydown", (e) => {
     const moves = {
@@ -159,6 +161,27 @@ export function activateBoardInput(state, ui, gates) {
     if (moves[e.key] && !state.attackOn) {
       removeHover(state, ui);
       moveHover(state, ui, ...moves[e.key]);
+
+      // TURN INTO A FUNCTION LATER UPDATES UNIT STATS
+      if (
+        isOccupied(state.units, state.hover.row, state.hover.col) ||
+        state.playerSelected
+      ) {
+        const hoveredUnit =
+          unitAt(state.units, state.hover.row, state.hover.col) ||
+          state.selectedUnit;
+
+        ui.unitName.textContent = `${hoveredUnit.name}`;
+        ui.unitHealthStat.textContent = `HP: ${hoveredUnit.health}`;
+        ui.unitAttackStat.textContent = `ATK: ${hoveredUnit.strength}`;
+        ui.unitDefenseStat.textContent = `DEF: ${hoveredUnit.defense}`;
+        ui.unitMovementStat.textContent = `MOV: ${hoveredUnit.movement}`;
+
+        ui.statList.classList.remove("hidden");
+        console.log(hoveredUnit.name);
+      } else {
+        ui.statList.classList.add("hidden");
+      }
 
       if (state.playerSelected) {
         console.log("Moving Player");
