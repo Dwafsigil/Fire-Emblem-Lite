@@ -565,9 +565,10 @@ button[button-disabled="true"]:focus {
   top: 0;
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
+  height: 30%;
 
   background: #111;
-  color: #eee;
+  color: #ffffff;
   border: 2px solid #444;
   padding: 12px;
 }
@@ -585,11 +586,12 @@ button[button-disabled="true"]:focus {
   top: calc(30% + 8px);
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
+  height: 55%;
 
   /* font-size: 10px; */
 
   background: #111;
-  color: #eee;
+  color: #ffffff;
   border: 2px solid #444;
   padding: 12px;
 }
@@ -599,11 +601,11 @@ button[button-disabled="true"]:focus {
   top: calc(88% + 2px);
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
-
+  height: 11.5%;
   /* font-size: 10px; */
 
   background: #111;
-  color: #eee;
+  color: #ffffff;
   border: 2px solid #444;
   padding: 12px;
 }
