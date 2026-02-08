@@ -37,5 +37,6 @@ export function createUI() {
     unitDefenseStat: document.querySelector(".unit-defense-stat"),
     unitMovementStat: document.querySelector(".unit-movement-stat"),
     statList: document.querySelector(".stat-list"),
+    terrainStat: document.querySelector(".terrain-stat"),
   };
 }
