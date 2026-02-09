@@ -35,3 +35,5 @@ runGame(state, ui, gates);
 // buttons for the action bar is screwed up
 
 // add combat stats such as hit, crit, avoid
+
+// bug where when friendly unit dies the game freaks out

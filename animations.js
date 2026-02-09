@@ -53,6 +53,7 @@ export function runAnimation(unit) {
 
 export async function deadAnimation(unit) {
   unit.node.classList.remove("dead");
+  // console.log("Running dead animation");
   unit.node.style.setProperty(
     "--sprite-url",
     `url("assets/${unit.unitType}/dead.png")`,
@@ -77,7 +78,7 @@ export function doAction(state, ui, action) {
     case "ability":
       break;
     case "item":
-      console.log("item");
+      // console.log("item");
       const firstItem = ui.itemList.querySelector("button");
       firstItem?.focus();
 

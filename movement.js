@@ -66,7 +66,7 @@ export function removeHighlight(boardEl, highTile) {
   for (const [r, c] of highTile) {
     tileAt(boardEl, r, c).classList.remove("highlight");
   }
-  console.log("removeHighlight");
+  // console.log("removeHighlight");
 }
 
 // ✅

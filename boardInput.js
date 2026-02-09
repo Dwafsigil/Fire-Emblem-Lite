@@ -82,7 +82,7 @@ export function activateBoardInput(state, ui, gates) {
 
     // 2. z selecting and deselecting player
     if (state.phase === Phase.PLAYER_SELECT && e.key === "z") {
-      console.log("Z");
+      // console.log("Z");
       if (
         isOccupied(state.units, state.hover.row, state.hover.col) &&
         !state.playerSelected
@@ -120,7 +120,7 @@ export function activateBoardInput(state, ui, gates) {
 
           playSfx(btnClick, 0.5, 0);
 
-          state.selectedUnit.strengthValue.classList.remove("hidden");
+          // state.selectedUnit.strengthValue.classList.remove("hidden");
 
           // console.log(state.selectedUnit.hitRate);
 
@@ -164,7 +164,15 @@ export function activateBoardInput(state, ui, gates) {
     // 3. Arrow Keys move and hover in 4 directions
 
     if (moves[e.key] && !state.attackOn) {
-      console.log(state.phase);
+      // console.log(state.phase);
+      if (state.playerSelected) {
+        const floating =
+          state.selectedUnit.node.querySelector(".floating-value");
+        if (floating) {
+          floating.remove();
+        }
+      }
+
       removeHover(state, ui);
       moveHover(state, ui, ...moves[e.key]);
 
@@ -173,7 +181,7 @@ export function activateBoardInput(state, ui, gates) {
       showUnitInfo(state, ui);
 
       if (state.playerSelected) {
-        console.log("Moving Player");
+        // console.log("Moving Player");
         movePlayer(state, ui, ...moves[e.key]);
       }
       return;
@@ -278,10 +286,10 @@ export function activateBoardInput(state, ui, gates) {
     ) {
       // console.log("inside attacking");
       const type = attack(state.selectedUnit, state.receivingUnit, ui);
-      console.log(type);
+      // console.log(type);
       state.attackOn = false;
       if (state.receivingUnit.checkDead()) {
-        removeDead(state, ui);
+        removeDead(state, ui, state.receivingUnit);
       }
       if (
         (!state.receivingUnit.checkDead() && type === "Hit") ||

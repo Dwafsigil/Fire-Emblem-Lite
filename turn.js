@@ -68,7 +68,7 @@ export async function runBattle(state, ui, gates) {
     await delay(1500);
     showPhase(ui, "Enemy Phase");
     state.phase = Phase.ENEMY_TURN;
-    console.log("Run Enemy Turn");
+    // console.log("Run Enemy Turn");
     await runEnemyTurn(state, ui);
     updateObstacle(state);
 

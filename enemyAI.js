@@ -52,7 +52,7 @@ export async function runEnemyTurn(state, ui) {
 }
 
 export async function enemyMove(state, ui, enemyUnit) {
-  console.log(state.closestFriendly);
+  // console.log(state.closestFriendly);
   if (!state.closestFriendly) return;
   const [oR, oC] = state.optimalMove[0];
   const { _, parent } = enemyPossibleMoves(
@@ -128,7 +128,7 @@ export function enemyPossibleMoves(state, startRow, startCol, moveRange) {
     state.enemyMoves.push([r, c]);
   }
 
-  console.log(parent);
+  // console.log(parent);
   return { reachable, parent };
 }
 
@@ -136,7 +136,7 @@ export function enemyAttack(state, ui, enemyUnit, closestFriendly) {
   const type = attack(enemyUnit, closestFriendly, ui);
 
   if (closestFriendly.checkDead()) {
-    removeDead(state, ui);
+    removeDead(state, ui, closestFriendly);
   }
   if ((!closestFriendly.checkDead() && type === "Hit") || type === "Crit") {
     hurtAnimation(closestFriendly);
@@ -155,8 +155,8 @@ export function checkOptimalMove(
   optimalMove,
   obstacles,
 ) {
-  console.log("Running check optimal");
-  console.log(closestFriendly);
+  // console.log("Running check optimal");
+  // console.log(closestFriendly);
 
   let closestDistance = 1000;
   let tempDistance;
@@ -176,7 +176,7 @@ export function checkOptimalMove(
     }
   }
 
-  console.log("optimal move", optimalMove);
+  // console.log("optimal move", optimalMove);
 
   return optimalMove;
 }
@@ -197,7 +197,7 @@ export function findClosestFriendly(units, enemyUnit, closestFriendly) {
       closestFriendly = u;
     }
   }
-  console.log("find closest friendly", closestFriendly);
+  // console.log("find closest friendly", closestFriendly);
   return closestFriendly;
 }
 

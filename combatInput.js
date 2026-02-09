@@ -3,6 +3,7 @@
 import { tileAt } from "./board.js";
 import { attackAnimation } from "./animations.js";
 import { showStats } from "./unitStatsUI.js";
+import { playAndRemove } from "./helpers.js";
 
 export function attack(attackingUnit, receivingUnit, ui) {
   // check if attack will hit
@@ -12,25 +13,57 @@ export function attack(attackingUnit, receivingUnit, ui) {
   let randomCritInt = Math.floor(Math.random() * 100 + 1);
   let hitChance = attackingUnit.hitRate - receivingUnit.avoidRate;
 
-  console.log(hitChance, randomHitInt, randomCritInt);
+  // console.log(hitChance, randomHitInt, randomCritInt);
 
   if (!receivingUnit) return false;
 
   if (randomHitInt <= hitChance) {
     if (randomCritInt <= attackingUnit.critRate) {
-      attackingUnit.attackPlayer(receivingUnit, "Crit");
+      const damage = attackingUnit.attackPlayer(receivingUnit, "Crit");
       attackAnimation(attackingUnit, "Crit");
       showStats(ui, receivingUnit);
+
+      const floatingValue = document.createElement("div");
+      floatingValue.classList.add("floating-value");
+
+      floatingValue.textContent = `${damage}`;
+      floatingValue.style.setProperty("--float-color", "red");
+
+      receivingUnit.node.appendChild(floatingValue);
+      playAndRemove(floatingValue);
+
       return "Crit";
     } else {
-      attackingUnit.attackPlayer(receivingUnit, "Hit");
+      const damage = attackingUnit.attackPlayer(receivingUnit, "Hit");
       attackAnimation(attackingUnit, "Hit");
       showStats(ui, receivingUnit);
+
+      const floatingValue = document.createElement("div");
+      floatingValue.classList.add("floating-value");
+
+      floatingValue.textContent = `${damage}`;
+      floatingValue.style.setProperty("--float-color", "red");
+
+      // console.log(receivingUnit);
+      receivingUnit.node.appendChild(floatingValue);
+      playAndRemove(floatingValue);
+
+      // console.log(receivingUnit);
       return "Hit";
     }
   } else {
     attackAnimation(attackingUnit, "Miss");
     showStats(ui, receivingUnit);
+
+    const floatingValue = document.createElement("div");
+    floatingValue.classList.add("floating-value");
+
+    floatingValue.textContent = `Miss!`;
+    floatingValue.style.setProperty("--float-color", "white");
+
+    receivingUnit.node.appendChild(floatingValue);
+    playAndRemove(floatingValue);
+
     return "Miss";
   }
 }

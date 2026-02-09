@@ -51,7 +51,7 @@ export class unitStats {
   // getters
 
   get hitRate() {
-    return this.skill * 2 + this.luck * 0.5 + 50;
+    return this.skill * 2 + this.luck * 0.5 - 100;
   }
 
   get avoidRate() {
@@ -97,7 +97,8 @@ export class unitStats {
     let damage = damageCalculation(this, target, type);
     target.takeDamage(damage);
 
-    this.strengthValue.classList.add("hidden");
+    return damage;
+    // this.strengthValue.classList.add("hidden");
 
     // consoleContent = `\n${this.name} attacked ${target.name} for ${damage} damage!`;
   }
@@ -109,7 +110,7 @@ export class unitStats {
   }
 
   playerWait() {
-    this.strengthValue.classList.add("hidden");
+    // this.strengthValue.classList.add("hidden");
   }
 
   checkDead() {

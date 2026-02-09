@@ -20,28 +20,28 @@ export function activateGlobalInput(state, ui, gates) {
     if (!btn) return;
 
     if (state.phase === Phase.MENU) {
-      console.log(btn.dataset.action);
+      // console.log(btn.dataset.action);
       switch (btn.dataset.action) {
         case "start": {
-          console.log("start");
+          // console.log("start");
           ui.startCover.classList.add("hidden");
           gates[Phase.MENU].open();
           break;
         }
         case "controls": {
-          console.log("controls");
+          // console.log("controls");
           state.currentMenu = "controls";
           renderMenu(state, ui);
           break;
         }
         case "credits": {
-          console.log("credits");
+          // console.log("credits");
           state.currentMenu = "credits";
           renderMenu(state, ui);
           break;
         }
         case "back": {
-          console.log("back");
+          // console.log("back");
           state.currentMenu = "main";
           renderMenu(state, ui);
           break;

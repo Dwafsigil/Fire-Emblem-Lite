@@ -1,3 +1,5 @@
+import { playAndRemove } from "./helpers.js";
+
 export const items = {
   potion: {
     id: "potion",
@@ -20,6 +22,16 @@ export function useItem(state, ui, foundElement) {
     state.selectedUnit.updateHealthBar();
     ui.unitHealthStat.textContent = `HP: ${state.selectedUnit.health}`;
     ui.itemList.removeChild(foundElement);
+
+    const floatingValue = document.createElement("div");
+    floatingValue.classList.add("floating-value");
+
+    floatingValue.textContent = `${Number(items["potion"].heal)}`;
+    floatingValue.style.setProperty("--float-color", "green");
+
+    state.selectedUnit.node.appendChild(floatingValue);
+
+    playAndRemove(floatingValue);
 
     const index = state.selectedUnit.inventory.findIndex(
       (item) => item.id === "potion",

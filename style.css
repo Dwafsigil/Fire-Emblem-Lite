@@ -132,21 +132,35 @@ button[button-disabled="true"]:focus {
   outline: 2px solid #7aa2ff; /* example focus ring */
 }
 
-.strength-value {
+.floating-value {
   position: absolute;
   top: -5px;
-  left: 50%;
-  transform: translateX(-33%);
+  left: 0%;
+  /* transform: translateX(-33%); */
   width: 100%;
   z-index: 1;
-  font-size: 5px;
+  font-size: 8px;
   letter-spacing: 1px;
   color: black;
+  text-align: center;
+  color: var(--float-color, white);
+
+  animation: floatUp 3000ms ease-out forwards;
 }
 
-.strength-value.hidden {
-  display: none;
+@keyframes floatUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-18px);
+    opacity: 0;
+  }
 }
+/* .floating-value.hidden {
+  display: none;
+} */
 
 .health-bar-container {
   position: absolute;
@@ -489,7 +503,7 @@ button[button-disabled="true"]:focus {
 
 @keyframes dead {
   0% {
-    background-position-x: -5px;
+    background-position-x: 0px;
   }
   20% {
     background-position-x: -120px;
@@ -503,6 +517,7 @@ button[button-disabled="true"]:focus {
   80% {
     background-position-x: -490px;
   }
+
   100% {
     background-position-x: -622px;
   }
@@ -556,7 +571,7 @@ button[button-disabled="true"]:focus {
   height: 408px;
   image-rendering: pixelated;
   background: url("maps/Fire-Emblem-Map.png") top left / 100% 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* transform: scale(1.8); */
 }
 

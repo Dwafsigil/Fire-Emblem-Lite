@@ -19,7 +19,7 @@ export function createInitialUnits() {
       affiliation: 0,
       row: 2,
       col: 2,
-      strength: 10,
+      strength: 40,
       movement: 5,
       inventory: [{ id: "potion" }, { id: "potion" }],
       health: 5,
