@@ -241,7 +241,7 @@ button[button-disabled="true"]:focus {
   height: 408px;
   width: 408px;
   z-index: 10;
-  color: #e0e0e0;
+  color: #ffffff;
   letter-spacing: 2px;
   word-spacing: 2px;
   gap: 6px;
@@ -330,7 +330,7 @@ button[button-disabled="true"]:focus {
   height: 408px;
   width: 408px;
   z-index: 999;
-  color: #e0e0e0;
+  color: #ffffff;
   letter-spacing: 2px;
   word-spacing: 2px;
 }
@@ -566,6 +566,7 @@ button[button-disabled="true"]:focus {
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
   height: 30%;
+  font-size: 11px;
 
   background: #111;
   color: #ffffff;

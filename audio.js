@@ -6,6 +6,8 @@ export const hoverSound = new Audio("sounds/hover_tile.mp3");
 export const swordHit = new Audio("sounds/sword_hit.wav");
 export const hurtGrunt = new Audio("sounds/hurt_sound.wav");
 export const deadGrunt = new Audio("sounds/dead_sound.wav");
+export const critHit = new Audio("sounds/sword_crit.mp3");
+export const missHit = new Audio("sounds/sword_miss.mp3");
 
 bgm.volume = 0.06;
 bgm.loop = true;

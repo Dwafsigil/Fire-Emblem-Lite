@@ -43,6 +43,8 @@ export function createInitialUnits() {
       movement: 5,
       strength: 5,
       inventory: [{ id: "potion" }],
+      health: 30,
+      maxHealth: 30,
     }),
     // new unitStats({
     //   playerId: 3,

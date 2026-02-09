@@ -1,12 +1,48 @@
 // import the stuff later
 
-import { unitAt } from "./unitQueries.js";
-export function showUnitStats(units, r, c) {
-  // if tile contains unit
-  // reveal unit stat ui and show stats
-  // else if no unit
-  // keep unit stat closed
+import { isOccupied } from "./unitQueries.js";
+import { items } from "./items.js";
 
-  const hoveredUnit = unitAt(units, r, c);
-  console.log(hoveredUnit.name);
+import { unitAt } from "./unitQueries.js";
+export function showUnitInfo(state, ui) {
+  // TURN INTO A FUNCTION LATER UPDATES UNIT STATS + POPULATE ITEM LIST
+
+  if (
+    isOccupied(state.units, state.hover.row, state.hover.col) ||
+    state.playerSelected
+  ) {
+    const hoveredUnit =
+      unitAt(state.units, state.hover.row, state.hover.col) ||
+      state.selectedUnit;
+
+    if (!state.playerSelected) {
+      hoveredUnit.inventory.forEach((item, index) => {
+        const el = document.createElement("button");
+        el.className = item;
+        el.dataset.index = index;
+        el.dataset.id = item.id;
+        el.textContent = items[item.id].name;
+        ui.itemList.appendChild(el);
+      });
+    }
+
+    showStats(ui, hoveredUnit);
+
+    ui.statList.classList.remove("hidden");
+  } else {
+    ui.statList.classList.add("hidden");
+    // removes all children of an element
+    ui.itemList.replaceChildren();
+  }
+}
+
+export function showStats(ui, unit) {
+  ui.unitName.textContent = `${unit.name}`;
+  ui.unitHealthStat.textContent = `HP: ${unit.health}`;
+  ui.unitAttackStat.textContent = `ATK: ${unit.strength}`;
+  ui.unitDefenseStat.textContent = `DEF: ${unit.defense}`;
+  ui.unitMovementStat.textContent = `MOV: ${unit.movement}`;
+  ui.unitHitStat.textContent = `HIT: ${unit.hitRate}`;
+  ui.unitAvoidStat.textContent = `AVO: ${unit.avoidRate}`;
+  ui.unitCritStat.textContent = `CRIT: ${unit.critRate}`;
 }

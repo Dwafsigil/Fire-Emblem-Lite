@@ -2,17 +2,37 @@
 
 import { tileAt } from "./board.js";
 import { attackAnimation } from "./animations.js";
+import { showStats } from "./unitStatsUI.js";
 
-export function attack(state) {
-  state.selectedUnit.attackPlayer(state.receivingUnit);
-  // consoleContent += `\n${state.selectedUnit.name} attacked ${state.receivingUnit.name} `;
-  // consoleTextField.textContent = consoleContent;
-  // let tempUnit = state.selectedUnit;
-  if (!state.receivingUnit) return false;
+export function attack(attackingUnit, receivingUnit, ui) {
+  // check if attack will hit
+  // if hit then check if crit
 
-  attackAnimation(state.selectedUnit);
-  // state.selectedUnit.node.classList.remove("attack");
-  // state.selectedUnit.attackPlayer(state.receivingUnit);
+  let randomHitInt = Math.floor(Math.random() * 100 + 1);
+  let randomCritInt = Math.floor(Math.random() * 100 + 1);
+  let hitChance = attackingUnit.hitRate - receivingUnit.avoidRate;
+
+  console.log(hitChance, randomHitInt, randomCritInt);
+
+  if (!receivingUnit) return false;
+
+  if (randomHitInt <= hitChance) {
+    if (randomCritInt <= attackingUnit.critRate) {
+      attackingUnit.attackPlayer(receivingUnit, "Crit");
+      attackAnimation(attackingUnit, "Crit");
+      showStats(ui, receivingUnit);
+      return "Crit";
+    } else {
+      attackingUnit.attackPlayer(receivingUnit, "Hit");
+      attackAnimation(attackingUnit, "Hit");
+      showStats(ui, receivingUnit);
+      return "Hit";
+    }
+  } else {
+    attackAnimation(attackingUnit, "Miss");
+    showStats(ui, receivingUnit);
+    return "Miss";
+  }
 }
 
 export function attackedUnit(state, r, c) {

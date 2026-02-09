@@ -28,10 +28,10 @@ activateGlobalInput(state, ui, gates);
 
 runGame(state, ui, gates);
 
-// leveling, weapon triangle, terrain bonus, objectives, classes, items, skills, saves
+// leveling, weapon triangle, terrain bonus, objectives, classes,  skills, saves, log
 
-// you need to turn some code in hover move into functions
+// can refactor a bunch of code into functions and optimize logic
 
 // buttons for the action bar is screwed up
 
-// make the ui box sizes constant
+// add combat stats such as hit, crit, avoid

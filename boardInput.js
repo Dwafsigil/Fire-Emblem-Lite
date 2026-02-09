@@ -21,8 +21,9 @@ import {
   movePlayer,
 } from "./movement.js";
 
-import { showUnitStats } from "./unitStatsUI.js";
-import { items } from "./items.js";
+import { showTerrainInfo } from "./terrainInfo.js";
+
+import { showUnitInfo } from "./unitStatsUI.js";
 
 export function activateBoardInput(state, ui, gates) {
   ui.boardEl.addEventListener("keydown", (e) => {
@@ -79,8 +80,9 @@ export function activateBoardInput(state, ui, gates) {
       return;
     }
 
-    // 2. spaceBar selecting and deselecting player
+    // 2. z selecting and deselecting player
     if (state.phase === Phase.PLAYER_SELECT && e.key === "z") {
+      console.log("Z");
       if (
         isOccupied(state.units, state.hover.row, state.hover.col) &&
         !state.playerSelected
@@ -119,6 +121,8 @@ export function activateBoardInput(state, ui, gates) {
           playSfx(btnClick, 0.5, 0);
 
           state.selectedUnit.strengthValue.classList.remove("hidden");
+
+          // console.log(state.selectedUnit.hitRate);
 
           return;
         }
@@ -160,74 +164,13 @@ export function activateBoardInput(state, ui, gates) {
     // 3. Arrow Keys move and hover in 4 directions
 
     if (moves[e.key] && !state.attackOn) {
+      console.log(state.phase);
       removeHover(state, ui);
       moveHover(state, ui, ...moves[e.key]);
 
-      // terrain code
-      let terrain = "grass";
-
-      for (const type in state.obstacleTypes) {
-        if (
-          state.obstacleTypes[type].some(
-            ([r, c]) => r === state.hover.row && c === state.hover.col,
-          )
-        ) {
-          terrain = type;
-          break;
-        }
-      }
-
-      switch (terrain) {
-        case "rock":
-          ui.terrainStat.textContent = "Hill";
-          break;
-        case "forest":
-          ui.terrainStat.textContent = "Forest";
-          break;
-        case "castle":
-          ui.terrainStat.textContent = "Castle";
-          break;
-        case "grass":
-          ui.terrainStat.textContent = "Grass";
-          break;
-      }
-
-      // TURN INTO A FUNCTION LATER UPDATES UNIT STATS + POPULATE ITEM LIST
-      if (
-        isOccupied(state.units, state.hover.row, state.hover.col) ||
-        state.playerSelected
-      ) {
-        const hoveredUnit =
-          unitAt(state.units, state.hover.row, state.hover.col) ||
-          state.selectedUnit;
-
-        if (!state.playerSelected) {
-          hoveredUnit.inventory.forEach((item, index) => {
-            console.log(item, index);
-            const el = document.createElement("button");
-            el.className = item;
-            el.dataset.index = index;
-            el.dataset.id = item.id;
-            el.textContent = items[item.id].name;
-            ui.itemList.appendChild(el);
-          });
-        }
-
-        console.log(hoveredUnit.inventory);
-
-        ui.unitName.textContent = `${hoveredUnit.name}`;
-        ui.unitHealthStat.textContent = `HP: ${hoveredUnit.health}`;
-        ui.unitAttackStat.textContent = `ATK: ${hoveredUnit.strength}`;
-        ui.unitDefenseStat.textContent = `DEF: ${hoveredUnit.defense}`;
-        ui.unitMovementStat.textContent = `MOV: ${hoveredUnit.movement}`;
-
-        ui.statList.classList.remove("hidden");
-        console.log(hoveredUnit.name);
-      } else {
-        ui.statList.classList.add("hidden");
-        // removes all children of an element
-        ui.itemList.replaceChildren();
-      }
+      if (!state.playerSelected) ui.itemList.replaceChildren();
+      showTerrainInfo(state, ui);
+      showUnitInfo(state, ui);
 
       if (state.playerSelected) {
         console.log("Moving Player");
@@ -333,13 +276,17 @@ export function activateBoardInput(state, ui, gates) {
       state.isTargeting == true &&
       e.key == "z"
     ) {
-      console.log("inside attacking");
-      attack(state);
+      // console.log("inside attacking");
+      const type = attack(state.selectedUnit, state.receivingUnit, ui);
+      console.log(type);
       state.attackOn = false;
       if (state.receivingUnit.checkDead()) {
         removeDead(state, ui);
       }
-      if (!state.receivingUnit.checkDead()) {
+      if (
+        (!state.receivingUnit.checkDead() && type === "Hit") ||
+        type === "Crit"
+      ) {
         hurtAnimation(state.receivingUnit);
       }
 

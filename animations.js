@@ -7,6 +7,8 @@ import { playSfx } from "./audio.js";
 import { hurtGrunt } from "./audio.js";
 import { swordHit } from "./audio.js";
 import { deadGrunt } from "./audio.js";
+import { critHit } from "./audio.js";
+import { missHit } from "./audio.js";
 import { attackHighlight } from "./combatInput.js";
 import { focusBoard } from "./uiControls.js";
 
@@ -26,9 +28,12 @@ export function playAnim(unit, className, delay) {
   }, delay);
 }
 
-export function attackAnimation(unit) {
+export function attackAnimation(unit, type) {
   playAnim(unit, "attack3", 600);
-  playSfx(swordHit, 0.5, 0);
+
+  if (type === "Hit") playSfx(swordHit, 0.5, 0);
+  if (type === "Crit") playSfx(critHit, 0.5, 0);
+  if (type === "Miss") playSfx(missHit, 0.9, 0);
 }
 
 export function hurtAnimation(unit) {
@@ -67,6 +72,7 @@ export function doAction(state, ui, action) {
       state.isTargeting = true;
       attackHighlight(state, ui);
       focusBoard(ui.boardEl);
+
       break;
     case "ability":
       break;

@@ -1,4 +1,4 @@
-import { items } from "./items.js";
+import { useItem } from "./items.js";
 import { Phase } from "./state.js";
 
 export function itemListControls(ui, state, gates) {
@@ -30,35 +30,10 @@ export function itemListControls(ui, state, gates) {
         return btn.dataset.index === String(current);
       });
 
-      if (foundElement.dataset.id === "potion") {
-        console.log(state.selectedUnit.health);
-        console.log(state.selectedUnit.maxHealth);
-        console.log(state.selectedUnit.inventory);
+      useItem(state, ui, foundElement);
 
-        state.selectedUnit.health += items["potion"].heal;
-
-        if (
-          Number(state.selectedUnit.health) >
-          Number(state.selectedUnit.maxHealth)
-        ) {
-          state.selectedUnit.health = state.selectedUnit.maxHealth;
-        }
-        state.selectedUnit.updateHealthValue(state.selectedUnit);
-        state.selectedUnit.updateHealthBar();
-        ui.unitHealthStat.textContent = `HP: ${state.selectedUnit.health}`;
-        ui.itemList.removeChild(foundElement);
-
-        const index = state.selectedUnit.inventory.findIndex(
-          (item) => item.id === "potion",
-        );
-        state.selectedUnit.inventory.splice(index, 1);
-        console.log(state.selectedUnit.inventory);
-
-        // ui.boardEL.focus();
-        gates[Phase.PLAYER_ACTION].open();
-        return;
-        // console.log("healed");
-      }
+      gates[Phase.PLAYER_ACTION].open();
+      return;
     }
 
     buttons[next].focus();

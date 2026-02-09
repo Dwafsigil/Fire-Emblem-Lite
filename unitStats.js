@@ -48,6 +48,20 @@ export class unitStats {
     this.affiliation = affiliation;
   }
 
+  // getters
+
+  get hitRate() {
+    return this.skill * 2 + this.luck * 0.5 + 50;
+  }
+
+  get avoidRate() {
+    return this.speed * 2 + this.luck - 20;
+  }
+
+  get critRate() {
+    return this.skill / 2 + 30;
+  }
+
   setHealthValue(el) {
     this.healthValue = el;
     this.updateHealthValue();
@@ -78,16 +92,9 @@ export class unitStats {
   updateStrength() {
     this.strengthValue.textContent = `ATK ${this.strength}`;
   }
-  //   getStrength() {
-  //     return this.strength;
-  //   }
 
-  //   getDefense() {
-  //     return this.defense;
-  //   }
-
-  attackPlayer(target) {
-    let damage = damageCalculation(this, target);
+  attackPlayer(target, type) {
+    let damage = damageCalculation(this, target, type);
     target.takeDamage(damage);
 
     this.strengthValue.classList.add("hidden");

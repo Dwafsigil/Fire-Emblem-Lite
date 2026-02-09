@@ -9,6 +9,7 @@ import { runAnimation } from "./animations.js";
 import { tileAt } from "./board.js";
 import { hurtAnimation } from "./animations.js";
 import { attackAnimation } from "./animations.js";
+import { attack } from "./combatInput.js";
 import { removeDead } from "./unitsView.js";
 
 export async function runEnemyTurn(state, ui) {
@@ -36,13 +37,13 @@ export async function runEnemyTurn(state, ui) {
 
     // console.log(checkAdjacent(state, u));
     if (checkAdjacent(state, u)) {
-      enemyAttack(u, state.closestFriendly);
-      if (state.closestFriendly.checkDead()) removeDead(state, ui);
+      enemyAttack(state, ui, u, state.closestFriendly);
+      // if (state.closestFriendly.checkDead()) removeDead(state, ui);
     } else {
       await enemyMove(state, ui, u);
       if (checkAdjacent(state, u)) {
-        enemyAttack(u, state.closestFriendly);
-        if (state.closestFriendly.checkDead()) removeDead(state, ui);
+        enemyAttack(state, ui, u, state.closestFriendly);
+        // if (state.closestFriendly.checkDead()) removeDead(state, ui);
       }
     }
 
@@ -131,13 +132,21 @@ export function enemyPossibleMoves(state, startRow, startCol, moveRange) {
   return { reachable, parent };
 }
 
-export function enemyAttack(enemyUnit, closestFriendly) {
-  // console.log("closest friendly", closestFriendly);
-  enemyUnit.attackPlayer(closestFriendly);
-  if (!closestFriendly.checkDead()) {
+export function enemyAttack(state, ui, enemyUnit, closestFriendly) {
+  const type = attack(enemyUnit, closestFriendly, ui);
+
+  if (closestFriendly.checkDead()) {
+    removeDead(state, ui);
+  }
+  if ((!closestFriendly.checkDead() && type === "Hit") || type === "Crit") {
     hurtAnimation(closestFriendly);
   }
-  attackAnimation(enemyUnit);
+
+  // enemyUnit.attackPlayer(closestFriendly);
+  // if (!closestFriendly.checkDead()) {
+  //   hurtAnimation(closestFriendly);
+  // }
+  // attackAnimation(enemyUnit);
 }
 
 export function checkOptimalMove(
