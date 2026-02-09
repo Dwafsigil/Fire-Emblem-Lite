@@ -4,6 +4,7 @@ import { isOccupied } from "./unitQueries.js";
 import { items } from "./items.js";
 
 import { unitAt } from "./unitQueries.js";
+import { getAvoidWithTerrain } from "./terrainInfo.js";
 export function showUnitInfo(state, ui) {
   // TURN INTO A FUNCTION LATER UPDATES UNIT STATS + POPULATE ITEM LIST
 
@@ -26,7 +27,7 @@ export function showUnitInfo(state, ui) {
       });
     }
 
-    showStats(ui, hoveredUnit);
+    showStats(state, ui, hoveredUnit);
 
     ui.statList.classList.remove("hidden");
   } else {
@@ -36,13 +37,13 @@ export function showUnitInfo(state, ui) {
   }
 }
 
-export function showStats(ui, unit) {
+export function showStats(state, ui, unit) {
   ui.unitName.textContent = `${unit.name}`;
   ui.unitHealthStat.textContent = `HP: ${unit.health}`;
   ui.unitAttackStat.textContent = `ATK: ${unit.strength}`;
   ui.unitDefenseStat.textContent = `DEF: ${unit.defense}`;
   ui.unitMovementStat.textContent = `MOV: ${unit.movement}`;
   ui.unitHitStat.textContent = `HIT: ${unit.hitRate}`;
-  ui.unitAvoidStat.textContent = `AVO: ${unit.avoidRate}`;
+  ui.unitAvoidStat.textContent = `AVO: ${getAvoidWithTerrain(state, unit)} `;
   ui.unitCritStat.textContent = `CRIT: ${unit.critRate}`;
 }

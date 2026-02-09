@@ -1,7 +1,6 @@
 // unit class
 
 import { damageCalculation } from "./calculations.js";
-// import { consoleContent, consoleLog, consoleTextField } from "./script.js";
 
 export class unitStats {
   constructor({
@@ -62,6 +61,10 @@ export class unitStats {
     return this.skill / 2 + 30;
   }
 
+  get terrainBonus() {
+    return getTileType(this.row, this.col);
+  }
+
   setHealthValue(el) {
     this.healthValue = el;
     this.updateHealthValue();
@@ -98,9 +101,6 @@ export class unitStats {
     target.takeDamage(damage);
 
     return damage;
-    // this.strengthValue.classList.add("hidden");
-
-    // consoleContent = `\n${this.name} attacked ${target.name} for ${damage} damage!`;
   }
 
   takeDamage(damage) {

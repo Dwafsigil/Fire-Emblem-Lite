@@ -6,7 +6,7 @@ import { showHoverAt } from "./hoverView.js";
 import { updateObstacle } from "./movement.js";
 
 export function initGame(state, ui) {
-  createBoard(ui.boardEl, state.board.rows, state.board.cols);
+  createBoard(state, ui.boardEl, state.board.rows, state.board.cols);
 
   placeUnits(state, ui, state.units);
   updateObstacle(state);

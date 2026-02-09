@@ -1,7 +1,27 @@
 // game board stuff
 
 // create the board based on specified rows and cols
-export function createBoard(boardEl, rows, cols) {
+export function createBoard(state, boardEl, rows, cols) {
+  state.board.grid = [];
+
+  for (let r = 0; r < rows; r++) {
+    state.board.grid[r] = [];
+
+    for (let c = 0; c < cols; c++) {
+      state.board.grid[r][c] = {
+        terrain: "grass",
+      };
+    }
+  }
+
+  for (const [type, coords] of Object.entries(state.obstacleTypes)) {
+    for (const [r, c] of coords) {
+      const tile = state.board.grid[r][c];
+
+      tile.terrain = type;
+    }
+  }
+
   // Essentially creating a temporary variable
   const frag = document.createDocumentFragment();
 

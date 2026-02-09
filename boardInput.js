@@ -21,6 +21,7 @@ import {
   movePlayer,
 } from "./movement.js";
 
+import { showStats } from "./unitStatsUI.js";
 import { showTerrainInfo } from "./terrainInfo.js";
 
 import { showUnitInfo } from "./unitStatsUI.js";
@@ -177,13 +178,13 @@ export function activateBoardInput(state, ui, gates) {
       moveHover(state, ui, ...moves[e.key]);
 
       if (!state.playerSelected) ui.itemList.replaceChildren();
-      showTerrainInfo(state, ui);
-      showUnitInfo(state, ui);
 
       if (state.playerSelected) {
         // console.log("Moving Player");
         movePlayer(state, ui, ...moves[e.key]);
       }
+      showTerrainInfo(state, ui);
+      showUnitInfo(state, ui);
       return;
     }
 
@@ -285,7 +286,7 @@ export function activateBoardInput(state, ui, gates) {
       e.key == "z"
     ) {
       // console.log("inside attacking");
-      const type = attack(state.selectedUnit, state.receivingUnit, ui);
+      const type = attack(state.selectedUnit, state.receivingUnit, state, ui);
       // console.log(type);
       state.attackOn = false;
       if (state.receivingUnit.checkDead()) {

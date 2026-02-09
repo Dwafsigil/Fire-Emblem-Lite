@@ -30,10 +30,8 @@ runGame(state, ui, gates);
 
 // leveling, weapon triangle, terrain bonus, objectives, classes,  skills, saves, log
 
-// can refactor a bunch of code into functions and optimize logic
-
 // buttons for the action bar is screwed up
 
-// add combat stats such as hit, crit, avoid
-
 // bug where when friendly unit dies the game freaks out
+
+// messy code need to refactor

@@ -1,3 +1,7 @@
+export const terrain = {
+  forest: { avo: 30 },
+};
+
 export function showTerrainInfo(state, ui) {
   let terrain = "grass";
 
@@ -17,7 +21,7 @@ export function showTerrainInfo(state, ui) {
       ui.terrainStat.textContent = "Hill";
       break;
     case "forest":
-      ui.terrainStat.textContent = "Forest";
+      ui.terrainStat.textContent = "Forest: +30 AVO";
       break;
     case "castle":
       ui.terrainStat.textContent = "Castle";
@@ -26,4 +30,23 @@ export function showTerrainInfo(state, ui) {
       ui.terrainStat.textContent = "Grass";
       break;
   }
+}
+
+export function terrainBonus(state, r, c) {
+  const terrainType = state.board.grid[r][c].terrain;
+
+  switch (terrainType) {
+    case "grass":
+      return 0;
+    case "forest":
+      return 30;
+  }
+}
+
+export function getAvoidWithTerrain(state, unit) {
+  const unitAvoid = unit.avoidRate;
+
+  const bonus = terrainBonus(state, unit.row, unit.col);
+
+  return Number(unitAvoid + bonus);
 }
