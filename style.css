@@ -433,6 +433,10 @@ button[button-disabled="true"]:focus {
   animation: idle 1.3s steps(1, end) infinite;
 }
 
+.player.grayed::before {
+  filter: grayScale(100%);
+}
+
 .player.attack3::before {
   background-image: var(--sprite-url);
   animation: attack 0.6s steps(1, end);

@@ -28,7 +28,9 @@ activateGlobalInput(state, ui, gates);
 
 runGame(state, ui, gates);
 
-// leveling, weapon triangle, terrain bonus, objectives, classes,  skills, saves, log
+// leveling, weapon triangle, objectives, classes,  skills, saves, log
+
+// add some qol, dont know what unit can be played and what can
 
 // buttons for the action bar is screwed up
 

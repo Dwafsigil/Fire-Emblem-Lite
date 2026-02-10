@@ -48,7 +48,7 @@ export async function runBattle(state, ui, gates) {
         );
 
         await gates[Phase.PLAYER_ACTION].wait();
-
+        state.selectedUnit.node.classList.add("grayed");
         closeActionBar(ui.actionBarEl);
         focusBoard(ui.boardEl);
         state.selectedUnit = null;
@@ -67,6 +67,14 @@ export async function runBattle(state, ui, gates) {
 
     await delay(1500);
     showPhase(ui, "Enemy Phase");
+
+    let friendlyUnits = state.units.filter((e) => e.affiliation == 0);
+
+    for (const unit of friendlyUnits) {
+      console.log(unit);
+      unit.node.classList.remove("grayed");
+    }
+
     state.phase = Phase.ENEMY_TURN;
     // console.log("Run Enemy Turn");
     await runEnemyTurn(state, ui);
