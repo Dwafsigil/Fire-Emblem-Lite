@@ -47,7 +47,29 @@ export async function runBattle(state, ui, gates) {
           state.selectedUnit,
         );
 
-        await gates[Phase.PLAYER_ACTION].wait();
+        const actionType = await gates[Phase.PLAYER_ACTION].wait();
+
+        switch (actionType) {
+          case "attack":
+            state.phase = Phase.PLAYER_ATTACK;
+
+            await gates[Phase.PLAYER_ATTACK].wait();
+            break;
+
+          case "skill":
+            state.phase = Phase.PLAYER_SKILL;
+
+            await gates[Phase.PLAYER_SKILL].wait();
+            break;
+          case "item":
+            state.phase = Phase.PLAYER_ITEM;
+
+            await gates[Phase.PLAYER_ITEM].wait();
+            break;
+          case "wait":
+            break;
+        }
+
         state.selectedUnit.node.classList.add("grayed");
         closeActionBar(ui.actionBarEl);
         focusBoard(ui.boardEl);
@@ -71,7 +93,6 @@ export async function runBattle(state, ui, gates) {
     let friendlyUnits = state.units.filter((e) => e.affiliation == 0);
 
     for (const unit of friendlyUnits) {
-      console.log(unit);
       unit.node.classList.remove("grayed");
     }
 

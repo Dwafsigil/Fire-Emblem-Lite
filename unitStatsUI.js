@@ -2,6 +2,7 @@
 
 import { isOccupied } from "./unitQueries.js";
 import { items } from "./items.js";
+import { skills } from "./skills.js";
 
 import { unitAt } from "./unitQueries.js";
 import { getAvoidWithTerrain } from "./terrainInfo.js";
@@ -25,6 +26,16 @@ export function showUnitInfo(state, ui) {
         el.textContent = items[item.id].name;
         ui.itemList.appendChild(el);
       });
+
+      hoveredUnit.skills.forEach((skill, index) => {
+        console.log(skill);
+        const el = document.createElement("button");
+        el.className = skill.id;
+        el.dataset.index = index;
+        el.dataset.id = skill.id;
+        el.textContent = `${skills[skill.id].name} ${skill.uses}/${skills[skill.id].uses}`;
+        ui.skillList.appendChild(el);
+      });
     }
 
     showStats(state, ui, hoveredUnit);
@@ -33,6 +44,7 @@ export function showUnitInfo(state, ui) {
   } else {
     ui.statList.classList.add("hidden");
     // removes all children of an element
+    ui.skillList.replaceChildren();
     ui.itemList.replaceChildren();
   }
 }

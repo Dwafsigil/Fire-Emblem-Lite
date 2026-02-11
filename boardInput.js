@@ -53,7 +53,7 @@ export function activateBoardInput(state, ui, gates) {
       if (state.playerSelected && state.phase === Phase.PLAYER_SELECT) {
         placePlayer(state, ui, state.startRow, state.startCol);
         state.currentUnitsQueue.push(state.selectedUnit);
-        state.selectedUnit.strengthValue.classList.add("hidden");
+        // state.selectedUnit.strengthValue.classList.add("hidden");
 
         state.playerSelected = false;
         state.selectedUnit = null;
@@ -64,7 +64,7 @@ export function activateBoardInput(state, ui, gates) {
         return;
       }
       // cancel in targeting
-      if (state.phase === Phase.PLAYER_ACTION) {
+      if (state.phase === Phase.PLAYER_ATTACK) {
         removeAttackHighlight(state, ui);
         removeConfirmHiglight(state, ui);
         openActionBar(ui.actionBarEl);
@@ -82,8 +82,8 @@ export function activateBoardInput(state, ui, gates) {
     }
 
     // 2. z selecting and deselecting player
-    if (state.phase === Phase.PLAYER_SELECT && e.key === "z") {
-      // console.log("Z");
+    if (state.phase === Phase.PLAYER_SELECT && e.code === "KeyZ") {
+      console.log("Z");
       if (
         isOccupied(state.units, state.hover.row, state.hover.col) &&
         !state.playerSelected
@@ -177,7 +177,10 @@ export function activateBoardInput(state, ui, gates) {
       removeHover(state, ui);
       moveHover(state, ui, ...moves[e.key]);
 
-      if (!state.playerSelected) ui.itemList.replaceChildren();
+      if (!state.playerSelected) {
+        ui.itemList.replaceChildren();
+        ui.skillList.replaceChildren();
+      }
 
       if (state.playerSelected) {
         // console.log("Moving Player");
@@ -286,7 +289,39 @@ export function activateBoardInput(state, ui, gates) {
       e.key == "z"
     ) {
       // console.log("inside attacking");
-      const type = attack(state.selectedUnit, state.receivingUnit, state, ui);
+
+      const type = attack(
+        state.selectedUnit,
+        state.receivingUnit,
+        state.useSkill,
+        state,
+        ui,
+      );
+
+      if (state.useSkill) {
+        const removeSkillUse = state.useSkill.dataset.id;
+
+        console.log(removeSkillUse);
+        console.log(state.selectedUnit.skills);
+        const skill = state.selectedUnit.skills.find((skill) => {
+          return skill.id === removeSkillUse;
+        });
+
+        skill.uses--;
+
+        if (skill.uses == 0) {
+          const index = state.selectedUnit.skills.findIndex(
+            (skill) => skill.id === removeSkillUse,
+          );
+
+          // state.selectedUnit.skills.splice(index, 1);
+        }
+        ui.skillList.replaceChildren();
+        ui.itemList.replaceChildren();
+
+        showUnitInfo(state, ui);
+      }
+
       // console.log(type);
       state.attackOn = false;
       if (state.receivingUnit.checkDead()) {
@@ -307,7 +342,13 @@ export function activateBoardInput(state, ui, gates) {
       state.isTargeting = false;
       playSfx(btnClick, 0.5, 0);
 
-      gates[Phase.PLAYER_ACTION].open();
+      state.useSkill = null;
+      // attack marker
+      if (state.phase === Phase.PLAYER_SKILL) gates[Phase.PLAYER_SKILL].open();
+      if (state.phase === Phase.PLAYER_ATTACK) {
+        gates[Phase.PLAYER_ATTACK].open();
+      }
+
       return;
     }
   });

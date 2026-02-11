@@ -23,7 +23,7 @@ export function activateActionbarInput(state, ui) {
     }
 
     // confirm button choice
-    if (e.key == "z") {
+    if (e.code == "KeyZ") {
       const btn = e.target.closest(`button[data-action]`);
       doAction(state, ui, btn.dataset.action);
       playSfx(btnClick, 0.5, 0);

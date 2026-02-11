@@ -73,14 +73,29 @@ export function doAction(state, ui, action) {
       state.isTargeting = true;
       attackHighlight(state, ui);
       focusBoard(ui.boardEl);
+      gates[Phase.PLAYER_ACTION].open("attack");
 
       break;
-    case "ability":
+    case "skill":
+      console.log("skill");
+      const noUseLeft = state.selectedUnit.skills.every((skill) => {
+        return skill.uses == 0;
+      });
+
+      if (noUseLeft) break;
+      const firstSkill = ui.skillList.querySelector("button");
+      firstSkill?.focus();
+      console.log("skill clicked");
+      gates[Phase.PLAYER_ACTION].open("skill");
+
       break;
     case "item":
-      // console.log("item");
+      console.log("item");
+      if (state.selectedUnit.inventory.length === 0) break;
+
       const firstItem = ui.itemList.querySelector("button");
       firstItem?.focus();
+      gates[Phase.PLAYER_ACTION].open("item");
 
       break;
     case "wait":

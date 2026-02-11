@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" />
     <title>Fire Emblem Lite</title>
+
     <link rel="icon" type="image/x-icon" href="/favicon/favicon-small.png" />
   </head>
   <body>
@@ -16,7 +17,7 @@
         <button class="action-btn" data-action="attack" button-disabled="false">
           Attack
         </button>
-        <button class="action-btn" data-action="ability">Ability</button>
+        <button class="action-btn" data-action="skill">Skill</button>
         <button class="action-btn" data-action="item">Item</button>
         <button class="action-btn" data-action="wait">Wait</button>
       </div>
@@ -34,6 +35,7 @@
               <li class="unit-crit-stat"></li>
             </ul>
           </aside>
+          <aside class="skill-list">skills</aside>
           <aside class="item-list">items</aside>
           <aside class="terrain-stat">terrain</aside>
           <div class="stage">
@@ -79,7 +81,6 @@
           <!-- <div class = "right-spacer"><div> -->
         </div>
       </div>
-      <script type="module" src="script.js" defer></script>
     </div>
     <audio
       id="bgm"
@@ -87,5 +88,6 @@
       preload="auto"
       loop
     ></audio>
+    <script type="module" src="script.js" defer></script>
   </body>
 </html>

@@ -133,7 +133,7 @@ export function enemyPossibleMoves(state, startRow, startCol, moveRange) {
 }
 
 export function enemyAttack(state, ui, enemyUnit, closestFriendly) {
-  const type = attack(enemyUnit, closestFriendly, state, ui);
+  const type = attack(enemyUnit, closestFriendly, state.useSkill, state, ui);
 
   if (closestFriendly.checkDead()) {
     removeDead(state, ui, closestFriendly);

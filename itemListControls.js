@@ -6,36 +6,40 @@ export function itemListControls(ui, state, gates) {
     // references the active button, can do active.dataset
     const active = document.activeElement;
 
-    const buttons = ui.itemList.querySelectorAll("button");
+    let itemButtons = ui.itemList.querySelectorAll("button");
     const current = Number(active.dataset.index);
 
     let next = current;
-
+    // if (state.Phase === Phase.PLAYER_ITEM) {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      next = (current + 1) % buttons.length;
+      next = (current + 1) % itemButtons.length;
     }
 
     if (e.key === "ArrowUp") {
       e.preventDefault();
-      next = (current - 1 + buttons.length) % buttons.length;
+
+      next = (current - 1 + itemButtons.length) % itemButtons.length;
     }
 
     if (e.key === "z") {
       e.preventDefault();
 
-      const buttons = [...ui.itemList.querySelectorAll("button")];
+      const itemButtons = [...ui.itemList.querySelectorAll("button")];
 
-      const foundElement = buttons.find((btn) => {
+      const foundElement = itemButtons.find((btn) => {
         return btn.dataset.index === String(current);
       });
 
       useItem(state, ui, foundElement);
 
-      gates[Phase.PLAYER_ACTION].open();
+      // ITEM MARKER
+      gates[Phase.PLAYER_ITEM].open();
+
       return;
     }
 
-    buttons[next].focus();
+    itemButtons[next].focus();
+    // }
   });
 }

@@ -42,5 +42,6 @@ export function createUI() {
     statList: document.querySelector(".stat-list"),
     terrainStat: document.querySelector(".terrain-stat"),
     itemList: document.querySelector(".item-list"),
+    skillList: document.querySelector(".skill-list"),
   };
 }

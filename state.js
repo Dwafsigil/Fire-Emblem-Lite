@@ -7,6 +7,9 @@ export const Phase = {
   MENU: "menu",
   PLAYER_SELECT: "player_select",
   PLAYER_ACTION: "player_action",
+  PLAYER_ATTACK: "player_attack",
+  PLAYER_SKILL: "player_skill",
+  PLAYER_ITEM: "player_item",
   ENEMY_TURN: "enemy_turn",
 };
 
@@ -19,10 +22,11 @@ export function createInitialUnits() {
       affiliation: 0,
       row: 8,
       col: 3,
-      strength: 40,
+      strength: 10,
       movement: 5,
       inventory: [{ id: "potion" }, { id: "potion" }],
       health: 5,
+      skills: [{ id: "empoweredStrike", uses: 0 }],
     }),
     // new unitStats({
     //   playerId: 1,
@@ -45,6 +49,7 @@ export function createInitialUnits() {
       inventory: [{ id: "potion" }],
       health: 30,
       maxHealth: 30,
+      skills: [{ id: "empoweredStrike", uses: 3 }],
     }),
     // new unitStats({
     //   playerId: 3,
@@ -99,6 +104,7 @@ export function createInitialState() {
 
     selectedUnit: null,
     playerSelected: false,
+    useSkill: null,
 
     isTargeting: false,
     unitHighlighted: false,

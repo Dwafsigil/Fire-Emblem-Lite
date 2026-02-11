@@ -22,6 +22,7 @@ export class unitStats {
     row = 0,
     col = 0,
     inventory = null,
+    skills = null,
   }) {
     this.playerId = playerId;
     this.name = name;
@@ -40,6 +41,7 @@ export class unitStats {
     this.row = row;
     this.col = col;
     this.inventory = inventory;
+    this.skills = skills;
 
     if (affiliation !== 0 && affiliation !== 1) {
       throw new Error("Affiliation Value Error");
@@ -50,7 +52,7 @@ export class unitStats {
   // getters
 
   get hitRate() {
-    return this.skill * 2 + this.luck * 0.5 - 100;
+    return this.skill * 2 + this.luck * 0.5 + 40;
   }
 
   get avoidRate() {
@@ -96,8 +98,8 @@ export class unitStats {
     this.strengthValue.textContent = `ATK ${this.strength}`;
   }
 
-  attackPlayer(target, type) {
-    let damage = damageCalculation(this, target, type);
+  attackPlayer(target, type, skillBonus) {
+    let damage = damageCalculation(this, target, type, skillBonus);
     target.takeDamage(damage);
 
     return damage;

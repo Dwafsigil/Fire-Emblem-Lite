@@ -601,12 +601,27 @@ button[button-disabled="true"]:focus {
   display: none;
 }
 
-.item-list {
+.skill-list {
   position: absolute;
   top: calc(30% + 8px);
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
-  height: 55%;
+  height: 33%;
+
+  /* font-size: 10px; */
+
+  background: #111;
+  color: #ffffff;
+  border: 2px solid #444;
+  padding: 12px;
+}
+
+.item-list {
+  position: absolute;
+  top: calc(65% + 8px);
+  right: calc(100% + 8px);
+  width: clamp(150px, 6vw, 240px);
+  height: 33.2%;
 
   /* font-size: 10px; */
 
@@ -618,8 +633,8 @@ button[button-disabled="true"]:focus {
 
 .terrain-stat {
   position: absolute;
-  top: calc(88% + 2px);
-  right: calc(100% + 8px);
+  top: calc(88.17% + 2px);
+  right: calc(-39% + 1px);
   width: clamp(150px, 6vw, 240px);
   height: 11.5%;
   /* font-size: 10px; */

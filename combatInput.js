@@ -5,23 +5,29 @@ import { attackAnimation } from "./animations.js";
 import { showStats } from "./unitStatsUI.js";
 import { playAndRemove } from "./helpers.js";
 import { getAvoidWithTerrain, terrainBonus } from "./terrainInfo.js";
+import { skills } from "./skills.js";
 
-export function attack(attackingUnit, receivingUnit, state, ui) {
+export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
   // check if attack will hit
   // if hit then check if crit
 
   let randomHitInt = Math.floor(Math.random() * 100 + 1);
   let randomCritInt = Math.floor(Math.random() * 100 + 1);
+
   let hitChance =
     attackingUnit.hitRate - getAvoidWithTerrain(state, receivingUnit);
 
-  // console.log(hitChance, randomHitInt, randomCritInt);
+  let skillBonus = skill ? skills[skill.dataset.id].bonus : 0;
 
   if (!receivingUnit) return false;
 
   if (randomHitInt <= hitChance) {
     if (randomCritInt <= attackingUnit.critRate) {
-      const damage = attackingUnit.attackPlayer(receivingUnit, "Crit");
+      const damage = attackingUnit.attackPlayer(
+        receivingUnit,
+        "Crit",
+        skillBonus,
+      );
       attackAnimation(attackingUnit, "Crit");
       showStats(state, ui, receivingUnit);
 
@@ -36,7 +42,11 @@ export function attack(attackingUnit, receivingUnit, state, ui) {
 
       return "Crit";
     } else {
-      const damage = attackingUnit.attackPlayer(receivingUnit, "Hit");
+      const damage = attackingUnit.attackPlayer(
+        receivingUnit,
+        "Hit",
+        skillBonus,
+      );
       attackAnimation(attackingUnit, "Hit");
       showStats(state, ui, receivingUnit);
 
