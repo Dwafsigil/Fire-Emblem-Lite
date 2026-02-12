@@ -13,6 +13,11 @@ export function useItem(state, ui, foundElement) {
   if (foundElement.dataset.id === "potion") {
     state.selectedUnit.health += items["potion"].heal;
 
+    // battle log
+    const el = document.createElement("li");
+    el.textContent = `${state.selectedUnit.name} uses a ${items["potion"].name}`;
+    ui.combatLog.appendChild(el);
+
     if (
       Number(state.selectedUnit.health) > Number(state.selectedUnit.maxHealth)
     ) {

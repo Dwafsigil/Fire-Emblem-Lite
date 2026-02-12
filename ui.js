@@ -43,5 +43,6 @@ export function createUI() {
     terrainStat: document.querySelector(".terrain-stat"),
     itemList: document.querySelector(".item-list"),
     skillList: document.querySelector(".skill-list"),
+    combatLog: document.querySelector(".combat-log"),
   };
 }

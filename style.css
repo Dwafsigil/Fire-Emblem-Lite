@@ -631,6 +631,26 @@ button[button-disabled="true"]:focus {
   padding: 12px;
 }
 
+.combat-log {
+  position: absolute;
+  top: 0;
+  right: calc(-39% + 1px);
+  width: clamp(150px, 6vw, 240px);
+  height: 87%;
+
+  font-size: 9px;
+  line-height: 12px;
+
+  background: #111;
+  color: #ffffff;
+  border: 2px solid #444;
+  padding: 12px;
+}
+
+.combat-log li {
+  list-style: none;
+}
+
 .terrain-stat {
   position: absolute;
   top: calc(88.17% + 2px);

@@ -40,6 +40,17 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
       receivingUnit.node.appendChild(floatingValue);
       playAndRemove(floatingValue);
 
+      // battle log
+      if (state.useSkill) {
+        const skillID = state.useSkill.dataset.id;
+        const el = document.createElement("li");
+        el.textContent = `${attackingUnit.name} hits a critical ${skills[skillID].name} on ${receivingUnit.name}`;
+        ui.combatLog.appendChild(el);
+      } else {
+        const el = document.createElement("li");
+        el.textContent = `${attackingUnit.name} hits a critical on ${receivingUnit.name}`;
+        ui.combatLog.appendChild(el);
+      }
       return "Crit";
     } else {
       const damage = attackingUnit.attackPlayer(
@@ -60,6 +71,19 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
       receivingUnit.node.appendChild(floatingValue);
       playAndRemove(floatingValue);
 
+      // battle log
+
+      if (state.useSkill) {
+        const skillID = state.useSkill.dataset.id;
+
+        const el = document.createElement("li");
+        el.textContent = `${attackingUnit.name} hits ${skills[skillID].name} on ${receivingUnit.name}`;
+        ui.combatLog.appendChild(el);
+      } else {
+        const el = document.createElement("li");
+        el.textContent = `${attackingUnit.name} hits ${receivingUnit.name}`;
+        ui.combatLog.appendChild(el);
+      }
       // console.log(receivingUnit);
       return "Hit";
     }
@@ -76,6 +100,19 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
     receivingUnit.node.appendChild(floatingValue);
     playAndRemove(floatingValue);
 
+    // battle log
+
+    if (state.useSkill) {
+      const skillID = state.useSkill.dataset.id;
+
+      const el = document.createElement("li");
+      el.textContent = `${attackingUnit.name} misses ${skills[skillID].name} on ${receivingUnit.name}`;
+      ui.combatLog.appendChild(el);
+    } else {
+      const el = document.createElement("li");
+      el.textContent = `${attackingUnit.name} misses ${receivingUnit.name}`;
+      ui.combatLog.appendChild(el);
+    }
     return "Miss";
   }
 }

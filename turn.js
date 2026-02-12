@@ -29,6 +29,11 @@ export async function runBattle(state, ui, gates) {
       while (hasPlayableUnits(state)) {
         ui.turnText.textContent = `Turn: ${state.turnCounter}`;
 
+        // battle log
+        const el = document.createElement("li");
+        el.textContent = `Turn ${state.turnCounter}:`;
+        ui.combatLog.appendChild(el);
+
         if (await isBattleOver(state, ui)) break;
         state.phase = Phase.PLAYER_SELECT;
 

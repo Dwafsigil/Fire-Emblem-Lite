@@ -26,7 +26,7 @@ export function createInitialUnits() {
       movement: 5,
       inventory: [{ id: "potion" }, { id: "potion" }],
       health: 5,
-      skills: [{ id: "empoweredStrike", uses: 0 }],
+      skills: [{ id: "empoweredStrike", uses: 3 }],
     }),
     // new unitStats({
     //   playerId: 1,

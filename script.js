@@ -35,20 +35,15 @@ runGame(state, ui, gates);
 
 // leveling, weapon triangle, objectives, classes,  skills, saves, log
 
-// buttons for the action bar is screwed up
+// Refactor: Tons of redunancy and bad logic
 
-// bug where when friendly unit dies the game freaks out
+// TODO Immediately:
+// 2. Item and Skill Description
+// 3. Added Ranger and Wizard Class
 
-// messy code need to refactor
-
-// Add Skills, log box, 2 more clases, need to update ai to use items, abilities and such
-
-// BUG: when attacking and pressing x to back, it will make a mistake on the state
-
-// figure out a way to add item and ability descriptions
-
-// BUG: cant add player_item conditional figure out
-
-// requires enemy unit to have skills and items otherwise bug
-
-// bug, you can click skill and items if there's none and it screws up the phases, must add conditionals
+// BUG LIST:
+// 1. Unit freaks out when they die sometimes
+// 2. Action bar buttons dont go left and right in order properly
+// 3. Backing from actions such as attack messes with the phases
+// 4. Unit requires items or skills otherwise the game bugs.
+// 5. Offensive skills do not check for adjacent. (Future bug fix)
