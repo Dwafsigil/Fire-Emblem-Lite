@@ -139,7 +139,7 @@ export function createInitialState() {
       [6, 5],
       [4, 6],
       [5, 6],
-      [6, 6],
+      // [6, 6],
       [1, 9],
       [2, 9],
       [1, 10],
@@ -181,6 +181,7 @@ export function createInitialState() {
         [11, 2],
         [11, 3],
       ],
+      castleGate: [6, 6],
     },
 
     obstacles: [],

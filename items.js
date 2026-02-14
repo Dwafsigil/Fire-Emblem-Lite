@@ -6,6 +6,7 @@ export const items = {
     name: "Health Potion",
     type: "consumable",
     heal: 5,
+    description: "Heal selected unit for 5 hp.",
   },
 };
 

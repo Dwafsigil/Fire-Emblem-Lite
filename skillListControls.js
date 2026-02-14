@@ -15,6 +15,8 @@ export function skillListControls(ui, state, gates) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
         next = (current + 1) % skillButtons.length;
+
+        active = document.activeElement;
       }
 
       if (e.key === "ArrowUp") {
@@ -38,11 +40,18 @@ export function skillListControls(ui, state, gates) {
         state.isTargeting = true;
         attackHighlight(state, ui);
         focusBoard(ui.boardEl);
+        ui.description.classList.add("hidden");
 
         // skill marker
 
         return;
       }
+
+      const currentID = active.dataset.id;
+
+      const itemDescription = items[currentID].description;
+
+      ui.description.textContent = `${itemDescription}`;
 
       skillButtons[next].focus();
     }

@@ -11,6 +11,8 @@ import { critHit } from "./audio.js";
 import { missHit } from "./audio.js";
 import { attackHighlight } from "./combatInput.js";
 import { focusBoard } from "./uiControls.js";
+import { items } from "./items.js";
+import { skills } from "./skills.js";
 
 export function playAnim(unit, className, delay) {
   unit.node.classList.remove(className);
@@ -64,6 +66,9 @@ export async function deadAnimation(unit) {
 }
 
 export function doAction(state, ui, action) {
+  let active = null;
+  let currentID = null;
+  let description = null;
   switch (action) {
     case "attack":
       if (ui.actionButtons.attack.getAttribute("button-disabled") === "true")
@@ -85,7 +90,15 @@ export function doAction(state, ui, action) {
       if (noUseLeft) break;
       const firstSkill = ui.skillList.querySelector("button");
       firstSkill?.focus();
-      console.log("skill clicked");
+
+      // skill description
+      active = document.activeElement;
+      currentID = active.dataset.id;
+      description = skills[currentID].description;
+
+      ui.description.textContent = `${description}`;
+      ui.description.classList.remove("hidden");
+
       gates[Phase.PLAYER_ACTION].open("skill");
 
       break;
@@ -95,6 +108,14 @@ export function doAction(state, ui, action) {
 
       const firstItem = ui.itemList.querySelector("button");
       firstItem?.focus();
+
+      // item description
+      active = document.activeElement;
+      currentID = active.dataset.id;
+      description = items[currentID].description;
+
+      ui.description.textContent = `${description}`;
+      ui.description.classList.remove("hidden");
       gates[Phase.PLAYER_ACTION].open("item");
 
       break;

@@ -44,5 +44,6 @@ export function createUI() {
     itemList: document.querySelector(".item-list"),
     skillList: document.querySelector(".skill-list"),
     combatLog: document.querySelector(".combat-log"),
+    description: document.querySelector(".description"),
   };
 }

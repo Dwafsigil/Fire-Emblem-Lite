@@ -5,6 +5,7 @@ export const skills = {
     type: "knight",
     uses: 3,
     bonus: 5,
+    description: "Empower attack increasing base damage by 5.",
   },
 };
 
