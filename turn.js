@@ -9,6 +9,7 @@ import { closeActionBar } from "./uiControls.js";
 import { focusBoard } from "./uiControls.js";
 import { runEnemyTurn } from "./enemyAI.js";
 import { updateObstacle } from "./movement.js";
+import { showCondition } from "./helpers.js";
 
 export const CANCEL = Symbol("CANCEL");
 
@@ -19,6 +20,7 @@ export const delay = (delayInms) => {
 export async function runBattle(state, ui, gates) {
   initGame(state, ui);
   startMusic(0);
+  showCondition(ui);
 
   while (true) {
     try {

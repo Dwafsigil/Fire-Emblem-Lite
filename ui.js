@@ -45,5 +45,6 @@ export function createUI() {
     skillList: document.querySelector(".skill-list"),
     combatLog: document.querySelector(".combat-log"),
     description: document.querySelector(".description"),
+    winCondition: document.querySelector(".win-condition"),
   };
 }
