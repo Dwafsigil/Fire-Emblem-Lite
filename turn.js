@@ -143,12 +143,27 @@ export async function isBattleOver(state, ui) {
   let friendlyUnit = state.units.filter((e) => e.affiliation == 0);
   let enemyUnit = state.units.filter((e) => e.affiliation == 1);
 
+  const seizedCastle = friendlyUnit.some((unit) => {
+    return unit.row === 6 && unit.col === 5;
+  });
+
+  // if castle is seized
+  if (seizedCastle) {
+    ui.gameOverCover.textContent = "You Win";
+    ui.gameOverCover.classList.remove("hidden");
+    return true;
+  }
+
+  // if all friendly unit dies
+
   if (friendlyUnit.length == 0) {
     ui.gameOverCover.textContent = "You Lose";
     await delay(1000);
     ui.gameOverCover.classList.remove("hidden");
     return true;
   }
+
+  // if all enemy unit dies
 
   if (enemyUnit.length == 0) {
     ui.gameOverCover.textContent = "You Win";
