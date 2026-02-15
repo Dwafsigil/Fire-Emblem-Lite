@@ -7,6 +7,7 @@ export class unitStats {
     playerId,
     name,
     unitType = "Knight",
+    variant = "knight",
     maxHealth = 10,
     health = 10,
     healthBarFill = null,
@@ -27,6 +28,7 @@ export class unitStats {
     this.playerId = playerId;
     this.name = name;
     this.unitType = unitType;
+    this.variant = variant;
     this.health = health;
     this.maxHealth = maxHealth;
     this.healthBarFill = healthBarFill;

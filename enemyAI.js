@@ -77,7 +77,7 @@ export async function enemyMove(state, ui, enemyUnit) {
   enemyUnit.node.classList.remove("run");
   enemyUnit.node.style.setProperty(
     "--sprite-url",
-    `url("assets/${enemyUnit.unitType}/Idle.png")`,
+    `url("assets/${enemyUnit.variant}/Idle.png")`,
   );
 }
 

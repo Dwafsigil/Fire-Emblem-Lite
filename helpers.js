@@ -5,7 +5,7 @@ export function playAndRemove(el) {
 }
 
 export async function showCondition(ui) {
-  ui.winCondition.classList.remove("hidden");
+  // ui.winCondition.classList.remove("hidden");
 
   await delay(3000);
 

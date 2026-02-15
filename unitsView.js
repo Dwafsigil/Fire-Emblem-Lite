@@ -13,13 +13,16 @@ export function placeUnits(state, ui, units) {
 }
 
 export function createPlayerNode(unit) {
+  console.log(unit.variant);
   const el = document.createElement("div");
-  el.className = "player";
+  el.className = `player ${unit.unitType} idle`;
   el.id = `player-${unit.playerId}`;
   el.style.setProperty(
     "--sprite-url",
-    `url("assets/${unit.unitType}/Idle.png")`,
+    `url("assets/${unit.variant}/Idle.png")`,
   );
+
+  console.log(el);
 
   // const strengthValue = document.createElement("div");
   // strengthValue.classList.add("strength-value");

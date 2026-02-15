@@ -18,14 +18,14 @@ export function playAnim(unit, className, delay) {
   unit.node.classList.remove(className);
   unit.node.style.setProperty(
     "--sprite-url",
-    `url("assets/${unit.unitType}/${className}.png")`,
+    `url("assets/${unit.variant}/${className}.png")`,
   );
   unit.node.classList.add(className);
   setTimeout(() => {
     unit.node.classList.remove(className);
     unit.node.style.setProperty(
       "--sprite-url",
-      `url("assets/${unit.unitType}/Idle.png")`,
+      `url("assets/${unit.variant}/Idle.png")`,
     );
   }, delay);
 }
@@ -47,7 +47,7 @@ export function runAnimation(unit) {
   unit.node.classList.remove("run");
   unit.node.style.setProperty(
     "--sprite-url",
-    `url("assets/${unit.unitType}/Run.png")`,
+    `url("assets/${unit.variant}/Run.png")`,
   );
   unit.node.classList.add("run");
   // playSfx(deadGrunt, 0.2, 200);
@@ -58,7 +58,7 @@ export async function deadAnimation(unit) {
   // console.log("Running dead animation");
   unit.node.style.setProperty(
     "--sprite-url",
-    `url("assets/${unit.unitType}/dead.png")`,
+    `url("assets/${unit.variant}/dead.png")`,
   );
   unit.node.classList.add("dead");
   playSfx(deadGrunt, 0.2, 200);

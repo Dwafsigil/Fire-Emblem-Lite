@@ -413,14 +413,11 @@ button[button-disabled="true"]:focus {
   transform-origin: center bottom;
 }
 
-.player::before {
+.player.knight::before {
   content: "";
   /* Size of ONE frame */
   width: 120px;
   height: 140%;
-
-  /* Use whole spritesheet as the background */
-  background-image: var(--sprite-url);
 
   background-repeat: no-repeat;
 
@@ -430,37 +427,45 @@ button[button-disabled="true"]:focus {
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
   transform: translate(-12px, -12px);
   /* transform: translate; */
-  animation: idle 1.3s steps(1, end) infinite;
+  /* background-image: var(--sprite-url);
+
+  animation: knightIdle 1.3s steps(1, end) infinite; */
 }
 
 .player.grayed::before {
   filter: grayScale(100%);
 }
 
-.player.attack3::before {
+.player.knight.idle::before {
   background-image: var(--sprite-url);
-  animation: attack 0.6s steps(1, end);
+
+  animation: knightIdle 1.3s steps(1, end) infinite;
 }
 
-.player.hurt::before {
+.player.knight.attack3::before {
   background-image: var(--sprite-url);
-  animation: hurt 0.5s steps(1, end);
+  animation: knightAttack 0.6s steps(1, end);
+}
+
+.player.knight.hurt::before {
+  background-image: var(--sprite-url);
+  animation: knightHurt 0.5s steps(1, end);
   background-size: 200% 100%;
 }
 
-.player.dead::before {
+.player.knight.dead::before {
   background-image: var(--sprite-url);
-  animation: dead 1s steps(1, end) forwards;
+  animation: knightDead 1s steps(1, end) forwards;
   background-size: 600% 100%;
 }
 
-.player.run::before {
+.player.knight.run::before {
   background-image: var(--sprite-url);
-  animation: run 0.7s steps(1, end) infinite;
+  animation: knightRun 0.7s steps(1, end) infinite;
   background-size: 700% 100%;
 }
 
-@keyframes idle {
+@keyframes knightIdle {
   0% {
     background-position-x: 0px;
   }
@@ -478,7 +483,7 @@ button[button-disabled="true"]:focus {
   }
 }
 
-@keyframes attack {
+@keyframes knightAttack {
   0% {
     background-position-x: -10px;
   }
@@ -492,11 +497,11 @@ button[button-disabled="true"]:focus {
     background-position-x: -370px;
   }
   100% {
-    background-position-x: -340;
+    background-position-x: -340px;
   }
 }
 
-@keyframes hurt {
+@keyframes knightHurt {
   0% {
     background-position-x: -10px;
   }
@@ -505,7 +510,7 @@ button[button-disabled="true"]:focus {
   }
 }
 
-@keyframes dead {
+@keyframes knightDead {
   0% {
     background-position-x: 0px;
   }
@@ -527,7 +532,7 @@ button[button-disabled="true"]:focus {
   }
 }
 
-@keyframes run {
+@keyframes knightRun {
   0% {
     background-position-x: 0px;
   }
@@ -545,6 +550,32 @@ button[button-disabled="true"]:focus {
   }
   100% {
     background-position-x: 0px;
+  }
+}
+
+.player.wizard::before {
+  content: "";
+  /* Size of ONE frame */
+  width: 120px;
+  height: 140%;
+
+  background-repeat: no-repeat;
+
+  background-position: 0 0;
+
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
+  transform: translate(5px, -12px);
+}
+
+.player.wizard.idle::before {
+  background-size: 700% 100%;
+  background-image: var(--sprite-url);
+  animation: wizardIdle 1.3s steps(1, end) infinite;
+}
+
+@keyframes wizardIdle {
+  0% {
+    background-position-x: 50px;
   }
 }
 

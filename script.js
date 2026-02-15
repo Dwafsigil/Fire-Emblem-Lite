@@ -38,8 +38,7 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// 1. Add a second win con
-// 2. Added Ranger and Wizard Class
+// 1. Added Ranger and Wizard Class
 
 // BUG LIST:
 // 1. Unit freaks out when they die sometimes
