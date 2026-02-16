@@ -413,7 +413,7 @@ button[button-disabled="true"]:focus {
   transform-origin: center bottom;
 }
 
-.player.knight::before {
+.player.knight_1::before {
   content: "";
   /* Size of ONE frame */
   width: 120px;
@@ -425,7 +425,26 @@ button[button-disabled="true"]:focus {
   background-position: 0 0;
 
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
-  transform: translate(-12px, -12px);
+  transform: translate(-12px, -8px);
+  /* transform: translate; */
+  /* background-image: var(--sprite-url);
+
+  animation: knightIdle 1.3s steps(1, end) infinite; */
+}
+
+.player.knight_2::before {
+  content: "";
+  /* Size of ONE frame */
+  width: 120px;
+  height: 140%;
+
+  background-repeat: no-repeat;
+
+  background-size: 400% 100%;
+  background-position: 0 0;
+
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
+  transform: translate(-12px, -8px);
   /* transform: translate; */
   /* background-image: var(--sprite-url);
 
@@ -436,31 +455,62 @@ button[button-disabled="true"]:focus {
   filter: grayScale(100%);
 }
 
-.player.knight.idle::before {
-  background-image: var(--sprite-url);
+.player.knight_1.idle::before {
+  background-image: url("assets/Knight_1/Idle.png");
 
   animation: knightIdle 1.3s steps(1, end) infinite;
 }
 
-.player.knight.attack3::before {
-  background-image: var(--sprite-url);
-  animation: knightAttack 0.6s steps(1, end);
+.player.knight_1.attack3::before {
+  background-image: url("assets/Knight_1/attack3.png");
+  /* background-size: 400% 100%; */
+  animation: knightAttack 0.6s steps(1, end) forwards;
 }
 
-.player.knight.hurt::before {
-  background-image: var(--sprite-url);
-  animation: knightHurt 0.5s steps(1, end);
+.player.knight_1.hurt::before {
+  background-image: url("assets/Knight_1/hurt.png");
+  animation: knightHurt 0.5s steps(1, end) forwards;
   background-size: 200% 100%;
 }
 
-.player.knight.dead::before {
-  background-image: var(--sprite-url);
+.player.knight_1.dead::before {
+  background-image: url("assets/Knight_1/dead.png");
   animation: knightDead 1s steps(1, end) forwards;
   background-size: 600% 100%;
 }
 
-.player.knight.run::before {
-  background-image: var(--sprite-url);
+.player.knight_1.run::before {
+  background-image: url("assets/Knight_1/Run.png");
+  animation: knightRun 0.7s steps(1, end) infinite;
+  background-size: 700% 100%;
+}
+
+.player.knight_2.idle::before {
+  background-image: url("assets/Knight_2/Idle.png");
+
+  animation: knightIdle 1.3s steps(1, end) infinite;
+}
+
+.player.knight_2.attack3::before {
+  background-image: url("assets/Knight_2/attack3.png");
+  /* background-size: 400% 100%; */
+  animation: knightAttack 0.6s steps(1, end) forwards;
+}
+
+.player.knight_2.hurt::before {
+  background-image: url("assets/Knight_2/hurt.png");
+  animation: knightHurt 0.5s steps(1, end) forwards;
+  background-size: 200% 100%;
+}
+
+.player.knight_2.dead::before {
+  background-image: url("assets/Knight_2/dead.png");
+  animation: knightDead 1s steps(1, end) forwards;
+  background-size: 600% 100%;
+}
+
+.player.knight_2.run::before {
+  background-image: url("assets/Knight_2/Run.png");
   animation: knightRun 0.7s steps(1, end) infinite;
   background-size: 700% 100%;
 }
@@ -497,7 +547,7 @@ button[button-disabled="true"]:focus {
     background-position-x: -370px;
   }
   100% {
-    background-position-x: -340px;
+    background-position-x: -10px;
   }
 }
 
@@ -564,18 +614,39 @@ button[button-disabled="true"]:focus {
   background-position: 0 0;
 
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
-  transform: translate(5px, -12px);
+  transform: translate(-30px, -8px);
 }
 
 .player.wizard.idle::before {
   background-size: 700% 100%;
   background-image: var(--sprite-url);
-  animation: wizardIdle 1.3s steps(1, end) infinite;
+  animation: wizardIdle 2s steps(1, end) infinite;
 }
 
 @keyframes wizardIdle {
   0% {
-    background-position-x: 50px;
+    background-position-x: 0px;
+  }
+  14% {
+    background-position-x: -120px;
+  }
+  28% {
+    background-position-x: -240px;
+  }
+  42% {
+    background-position-x: -360px;
+  }
+  56% {
+    background-position-x: -480px;
+  }
+  70% {
+    background-position-x: -600px;
+  }
+  84% {
+    background-position-x: -720px;
+  }
+  100% {
+    background-position-x: 0px;
   }
 }
 

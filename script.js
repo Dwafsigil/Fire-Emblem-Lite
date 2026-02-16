@@ -10,6 +10,7 @@ import { activateActionbarInput } from "./actionbarInput.js";
 import { activateGlobalInput } from "./globalInput.js";
 import { itemListControls } from "./itemListControls.js";
 import { skillListControls } from "./skillListControls.js";
+import { preloadSprites } from "./preload.js";
 
 export const state = createInitialState();
 export const ui = createUI();
@@ -23,6 +24,9 @@ export const gates = {
   [Phase.PLAYER_ITEM]: createGate(),
   [Phase.ENEMY_TURN]: createGate(),
 };
+
+preloadSprites("knight_1");
+preloadSprites("knight_2");
 
 initUIControls(ui);
 skillListControls(ui, state, gates);
@@ -38,7 +42,8 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// 1. Added Ranger and Wizard Class
+// 1. Added Ranger and Wizard Class (Animation Only)
+// 2. Optimize and Organize Code Logic
 
 // BUG LIST:
 // 1. Unit freaks out when they die sometimes

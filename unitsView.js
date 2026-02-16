@@ -15,19 +15,15 @@ export function placeUnits(state, ui, units) {
 export function createPlayerNode(unit) {
   console.log(unit.variant);
   const el = document.createElement("div");
-  el.className = `player ${unit.unitType} idle`;
+
+  el.className = `player ${unit.variant} idle`;
   el.id = `player-${unit.playerId}`;
-  el.style.setProperty(
-    "--sprite-url",
-    `url("assets/${unit.variant}/Idle.png")`,
-  );
+  // el.style.setProperty(
+  //   "--sprite-url",
+  //   `url("assets/${unit.variant}/idle.png")`,
+  // );
 
   console.log(el);
-
-  // const strengthValue = document.createElement("div");
-  // strengthValue.classList.add("strength-value");
-  // strengthValue.classList.add("hidden");
-  // strengthValue.textContent = "STR  20";
 
   const healthBarContainer = document.createElement("div");
   healthBarContainer.classList.add("health-bar-container");

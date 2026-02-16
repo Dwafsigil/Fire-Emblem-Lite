@@ -75,10 +75,10 @@ export async function enemyMove(state, ui, enemyUnit) {
     await delay(500);
   }
   enemyUnit.node.classList.remove("run");
-  enemyUnit.node.style.setProperty(
-    "--sprite-url",
-    `url("assets/${enemyUnit.variant}/Idle.png")`,
-  );
+  // enemyUnit.node.style.setProperty(
+  //   "--sprite-url",
+  //   `url("assets/${enemyUnit.variant}/Idle.png")`,
+  // );
 }
 
 const key = (r, c) => `${r},${c}`;

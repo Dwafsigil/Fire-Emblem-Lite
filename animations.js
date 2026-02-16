@@ -14,24 +14,39 @@ import { focusBoard } from "./uiControls.js";
 import { items } from "./items.js";
 import { skills } from "./skills.js";
 
-export function playAnim(unit, className, delay) {
-  unit.node.classList.remove(className);
-  unit.node.style.setProperty(
-    "--sprite-url",
-    `url("assets/${unit.variant}/${className}.png")`,
+export function playAnim(unit, className) {
+  const el = unit.node;
+
+  if (el.dataset.dead === "1") return;
+
+  console.log("Running anim");
+  // el.style.setProperty(
+  //   "--sprite-url",
+  //   `url("assets/${unit.variant}/${className}.png")`,
+  // );
+
+  el.classList.remove(className);
+  void el.offsetWidth;
+  el.classList.add(className);
+
+  el.addEventListener(
+    "animationend",
+    () => {
+      el.classList.remove(className);
+      // el.style.setProperty(
+      //   "--sprite-url",
+      //   `url("assets/${unit.variant}/Idle.png")`,
+      // );
+    },
+    { once: true },
   );
-  unit.node.classList.add(className);
-  setTimeout(() => {
-    unit.node.classList.remove(className);
-    unit.node.style.setProperty(
-      "--sprite-url",
-      `url("assets/${unit.variant}/Idle.png")`,
-    );
-  }, delay);
 }
 
 export function attackAnimation(unit, type) {
-  playAnim(unit, "attack3", 600);
+  // console.log(unit.node.classList);
+  logAnim(unit, "attack");
+
+  playAnim(unit, "attack3");
 
   if (type === "Hit") playSfx(swordHit, 0.5, 0);
   if (type === "Crit") playSfx(critHit, 0.5, 0);
@@ -39,30 +54,48 @@ export function attackAnimation(unit, type) {
 }
 
 export function hurtAnimation(unit) {
+  logAnim(unit, "hurt");
+
   playAnim(unit, "hurt", 500);
   playSfx(hurtGrunt, 0.3, 200);
 }
 
 export function runAnimation(unit) {
+  logAnim(unit, "run");
+
   unit.node.classList.remove("run");
-  unit.node.style.setProperty(
-    "--sprite-url",
-    `url("assets/${unit.variant}/Run.png")`,
-  );
+  // unit.node.style.setProperty(
+  //   "--sprite-url",
+  //   `url("assets/${unit.variant}/Run.png")`,
+  // );
   unit.node.classList.add("run");
   // playSfx(deadGrunt, 0.2, 200);
 }
 
 export async function deadAnimation(unit) {
-  unit.node.classList.remove("dead");
+  logAnim(unit, "dead");
   // console.log("Running dead animation");
-  unit.node.style.setProperty(
-    "--sprite-url",
-    `url("assets/${unit.variant}/dead.png")`,
-  );
+
+  unit.node.dataset.dead = "1";
+
+  // unit.node.style.setProperty(
+  //   "--sprite-url",
+  //   `url("assets/${unit.variant}/dead.png")`,
+  // );
   unit.node.classList.add("dead");
   playSfx(deadGrunt, 0.2, 200);
   // removeDead();
+}
+
+function logAnim(unit, label) {
+  const el = unit.node;
+  console.log(
+    `[ANIM] ${unit.playerId ?? unit.id ?? ""} ${unit.variant} -> ${label}`,
+    "classes:",
+    [...el.classList],
+    "hp:",
+    unit.hp,
+  );
 }
 
 export function doAction(state, ui, action) {
