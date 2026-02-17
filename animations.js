@@ -19,12 +19,6 @@ export function playAnim(unit, className) {
 
   if (el.dataset.dead === "1") return;
 
-  console.log("Running anim");
-  // el.style.setProperty(
-  //   "--sprite-url",
-  //   `url("assets/${unit.variant}/${className}.png")`,
-  // );
-
   el.classList.remove(className);
   void el.offsetWidth;
   el.classList.add(className);
@@ -33,10 +27,6 @@ export function playAnim(unit, className) {
     "animationend",
     () => {
       el.classList.remove(className);
-      // el.style.setProperty(
-      //   "--sprite-url",
-      //   `url("assets/${unit.variant}/Idle.png")`,
-      // );
     },
     { once: true },
   );
@@ -44,9 +34,8 @@ export function playAnim(unit, className) {
 
 export function attackAnimation(unit, type) {
   // console.log(unit.node.classList);
-  logAnim(unit, "attack");
 
-  playAnim(unit, "attack3");
+  playAnim(unit, "attack");
 
   if (type === "Hit") playSfx(swordHit, 0.5, 0);
   if (type === "Crit") playSfx(critHit, 0.5, 0);
@@ -54,15 +43,11 @@ export function attackAnimation(unit, type) {
 }
 
 export function hurtAnimation(unit) {
-  logAnim(unit, "hurt");
-
   playAnim(unit, "hurt", 500);
   playSfx(hurtGrunt, 0.3, 200);
 }
 
 export function runAnimation(unit) {
-  logAnim(unit, "run");
-
   unit.node.classList.remove("run");
   // unit.node.style.setProperty(
   //   "--sprite-url",
@@ -73,7 +58,6 @@ export function runAnimation(unit) {
 }
 
 export async function deadAnimation(unit) {
-  logAnim(unit, "dead");
   // console.log("Running dead animation");
 
   unit.node.dataset.dead = "1";

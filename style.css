@@ -129,7 +129,7 @@ button[button-disabled="true"] {
 
 button[button-disabled="true"]:hover,
 button[button-disabled="true"]:focus {
-  outline: 2px solid #7aa2ff; /* example focus ring */
+  outline: 2px solid #7aa2ff;
 }
 
 .floating-value {
@@ -389,7 +389,7 @@ button[button-disabled="true"]:focus {
   z-index: 4;
 }
 
-.attack {
+.attack-border {
   border: 1px solid red;
   z-index: 4;
 }
@@ -432,6 +432,40 @@ button[button-disabled="true"]:focus {
   animation: knightIdle 1.3s steps(1, end) infinite; */
 }
 
+.player.grayed::before {
+  filter: grayScale(100%);
+}
+
+.player.knight_1.idle::before {
+  background-image: url("assets/knight_1/Idle.png");
+
+  animation: knightIdle 1.3s steps(1, end) infinite;
+}
+
+.player.knight_1.attack::before {
+  background-image: url("assets/knight_1/attack.png");
+  /* background-size: 400% 100%; */
+  animation: knightAttack 0.6s steps(1, end) forwards;
+}
+
+.player.knight_1.hurt::before {
+  background-image: url("assets/knight_1/hurt.png");
+  animation: knightHurt 0.5s steps(1, end) forwards;
+  background-size: 200% 100%;
+}
+
+.player.knight_1.dead::before {
+  background-image: url("assets/knight_1/dead.png");
+  animation: knightDead 1s steps(1, end) forwards;
+  background-size: 600% 100%;
+}
+
+.player.knight_1.run::before {
+  background-image: url("assets/knight_1/Run.png");
+  animation: knightRun 0.7s steps(1, end) infinite;
+  background-size: 700% 100%;
+}
+
 .player.knight_2::before {
   content: "";
   /* Size of ONE frame */
@@ -451,66 +485,32 @@ button[button-disabled="true"]:focus {
   animation: knightIdle 1.3s steps(1, end) infinite; */
 }
 
-.player.grayed::before {
-  filter: grayScale(100%);
-}
-
-.player.knight_1.idle::before {
-  background-image: url("assets/Knight_1/Idle.png");
-
-  animation: knightIdle 1.3s steps(1, end) infinite;
-}
-
-.player.knight_1.attack3::before {
-  background-image: url("assets/Knight_1/attack3.png");
-  /* background-size: 400% 100%; */
-  animation: knightAttack 0.6s steps(1, end) forwards;
-}
-
-.player.knight_1.hurt::before {
-  background-image: url("assets/Knight_1/hurt.png");
-  animation: knightHurt 0.5s steps(1, end) forwards;
-  background-size: 200% 100%;
-}
-
-.player.knight_1.dead::before {
-  background-image: url("assets/Knight_1/dead.png");
-  animation: knightDead 1s steps(1, end) forwards;
-  background-size: 600% 100%;
-}
-
-.player.knight_1.run::before {
-  background-image: url("assets/Knight_1/Run.png");
-  animation: knightRun 0.7s steps(1, end) infinite;
-  background-size: 700% 100%;
-}
-
 .player.knight_2.idle::before {
-  background-image: url("assets/Knight_2/Idle.png");
+  background-image: url("assets/knight_2/idle.png");
 
   animation: knightIdle 1.3s steps(1, end) infinite;
 }
 
-.player.knight_2.attack3::before {
-  background-image: url("assets/Knight_2/attack3.png");
+.player.knight_2.attack::before {
+  background-image: url("assets/knight_2/attack.png");
   /* background-size: 400% 100%; */
   animation: knightAttack 0.6s steps(1, end) forwards;
 }
 
 .player.knight_2.hurt::before {
-  background-image: url("assets/Knight_2/hurt.png");
+  background-image: url("assets/knight_2/hurt.png");
   animation: knightHurt 0.5s steps(1, end) forwards;
   background-size: 200% 100%;
 }
 
 .player.knight_2.dead::before {
-  background-image: url("assets/Knight_2/dead.png");
+  background-image: url("assets/knight_2/dead.png");
   animation: knightDead 1s steps(1, end) forwards;
   background-size: 600% 100%;
 }
 
 .player.knight_2.run::before {
-  background-image: url("assets/Knight_2/Run.png");
+  background-image: url("assets/knight_2/Run.png");
   animation: knightRun 0.7s steps(1, end) infinite;
   background-size: 700% 100%;
 }
@@ -603,7 +603,7 @@ button[button-disabled="true"]:focus {
   }
 }
 
-.player.wizard::before {
+.player.wizard_1::before {
   content: "";
   /* Size of ONE frame */
   width: 120px;
@@ -617,10 +617,34 @@ button[button-disabled="true"]:focus {
   transform: translate(-30px, -8px);
 }
 
-.player.wizard.idle::before {
+.player.wizard_1.idle::before {
   background-size: 700% 100%;
-  background-image: var(--sprite-url);
+  background-image: url("assets/wizard_1/idle.png");
   animation: wizardIdle 2s steps(1, end) infinite;
+}
+
+.player.wizard_1.attack::before {
+  background-size: 400% 100%;
+  background-image: url("assets/wizard_1/attack.png");
+  animation: wizardAttack 0.5s steps(1, end) forwards;
+}
+
+.player.wizard_1.hurt::before {
+  background-size: 300% 100%;
+  background-image: url("assets/wizard_1/hurt.png");
+  animation: wizardHurt 0.5s steps(1, end) forwards;
+}
+
+.player.wizard_1.dead::before {
+  background-size: 600% 100%;
+  background-image: url("assets/wizard_1/dead.png");
+  animation: wizardDead 1s steps(1, end) forwards;
+}
+
+.player.wizard_1.run::before {
+  background-size: 800% 100%;
+  background-image: url("assets/wizard_1/run.png");
+  animation: wizardRun 1s steps(1, end) infinite;
 }
 
 @keyframes wizardIdle {
@@ -647,6 +671,256 @@ button[button-disabled="true"]:focus {
   }
   100% {
     background-position-x: 0px;
+  }
+}
+
+@keyframes wizardAttack {
+  0% {
+    background-position-x: -7px;
+  }
+  25% {
+    background-position-x: -128px;
+  }
+  50% {
+    background-position-x: -248px;
+  }
+  75% {
+    background-position-x: -368px;
+  }
+  100% {
+    background-position-x: -7px;
+  }
+}
+
+@keyframes wizardHurt {
+  0% {
+    background-position-x: 2px;
+  }
+  33% {
+    background-position-x: -118px;
+  }
+  67% {
+    background-position-x: -238px;
+  }
+  100% {
+    background-position-x: 2px;
+  }
+}
+
+@keyframes wizardDead {
+  0% {
+    background-position-x: 4px;
+  }
+  16.7% {
+    background-position-x: -118px;
+  }
+  33.3% {
+    background-position-x: -236px;
+  }
+  50% {
+    background-position-x: -360px;
+  }
+  66.7% {
+    background-position-x: -480px;
+  }
+  83.4% {
+    background-position-x: -600px;
+  }
+  100% {
+    background-position-x: -600px;
+  }
+}
+
+@keyframes wizardRun {
+  0% {
+    background-position-x: 4px;
+  }
+  12.5% {
+    background-position-x: -116px;
+  }
+  25% {
+    background-position-x: -238px;
+  }
+  37.5% {
+    background-position-x: -356px;
+  }
+  50% {
+    background-position-x: -476px;
+  }
+  62.5% {
+    background-position-x: -598px;
+  }
+  75% {
+    background-position-x: -718px;
+  }
+  87.5% {
+    background-position-x: -838px;
+  }
+  100% {
+    background-position-x: 6px;
+  }
+}
+
+.player.wizard_2::before {
+  content: "";
+  /* Size of ONE frame */
+  width: 120px;
+  height: 140%;
+  background-repeat: no-repeat;
+
+  background-position: 0 0;
+
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
+  transform: translate(-30px, -8px);
+}
+
+.player.wizard_2.idle::before {
+  background-size: 800% 100%;
+  background-image: url("assets/wizard_2/idle.png");
+  animation: wizardIdle2 1.2s steps(1, end) infinite;
+}
+
+.player.wizard_2.attack::before {
+  background-size: 700% 100%;
+  background-image: url("assets/wizard_2/attack.png");
+  animation: wizardAttack2 0.6s steps(1, end) forwards;
+}
+
+.player.wizard_2.hurt::before {
+  background-size: 400% 100%;
+  background-image: url("assets/wizard_2/hurt.png");
+  animation: wizardHurt2 0.5s steps(1, end) forwards;
+}
+
+.player.wizard_2.dead::before {
+  background-size: 400% 100%;
+  background-image: url("assets/wizard_2/dead.png");
+  animation: wizardDead2 1s steps(1, end) forwards;
+}
+
+.player.wizard_2.run::before {
+  background-size: 800% 100%;
+  background-image: url("assets/wizard_2/run.png");
+  animation: wizardRun2 1s steps(1, end) infinite;
+}
+
+@keyframes wizardIdle2 {
+  0% {
+    background-position-x: -8px;
+  }
+  12.5% {
+    background-position-x: -128px;
+  }
+  25% {
+    background-position-x: -248px;
+  }
+  37.5% {
+    background-position-x: -368px;
+  }
+  50% {
+    background-position-x: -488px;
+  }
+  62.5% {
+    background-position-x: -608px;
+  }
+  75% {
+    background-position-x: -728px;
+  }
+  87.5% {
+    background-position-x: -848px;
+  }
+  100% {
+    background-position-x: -8;
+  }
+}
+
+@keyframes wizardAttack2 {
+  0% {
+    background-position-x: 0px;
+  }
+  14.2% {
+    background-position-x: -120px;
+  }
+  28.4% {
+    background-position-x: -240px;
+  }
+  42.6% {
+    background-position-x: -360px;
+  }
+  56.8% {
+    background-position-x: -480px;
+  }
+  80% {
+    background-position-x: -600px;
+  }
+  100% {
+    background-position-x: -720px;
+  }
+}
+
+@keyframes wizardHurt2 {
+  0% {
+    background-position-x: -8px;
+  }
+  25% {
+    background-position-x: -128px;
+  }
+  50% {
+    background-position-x: -248px;
+  }
+  75% {
+    background-position-x: -368px;
+  }
+  100% {
+    background-position-x: -8px;
+  }
+}
+
+@keyframes wizardDead2 {
+  0% {
+    background-position-x: 0px;
+  }
+  25% {
+    background-position-x: -120px;
+  }
+  50% {
+    background-position-x: -250px;
+  }
+  75% {
+    background-position-x: -370px;
+  }
+  100% {
+    background-position-x: -370px;
+  }
+}
+
+@keyframes wizardRun2 {
+  0% {
+    background-position-x: 4px;
+  }
+  12.5% {
+    background-position-x: -116px;
+  }
+  25% {
+    background-position-x: -240px;
+  }
+  37.5% {
+    background-position-x: -355px;
+  }
+  50% {
+    background-position-x: -474px;
+  }
+  62.5% {
+    background-position-x: -596px;
+  }
+  75% {
+    background-position-x: -716px;
+  }
+  87.5% {
+    background-position-x: -838px;
+  }
+  100% {
+    background-position-x: -4px;
   }
 }
 

@@ -1,9 +1,9 @@
 export async function preloadSprites(variant) {
   console.log(`Preloading ${variant}`);
   const animations = [
-    "Idle.png",
-    "Run.png",
-    "attack3.png",
+    "idle.png",
+    "run.png",
+    "attack.png",
     "hurt.png",
     "dead.png",
   ];

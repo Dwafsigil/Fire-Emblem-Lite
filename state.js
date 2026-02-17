@@ -18,8 +18,8 @@ export function createInitialUnits() {
     new unitStats({
       playerId: 0,
       name: "Johnny",
-      unitType: "knight",
-      variant: "knight_1",
+      unitType: "wizard",
+      variant: "wizard_2",
       affiliation: 0,
       row: 8,
       col: 3,

@@ -27,6 +27,8 @@ export const gates = {
 
 preloadSprites("knight_1");
 preloadSprites("knight_2");
+preloadSprites("wizard_1");
+preloadSprites("wizard_2");
 
 initUIControls(ui);
 skillListControls(ui, state, gates);

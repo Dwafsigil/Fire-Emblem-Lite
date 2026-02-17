@@ -18,10 +18,6 @@ export function createPlayerNode(unit) {
 
   el.className = `player ${unit.variant} idle`;
   el.id = `player-${unit.playerId}`;
-  // el.style.setProperty(
-  //   "--sprite-url",
-  //   `url("assets/${unit.variant}/idle.png")`,
-  // );
 
   console.log(el);
 

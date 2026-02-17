@@ -140,7 +140,7 @@ export function attackHighlight(state, ui) {
     const newRow = state.selectedUnit.row + dR;
     const newCol = state.selectedUnit.col + dC;
     if (tileAt(ui.boardEl, newRow, newCol) !== null)
-      tileAt(ui.boardEl, newRow, newCol).classList.add("attack");
+      tileAt(ui.boardEl, newRow, newCol).classList.add("attack-border");
   }
 }
 
@@ -156,7 +156,7 @@ export function removeAttackHighlight(state, ui) {
     const newRow = state.selectedUnit.row + dR;
     const newCol = state.selectedUnit.col + dC;
     if (tileAt(ui.boardEl, newRow, newCol) !== null)
-      tileAt(ui.boardEl, newRow, newCol).classList.remove("attack");
+      tileAt(ui.boardEl, newRow, newCol).classList.remove("attack-border");
   }
 }
 
