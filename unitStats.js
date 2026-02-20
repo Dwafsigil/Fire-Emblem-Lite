@@ -12,7 +12,7 @@ export class unitStats {
     health = 10,
     healthBarFill = null,
     strength = 10,
-    magic = 10,
+    intelligence = 10,
     skill = 10,
     speed = 10,
     luck = 10,
@@ -33,7 +33,7 @@ export class unitStats {
     this.maxHealth = maxHealth;
     this.healthBarFill = healthBarFill;
     this.strength = strength;
-    this.magic = magic;
+    this.intelligence = intelligence;
     this.skill = skill;
     this.speed = speed;
     this.luck = luck;
@@ -100,8 +100,8 @@ export class unitStats {
     this.strengthValue.textContent = `ATK ${this.strength}`;
   }
 
-  attackPlayer(target, type, skillBonus) {
-    let damage = damageCalculation(this, target, type, skillBonus);
+  attackPlayer(target, special, type, skillBonus) {
+    let damage = damageCalculation(this, target, special, type, skillBonus);
     target.takeDamage(damage);
 
     return damage;

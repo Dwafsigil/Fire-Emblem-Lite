@@ -19,7 +19,7 @@ export function createInitialUnits() {
       playerId: 0,
       name: "Johnny",
       unitType: "wizard",
-      variant: "wizard_2",
+      variant: "wizard_1",
       affiliation: 0,
       row: 8,
       col: 3,
@@ -27,7 +27,8 @@ export function createInitialUnits() {
       movement: 5,
       inventory: [{ id: "potion" }, { id: "potion" }],
       health: 5,
-      skills: [{ id: "empoweredStrike", uses: 3 }],
+      skills: [{ id: "fireball", uses: 2 }],
+      intelligence: 30,
     }),
     // new unitStats({
     //   playerId: 1,

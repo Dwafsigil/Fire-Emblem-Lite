@@ -2,7 +2,7 @@ import { Phase } from "./state.js";
 import { attackHighlight } from "./combatInput.js";
 import { focusBoard } from "./uiControls.js";
 
-export function skillListControls(ui, state, gates) {
+export function skillListControls(ui, state) {
   ui.skillList.addEventListener("keydown", (e) => {
     // references the active button, can do active.dataset
     const active = document.activeElement;

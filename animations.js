@@ -32,10 +32,19 @@ export function playAnim(unit, className) {
   );
 }
 
-export function attackAnimation(unit, type) {
+export function attackAnimation(unit, type, skill = null) {
   // console.log(unit.node.classList);
+  // console.log(skill);
 
-  playAnim(unit, "attack");
+  let skillName = skill ? skill.dataset.id : 0;
+
+  console.log(skillName);
+
+  if (skillName === "fireball") {
+    playAnim(unit, "fireball");
+  } else {
+    playAnim(unit, "attack");
+  }
 
   if (type === "Hit") playSfx(swordHit, 0.5, 0);
   if (type === "Crit") playSfx(critHit, 0.5, 0);
@@ -49,37 +58,15 @@ export function hurtAnimation(unit) {
 
 export function runAnimation(unit) {
   unit.node.classList.remove("run");
-  // unit.node.style.setProperty(
-  //   "--sprite-url",
-  //   `url("assets/${unit.variant}/Run.png")`,
-  // );
+
   unit.node.classList.add("run");
-  // playSfx(deadGrunt, 0.2, 200);
 }
 
 export async function deadAnimation(unit) {
-  // console.log("Running dead animation");
-
   unit.node.dataset.dead = "1";
 
-  // unit.node.style.setProperty(
-  //   "--sprite-url",
-  //   `url("assets/${unit.variant}/dead.png")`,
-  // );
   unit.node.classList.add("dead");
   playSfx(deadGrunt, 0.2, 200);
-  // removeDead();
-}
-
-function logAnim(unit, label) {
-  const el = unit.node;
-  console.log(
-    `[ANIM] ${unit.playerId ?? unit.id ?? ""} ${unit.variant} -> ${label}`,
-    "classes:",
-    [...el.classList],
-    "hp:",
-    unit.hp,
-  );
 }
 
 export function doAction(state, ui, action) {

@@ -52,7 +52,12 @@ export function showUnitInfo(state, ui) {
 export function showStats(state, ui, unit) {
   ui.unitName.textContent = `${unit.name}`;
   ui.unitHealthStat.textContent = `HP: ${unit.health}`;
-  ui.unitAttackStat.textContent = `ATK: ${unit.strength}`;
+  if (unit.unitType == "wizard") {
+    ui.unitAttackStat.textContent = `INT: ${unit.intelligence}`;
+  }
+  if (unit.unitType == "knight") {
+    ui.unitAttackStat.textContent = `STR: ${unit.strength}`;
+  }
   ui.unitDefenseStat.textContent = `DEF: ${unit.defense}`;
   ui.unitMovementStat.textContent = `MOV: ${unit.movement}`;
   ui.unitHitStat.textContent = `HIT: ${unit.hitRate}`;

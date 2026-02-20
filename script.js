@@ -39,16 +39,15 @@ activateGlobalInput(state, ui, gates);
 
 runGame(state, ui, gates);
 
-// leveling, weapon triangle, objectives, classes,  skills, saves, log
+// leveling, weapon triangle, saves,
 
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// 1. Added Ranger and Wizard Class (Animation Only)
-// 2. Optimize and Organize Code Logic
+// 1. Optimize and Organize Code Logic
+// 2. Equip weapons and gear
 
 // BUG LIST:
-// 1. Unit freaks out when they die sometimes
 // 2. Action bar buttons dont go left and right in order properly
 // 3. Backing from actions such as attack messes with the phases
 // 4. Unit requires items or skills otherwise the game bugs.

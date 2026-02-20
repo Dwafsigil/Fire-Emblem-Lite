@@ -1,5 +1,5 @@
 export async function preloadSprites(variant) {
-  console.log(`Preloading ${variant}`);
+  // console.log(`Preloading ${variant}`);
   const animations = [
     "idle.png",
     "run.png",
@@ -13,7 +13,7 @@ export async function preloadSprites(variant) {
       const img = new Image();
       img.src = `assets/${variant}/${animation}`;
       if (img.decode) await img.decode();
-      console.log(`Loaded ${variant} ${animation}`);
+      // console.log(`Loaded ${variant} ${animation}`);
     }),
   );
 }

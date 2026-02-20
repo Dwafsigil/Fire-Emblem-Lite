@@ -10,6 +10,7 @@ import { skills } from "./skills.js";
 export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
   // check if attack will hit
   // if hit then check if crit
+  console.log("In attack", skill);
 
   let randomHitInt = Math.floor(Math.random() * 100 + 1);
   let randomCritInt = Math.floor(Math.random() * 100 + 1);
@@ -18,17 +19,19 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
     attackingUnit.hitRate - getAvoidWithTerrain(state, receivingUnit);
 
   let skillBonus = skill ? skills[skill.dataset.id].bonus : 0;
-
+  let skillSpecial = skill ? skills[skill.dataset.id].special : null;
+  console.log(skillBonus);
   if (!receivingUnit) return false;
 
   if (randomHitInt <= hitChance) {
     if (randomCritInt <= attackingUnit.critRate) {
       const damage = attackingUnit.attackPlayer(
         receivingUnit,
+        skillSpecial,
         "Crit",
         skillBonus,
       );
-      attackAnimation(attackingUnit, "Crit");
+      attackAnimation(attackingUnit, "Crit", skill);
       showStats(state, ui, receivingUnit);
 
       const floatingValue = document.createElement("div");
@@ -55,10 +58,11 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
     } else {
       const damage = attackingUnit.attackPlayer(
         receivingUnit,
+        skillSpecial,
         "Hit",
         skillBonus,
       );
-      attackAnimation(attackingUnit, "Hit");
+      attackAnimation(attackingUnit, "Hit", skill);
       showStats(state, ui, receivingUnit);
 
       const floatingValue = document.createElement("div");
@@ -88,7 +92,7 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
       return "Hit";
     }
   } else {
-    attackAnimation(attackingUnit, "Miss");
+    attackAnimation(attackingUnit, "Miss", skill);
     showStats(state, ui, receivingUnit);
 
     const floatingValue = document.createElement("div");

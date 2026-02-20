@@ -646,6 +646,11 @@ button[button-disabled="true"]:focus {
   background-image: url("assets/wizard_1/run.png");
   animation: wizardRun 1s steps(1, end) infinite;
 }
+.player.wizard_1.fireball::before {
+  background-size: 800% 100%;
+  background-image: url("assets/wizard_1/fireball.png");
+  animation: fireball 0.6s steps(1, end) forwards;
+}
 
 @keyframes wizardIdle {
   0% {
@@ -758,6 +763,36 @@ button[button-disabled="true"]:focus {
   }
   100% {
     background-position-x: 6px;
+  }
+}
+
+@keyframes fireball {
+  0% {
+    background-position-x: 0px;
+  }
+  12.5% {
+    background-position-x: -120px;
+  }
+  25% {
+    background-position-x: -240px;
+  }
+  37.5% {
+    background-position-x: -360px;
+  }
+  50% {
+    background-position-x: -480px;
+  }
+  62.5% {
+    background-position-x: -600px;
+  }
+  75% {
+    background-position-x: -720px;
+  }
+  87.5% {
+    background-position-x: -840px;
+  }
+  100% {
+    background-position-x: 0px;
   }
 }
 

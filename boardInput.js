@@ -290,6 +290,8 @@ export function activateBoardInput(state, ui, gates) {
     ) {
       // console.log("inside attacking");
 
+      console.log(state.useSkill);
+
       const type = attack(
         state.selectedUnit,
         state.receivingUnit,
@@ -297,6 +299,8 @@ export function activateBoardInput(state, ui, gates) {
         state,
         ui,
       );
+
+      // Removing a use
 
       if (state.useSkill) {
         const removeSkillUse = state.useSkill.dataset.id;
