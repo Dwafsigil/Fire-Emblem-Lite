@@ -54,11 +54,10 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// Add Dialogue
-// Add all the animations in
-// Optimize and Organize Code Logic
 // Equip weapons and gear
+// Add all the animations in
 // Want the units to be in the background of the dialogue
+// Optimize and Organize Code Logic
 
 // BUG LIST:
 // 2. Action bar buttons dont go left and right in order properly

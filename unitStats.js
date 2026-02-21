@@ -23,6 +23,7 @@ export class unitStats {
     row = 0,
     col = 0,
     inventory = null,
+    equipped = null,
     skills = null,
   }) {
     this.playerId = playerId;
@@ -43,6 +44,7 @@ export class unitStats {
     this.row = row;
     this.col = col;
     this.inventory = inventory;
+    this.equipped = equipped;
     this.skills = skills;
 
     if (affiliation !== 0 && affiliation !== 1) {
@@ -54,7 +56,8 @@ export class unitStats {
   // getters
 
   get hitRate() {
-    return this.skill * 2 + this.luck * 0.5 + 40;
+    // fix
+    return this.skill * 2 + this.luck * 0.5 + 100;
   }
 
   get avoidRate() {

@@ -21,6 +21,13 @@ export function showUnitInfo(state, ui) {
       hoveredUnit.inventory.forEach((item, index) => {
         const el = document.createElement("button");
         el.className = item;
+        console.log(hoveredUnit.equipped);
+        console.log(item);
+
+        if (item.id === hoveredUnit.equipped) {
+          el.style.color = "blue";
+        }
+
         el.dataset.index = index;
         el.dataset.id = item.id;
         el.textContent = items[item.id].name;
@@ -63,4 +70,11 @@ export function showStats(state, ui, unit) {
   ui.unitHitStat.textContent = `HIT: ${unit.hitRate}`;
   ui.unitAvoidStat.textContent = `AVO: ${getAvoidWithTerrain(state, unit)} `;
   ui.unitCritStat.textContent = `CRIT: ${unit.critRate}`;
+}
+
+export function removeUnitInfo(ui) {
+  ui.statList.classList.add("hidden");
+  // removes all children of an element
+  ui.skillList.replaceChildren();
+  ui.itemList.replaceChildren();
 }

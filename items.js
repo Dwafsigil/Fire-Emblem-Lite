@@ -1,5 +1,5 @@
 import { playAndRemove } from "./helpers.js";
-
+import { Phase } from "./state.js";
 export const items = {
   potion: {
     id: "potion",
@@ -8,9 +8,16 @@ export const items = {
     heal: 5,
     description: "Heal selected unit for 5 hp.",
   },
+  ironSword: {
+    id: "ironSword",
+    name: "Iron Sword",
+    type: "weapon",
+    bonuses: { strength: 2 },
+    description: "+2 Physical Attack Damage",
+  },
 };
 
-export function useItem(state, ui, foundElement) {
+export function useItem(state, ui, gates, foundElement) {
   if (foundElement.dataset.id === "potion") {
     state.selectedUnit.health += items["potion"].heal;
 
@@ -44,4 +51,7 @@ export function useItem(state, ui, foundElement) {
     );
     state.selectedUnit.inventory.splice(index, 1);
   }
+
+  ui.description.classList.add("hidden");
+  gates[Phase.PLAYER_ITEM].open();
 }

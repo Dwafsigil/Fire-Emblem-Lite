@@ -12,7 +12,7 @@ export function damageCalculation(
   const intelligence = attacker.intelligence;
   const resistance = defender.resistance;
 
-  if ((attacker.unitType = "wizard")) {
+  if (attacker.unitType === "wizard") {
     if ((special = "Armor Pen")) {
       if (type === "Hit") return Math.floor(intelligence + skillBonus);
       if (type === "Crit") return Math.floor((intelligence + skillBonus) * 1.5);
@@ -23,7 +23,7 @@ export function damageCalculation(
         return Math.floor((intelligence + skillBonus) * 1.5 - resistance);
     }
   }
-  if ((attacker.unitType = "knight")) {
+  if (attacker.unitType === "knight") {
     if (type === "Hit") return Math.floor(attack + skillBonus - defense);
     if (type === "Crit")
       return Math.floor((attack + skillBonus) * 1.5 - defense);

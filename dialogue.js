@@ -13,7 +13,7 @@ export const dialogue = [
   },
   {
     speaker: "???",
-    text: "Sssiiiiiiiiiixxxx SSSeeeeveeeennnn haha.",
+    text: "Be a little nice eh.",
     url: "smile",
   },
   {
