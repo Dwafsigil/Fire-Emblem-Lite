@@ -17,3 +17,8 @@ export async function preloadSprites(variant) {
     }),
   );
 }
+
+export function preloadImage(url) {
+  const img = new Image();
+  img.src = url;
+}

@@ -5,6 +5,7 @@ import { unitStats } from "./unitStats.js";
 //
 export const Phase = {
   MENU: "menu",
+  DIALOGUE: "dialogue",
   PLAYER_SELECT: "player_select",
   PLAYER_ACTION: "player_action",
   PLAYER_ATTACK: "player_attack",

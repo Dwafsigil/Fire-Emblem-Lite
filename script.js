@@ -10,13 +10,15 @@ import { activateActionbarInput } from "./actionbarInput.js";
 import { activateGlobalInput } from "./globalInput.js";
 import { itemListControls } from "./itemListControls.js";
 import { skillListControls } from "./skillListControls.js";
-import { preloadSprites } from "./preload.js";
+import { preloadSprites, preloadImage } from "./preload.js";
+import { activateDialogueControls } from "./dialogue.js";
 
 export const state = createInitialState();
 export const ui = createUI();
 
 export const gates = {
   [Phase.MENU]: createGate(),
+  [Phase.DIALOGUE]: createGate(),
   [Phase.PLAYER_SELECT]: createGate(),
   [Phase.PLAYER_ATTACK]: createGate(),
   [Phase.PLAYER_ACTION]: createGate(),
@@ -30,7 +32,15 @@ preloadSprites("knight_2");
 preloadSprites("wizard_1");
 preloadSprites("wizard_2");
 
+preloadImage("assets/queen/aggression.png");
+preloadImage("assets/queen/calm.png");
+preloadImage("assets/queen/sadness.png");
+preloadImage("assets/queen/smile.png");
+preloadImage("assets/queen/special.png");
+preloadImage("assets/queen/talk.png");
+
 initUIControls(ui);
+activateDialogueControls(ui, gates);
 skillListControls(ui, state, gates);
 itemListControls(ui, state, gates);
 activateBoardInput(state, ui, gates);
@@ -48,6 +58,7 @@ runGame(state, ui, gates);
 // Add all the animations in
 // Optimize and Organize Code Logic
 // Equip weapons and gear
+// Want the units to be in the background of the dialogue
 
 // BUG LIST:
 // 2. Action bar buttons dont go left and right in order properly

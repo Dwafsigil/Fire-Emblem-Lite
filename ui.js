@@ -46,5 +46,9 @@ export function createUI() {
     combatLog: document.querySelector(".combat-log"),
     description: document.querySelector(".description"),
     winCondition: document.querySelector(".win-condition"),
+    speakerName: document.querySelector(".speaker-name"),
+    characterImage: document.querySelector(".character-image"),
+    screen: document.querySelector(".content"),
+    // descriptionBox: document.querySelector(".description-box"),
   };
 }

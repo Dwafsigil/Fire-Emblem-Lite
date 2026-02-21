@@ -1094,6 +1094,10 @@ button[button-disabled="true"]:focus {
   z-index: 99;
 }
 
+.character-image.hidden {
+  display: none;
+}
+
 .speaker-name {
   position: absolute;
   top: calc(75% + 3px);
@@ -1111,7 +1115,31 @@ button[button-disabled="true"]:focus {
   z-index: 99;
 }
 
+.speaker-name.hidden {
+  display: none;
+}
+
 .description {
+  position: absolute;
+  top: calc(80% + 2px);
+
+  /* width: clamp(150px, 6vw, 240px); */
+  height: 20%;
+  width: 75%;
+  font-size: 14px;
+  text-align: left;
+  background: #111;
+  color: #ffffff;
+  border: 2px solid #444;
+  padding: 12px;
+  z-index: 5;
+}
+
+.description.hidden {
+  display: none;
+}
+
+.description-box {
   position: absolute;
   top: calc(80% + 2px);
 
@@ -1119,7 +1147,7 @@ button[button-disabled="true"]:focus {
   height: 20%;
   width: 100%;
   /* font-size: 10px; */
-
+  text-align: left;
   background: #111;
   color: #ffffff;
   border: 2px solid #444;
@@ -1127,7 +1155,7 @@ button[button-disabled="true"]:focus {
   z-index: 11;
 }
 
-.description.hidden {
+.description-box.hidden {
   display: none;
 }
 
