@@ -10,8 +10,7 @@ import { focusBoard } from "./uiControls.js";
 import { runEnemyTurn } from "./enemyAI.js";
 import { updateObstacle } from "./movement.js";
 import { showCondition } from "./helpers.js";
-
-export const CANCEL = Symbol("CANCEL");
+import { CANCEL } from "./gates.js";
 
 export const delay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
@@ -45,36 +44,49 @@ export async function runBattle(state, ui, gates) {
           setDisabled(ui.actionButtons.attack, true);
         }
 
-        // Player Action
-        state.phase = Phase.PLAYER_ACTION;
+        while (true) {
+          // Player Action
+          state.phase = Phase.PLAYER_ACTION;
 
-        updatePlayable(
-          state.playerTurn,
-          state.currentUnitsQueue,
-          state.selectedUnit,
-        );
+          updatePlayable(
+            state.playerTurn,
+            state.currentUnitsQueue,
+            state.selectedUnit,
+          );
 
-        const actionType = await gates[Phase.PLAYER_ACTION].wait();
+          const actionType = await gates[Phase.PLAYER_ACTION].wait();
 
-        switch (actionType) {
-          case "attack":
-            state.phase = Phase.PLAYER_ATTACK;
+          if (actionType === "wait") break;
 
-            await gates[Phase.PLAYER_ATTACK].wait();
+          try {
+            switch (actionType) {
+              case "attack":
+                state.phase = Phase.PLAYER_ATTACK;
+                console.log(state.phase);
+
+                await gates[Phase.PLAYER_ATTACK].wait();
+                break;
+
+              case "skill":
+                state.phase = Phase.PLAYER_SKILL;
+                console.log(state.phase);
+
+                await gates[Phase.PLAYER_SKILL].wait();
+                break;
+              case "item":
+                state.phase = Phase.PLAYER_ITEM;
+
+                await gates[Phase.PLAYER_ITEM].wait();
+                break;
+            }
+
             break;
-
-          case "skill":
-            state.phase = Phase.PLAYER_SKILL;
-
-            await gates[Phase.PLAYER_SKILL].wait();
-            break;
-          case "item":
-            state.phase = Phase.PLAYER_ITEM;
-
-            await gates[Phase.PLAYER_ITEM].wait();
-            break;
-          case "wait":
-            break;
+          } catch (e) {
+            if (e === CANCEL) {
+              continue;
+            }
+            throw e;
+          }
         }
 
         state.selectedUnit.node.classList.add("grayed");

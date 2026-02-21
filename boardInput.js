@@ -75,6 +75,7 @@ export function activateBoardInput(state, ui, gates) {
         state.receivingUnit = null;
 
         playSfx(btnClick, 0.5, 0);
+        gates[Phase.PLAYER_ATTACK].cancel();
         return;
       }
 

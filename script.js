@@ -54,7 +54,7 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// Equip weapons and gear
+// Allow to hit x to back
 // Add all the animations in
 // Want the units to be in the background of the dialogue
 // Optimize and Organize Code Logic

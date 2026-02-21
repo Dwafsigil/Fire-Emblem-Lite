@@ -56,7 +56,7 @@ export function activateDialogueControls(ui, gates) {
   document.addEventListener("keydown", (e) => {
     e.preventDefault();
 
-    if (e.key === "z" && dialogueActive) {
+    if (e.code === "KeyZ" && dialogueActive) {
       currentLine++;
 
       if (currentLine === dialogue.length) {
