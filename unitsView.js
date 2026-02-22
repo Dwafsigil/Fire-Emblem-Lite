@@ -76,7 +76,7 @@ export async function removeDead(state, ui, deadUnit) {
   let t = tileAt(ui.boardEl, deadUnit.row, deadUnit.col);
   setTimeout(() => {
     t.removeChild(deadUnit.node);
-  }, 2000);
+  }, 3000);
 
   // let tempUnit;
   // if (state.playerTurn == true) {

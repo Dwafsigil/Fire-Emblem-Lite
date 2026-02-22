@@ -336,11 +336,11 @@ button[button-disabled="true"]:focus {
 }
 
 .game-over-cover {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
+  text-align: middle;
   background-color: rgba(0, 0, 0, 0.3);
-  position: relative;
+  position: absolute;
   height: 408px;
   width: 408px;
   z-index: 999;
@@ -430,10 +430,6 @@ button[button-disabled="true"]:focus {
   /* background-image: var(--sprite-url);
 
   animation: knightIdle 1.3s steps(1, end) infinite; */
-}
-
-.player.grayed::before {
-  filter: grayScale(100%);
 }
 
 .player.knight_1.idle::before {
@@ -957,6 +953,10 @@ button[button-disabled="true"]:focus {
   100% {
     background-position-x: -4px;
   }
+}
+
+.player.grayed::before {
+  filter: grayScale(100%);
 }
 
 .highlight {

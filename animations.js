@@ -38,8 +38,6 @@ export function attackAnimation(unit, type, skill = null) {
 
   let skillName = skill ? skill.dataset.id : 0;
 
-  console.log(skillName);
-
   if (skillName === "fireball") {
     playAnim(unit, "fireball");
   } else {

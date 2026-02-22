@@ -204,7 +204,7 @@ export function activateBoardInput(state, ui, gates) {
 
     // 3. Arrow Keys move and hover in 4 directions
 
-    if (moves[e.key] && !state.attackOn) {
+    if (moves[e.key] && !state.attackOn && state.phase !== Phase.DIALOGUE) {
       // console.log(state.phase);
       if (state.playerSelected) {
         const floating =

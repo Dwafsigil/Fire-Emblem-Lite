@@ -11,6 +11,8 @@ import { runEnemyTurn } from "./enemyAI.js";
 import { updateObstacle } from "./movement.js";
 import { showCondition } from "./helpers.js";
 import { CANCEL } from "./gates.js";
+import { tileAt } from "./board.js";
+import { initDialogue } from "./dialogue.js";
 
 export const delay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
@@ -20,7 +22,11 @@ export async function runBattle(state, ui, gates) {
   initGame(state, ui);
   startMusic(0);
   showCondition(ui);
-
+  // dialogue
+  initDialogue(ui);
+  state.phase = Phase.DIALOGUE;
+  await gates[Phase.DIALOGUE].wait();
+  // state.phase = Phase.PLAYER_SELECT;
   while (true) {
     try {
       setDisabled(ui.actionButtons.attack, false);
@@ -167,7 +173,13 @@ export async function isBattleOver(state, ui) {
 
   // if castle is seized
   if (seizedCastle) {
-    ui.gameOverCover.textContent = "You Win";
+    ui.gameOverCover.textContent = "Castle Captured";
+    await delay(1000);
+    console.log(state.units);
+    // state.units.forEach((unit) => {
+    //   let t = tileAt(ui.boardEl, unit.row, unit.col);
+    //   t.removeChild(unit.node);
+    // });
     ui.gameOverCover.classList.remove("hidden");
     return true;
   }
@@ -175,8 +187,8 @@ export async function isBattleOver(state, ui) {
   // if all friendly unit dies
 
   if (friendlyUnit.length == 0) {
-    ui.gameOverCover.textContent = "You Lose";
-    await delay(1000);
+    ui.gameOverCover.textContent = "Game Over";
+    await delay(2000);
     ui.gameOverCover.classList.remove("hidden");
     return true;
   }
@@ -184,8 +196,8 @@ export async function isBattleOver(state, ui) {
   // if all enemy unit dies
 
   if (enemyUnit.length == 0) {
-    ui.gameOverCover.textContent = "You Win";
-    await delay(1000);
+    ui.gameOverCover.textContent = "Enemy Routed";
+    await delay(2000);
     ui.gameOverCover.classList.remove("hidden");
     return true;
   }

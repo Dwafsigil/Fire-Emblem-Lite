@@ -3,22 +3,22 @@ import { Phase } from "./state.js";
 export const dialogue = [
   {
     speaker: "???",
-    text: "Hello, I'm messing around with the dialogue stuff so all of the text will be filler.",
+    text: "Hello, I'm mainly focused on doing code logic stuff so the design and stuff is going to suck.",
     url: "talk",
   },
   {
     speaker: "???",
-    text: "Yeah so...",
+    text: "So yeah...",
     url: "talk",
   },
   {
     speaker: "???",
-    text: "Be a little nice eh.",
+    text: "Be a little nice okay?",
     url: "smile",
   },
   {
     speaker: "???",
-    text: "Man, I need a girlfriend so bad.",
+    text: "Gosh, I really sunk so many hours into this.",
     url: "sadness",
   },
   {

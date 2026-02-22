@@ -7,7 +7,7 @@ export async function runGame(state, ui, gates) {
   await gates[Phase.MENU].wait();
   // placeUnits(state, ui, state.units);
 
-  initDialogue(ui);
-  await gates[Phase.DIALOGUE].wait();
+  // initDialogue(ui);
+  // await gates[Phase.DIALOGUE].wait();
   runBattle(state, ui, gates);
 }

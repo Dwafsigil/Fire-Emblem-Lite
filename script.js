@@ -51,17 +51,15 @@ runGame(state, ui, gates);
 
 // leveling, weapon triangle, saves,
 
+// maybe a little burnt out?
+
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// fix action bar
+// add potion and weapon sprite
 // Add all the animations in
-// Want the units to be in the background of the dialogue
+
 // Optimize and Organize Code Logic
 
 // BUG LIST:
-// 2. Action bar buttons dont go left and right in order properly
-// 3. Backing from actions such as attack messes with the phases
 // 4. Unit requires items or skills otherwise the game bugs.
-// 5. Offensive skills do not check for adjacent. (Future bug fix)
-// 6. Flashing animation for the new ones
