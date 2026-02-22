@@ -1,11 +1,13 @@
 import { Phase } from "./state.js";
 import { attackHighlight } from "./combatInput.js";
 import { focusBoard } from "./uiControls.js";
+import { skills } from "./skills.js";
+import { openActionBar } from "./uiControls.js";
 
-export function skillListControls(ui, state) {
+export function skillListControls(ui, state, gates) {
   ui.skillList.addEventListener("keydown", (e) => {
     // references the active button, can do active.dataset
-    const active = document.activeElement;
+    let active = document.activeElement;
 
     const skillButtons = ui.skillList.querySelectorAll("button");
     const current = Number(active.dataset.index);
@@ -25,6 +27,7 @@ export function skillListControls(ui, state) {
         next = (current - 1 + skillButtons.length) % skillButtons.length;
       }
 
+      // Confirm ability with Z
       if (e.key === "z") {
         e.preventDefault();
 
@@ -47,13 +50,25 @@ export function skillListControls(ui, state) {
         return;
       }
 
-      const currentID = active.dataset.id;
-
-      const itemDescription = items[currentID].description;
-
-      ui.description.textContent = `${itemDescription}`;
+      if (
+        state.phase === Phase.PLAYER_SKILL &&
+        !state.attackOn &&
+        e.key === "x"
+      ) {
+        console.log("Inside");
+        openActionBar(ui.actionBarEl);
+        ui.description.classList.add("hidden");
+        gates[Phase.PLAYER_SKILL].cancel();
+        return;
+      }
 
       skillButtons[next].focus();
+
+      const currentID = active.dataset.id;
+
+      const skillDescription = skills[currentID].description;
+
+      ui.description.textContent = `${skillDescription}`;
     }
   });
 }

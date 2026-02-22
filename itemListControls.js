@@ -2,6 +2,7 @@ import { useItem } from "./items.js";
 import { Phase } from "./state.js";
 import { items } from "./items.js";
 import { showUnitInfo, showStats } from "./unitStatsUI.js";
+import { openActionBar } from "./uiControls.js";
 
 export function itemListControls(ui, state, gates) {
   ui.itemList.addEventListener("keydown", (e) => {
@@ -87,6 +88,14 @@ export function itemListControls(ui, state, gates) {
         useItem(state, ui, gates, foundElement);
       }
 
+      return;
+    }
+
+    if (state.phase === Phase.PLAYER_ITEM && e.key === "x") {
+      console.log("Inside");
+      openActionBar(ui.actionBarEl);
+      ui.description.classList.add("hidden");
+      gates[Phase.PLAYER_ITEM].cancel();
       return;
     }
 

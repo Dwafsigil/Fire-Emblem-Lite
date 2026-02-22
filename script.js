@@ -54,7 +54,7 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// Allow to hit x to back
+// Allow to hit x to back for skills and items
 // Add all the animations in
 // Want the units to be in the background of the dialogue
 // Optimize and Organize Code Logic

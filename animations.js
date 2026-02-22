@@ -103,6 +103,7 @@ export function doAction(state, ui, action) {
       ui.description.textContent = `${description}`;
       ui.description.classList.remove("hidden");
 
+      console.log("Hit Skill");
       gates[Phase.PLAYER_ACTION].open("skill");
 
       break;

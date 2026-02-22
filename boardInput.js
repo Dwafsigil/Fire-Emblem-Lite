@@ -20,7 +20,7 @@ import {
   updateObstacle,
   movePlayer,
 } from "./movement.js";
-
+import { skills } from "./skills.js";
 import { showStats } from "./unitStatsUI.js";
 import { showTerrainInfo } from "./terrainInfo.js";
 
@@ -49,6 +49,7 @@ export function activateBoardInput(state, ui, gates) {
 
     // 1. x go back
     if (e.key == "x") {
+      console.log("detecting x");
       // cancel when player selected
       if (state.playerSelected && state.phase === Phase.PLAYER_SELECT) {
         placePlayer(state, ui, state.startRow, state.startCol);
@@ -76,6 +77,33 @@ export function activateBoardInput(state, ui, gates) {
 
         playSfx(btnClick, 0.5, 0);
         gates[Phase.PLAYER_ATTACK].cancel();
+        return;
+      }
+
+      // cancel skill targeting
+      if (state.phase === Phase.PLAYER_SKILL && state.attackOn) {
+        let active = null;
+        let currentID = null;
+        let description = null;
+        removeAttackHighlight(state, ui);
+        removeConfirmHiglight(state, ui);
+
+        state.attackOn = false;
+        state.isTargeting = false;
+        state.unitHighlighted = false;
+        state.receivingUnit = null;
+
+        const firstSkill = ui.skillList.querySelector("button");
+        firstSkill?.focus();
+
+        // skill description
+        active = document.activeElement;
+        currentID = active.dataset.id;
+        description = skills[currentID].description;
+
+        ui.description.textContent = `${description}`;
+        ui.description.classList.remove("hidden");
+
         return;
       }
 
