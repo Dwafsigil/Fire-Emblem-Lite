@@ -1,8 +1,8 @@
 import { Phase } from "./state.js";
 import { attackHighlight } from "./combatInput.js";
-import { focusBoard } from "./uiControls.js";
+// import { focusBoard } from "./uiControls.js";
 import { skills } from "./skills.js";
-import { openActionBar } from "./uiControls.js";
+// import { openActionBar } from "./uiControls.js";
 
 export function skillListControls(ui, state, gates) {
   ui.skillList.addEventListener("keydown", (e) => {
@@ -42,7 +42,8 @@ export function skillListControls(ui, state, gates) {
         state.attackOn = true;
         state.isTargeting = true;
         attackHighlight(state, ui);
-        focusBoard(ui.boardEl);
+        ui.boardEl.focus();
+        // focusBoard(ui.boardEl);
         ui.description.classList.add("hidden");
 
         // skill marker
@@ -56,7 +57,9 @@ export function skillListControls(ui, state, gates) {
         e.key === "x"
       ) {
         console.log("Inside");
-        openActionBar(ui.actionBarEl);
+        // openActionBar(ui.actionBarEl);
+        const firstButton = ui.actionBarEl.querySelector("button");
+        firstButton?.focus();
         ui.description.classList.add("hidden");
         gates[Phase.PLAYER_SKILL].cancel();
         return;

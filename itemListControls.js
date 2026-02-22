@@ -2,7 +2,7 @@ import { useItem } from "./items.js";
 import { Phase } from "./state.js";
 import { items } from "./items.js";
 import { showUnitInfo, showStats } from "./unitStatsUI.js";
-import { openActionBar } from "./uiControls.js";
+// import { openActionBar } from "./uiControls.js";
 
 export function itemListControls(ui, state, gates) {
   ui.itemList.addEventListener("keydown", (e) => {
@@ -42,9 +42,9 @@ export function itemListControls(ui, state, gates) {
       //   return btn.dataset.index === String(current);
       // });
       // console.log(foundElement);
-      itemButtons[next].focus();
-      active = document.activeElement;
-      console.log(active);
+      // itemButtons[next].focus();
+      // active = document.activeElement;
+      // console.log(active);
     }
 
     if (e.key === "z") {
@@ -93,7 +93,9 @@ export function itemListControls(ui, state, gates) {
 
     if (state.phase === Phase.PLAYER_ITEM && e.key === "x") {
       console.log("Inside");
-      openActionBar(ui.actionBarEl);
+      // openActionBar(ui.actionBarEl);
+      const firstButton = ui.actionBarEl.querySelector("button");
+      firstButton?.focus();
       ui.description.classList.add("hidden");
       gates[Phase.PLAYER_ITEM].cancel();
       return;

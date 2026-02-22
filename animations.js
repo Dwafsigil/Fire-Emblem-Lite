@@ -10,7 +10,7 @@ import { deadGrunt } from "./audio.js";
 import { critHit } from "./audio.js";
 import { missHit } from "./audio.js";
 import { attackHighlight } from "./combatInput.js";
-import { focusBoard } from "./uiControls.js";
+// import { focusBoard } from "./uiControls.js";
 import { items } from "./items.js";
 import { skills } from "./skills.js";
 
@@ -81,7 +81,8 @@ export function doAction(state, ui, action) {
 
       state.isTargeting = true;
       attackHighlight(state, ui);
-      focusBoard(ui.boardEl);
+      ui.boardEl.focus();
+      // focusBoard(ui.boardEl);
       gates[Phase.PLAYER_ACTION].open("attack");
 
       break;
@@ -108,7 +109,7 @@ export function doAction(state, ui, action) {
 
       break;
     case "item":
-      console.log("item");
+      console.log("item running");
       if (state.selectedUnit.inventory.length === 0) break;
 
       const firstItem = ui.itemList.querySelector("button");

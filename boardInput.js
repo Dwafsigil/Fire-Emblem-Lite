@@ -1,7 +1,7 @@
 import { Phase } from "./state.js";
 import { updatePlayable, checkPlayable, isBattleOver } from "./turn.js";
 import { isOccupied, enemyAt, unitAt } from "./unitQueries.js";
-import { openActionBar } from "./uiControls.js";
+// import { openActionBar } from "./uiControls.js";
 import { removeHover, moveHover } from "./hoverView.js";
 import {
   removeAttackHighlight,
@@ -68,7 +68,10 @@ export function activateBoardInput(state, ui, gates) {
       if (state.phase === Phase.PLAYER_ATTACK) {
         removeAttackHighlight(state, ui);
         removeConfirmHiglight(state, ui);
-        openActionBar(ui.actionBarEl);
+        // openActionBar(ui.actionBarEl);
+
+        const firstButton = ui.actionBarEl.querySelector("button");
+        firstButton?.focus();
 
         state.attackOn = false;
         state.isTargeting = false;
@@ -181,8 +184,16 @@ export function activateBoardInput(state, ui, gates) {
           state.selectedUnit,
         );
 
+        // Testing
         playSfx(btnClick, 0.5, 0);
-        openActionBar(ui.actionBarEl);
+
+        // actionbar stuff
+        ui.actionBarEl.classList.remove("hidden");
+
+        const firstButton = ui.actionBarEl.querySelector("button");
+        firstButton?.focus();
+
+        // openActionBar(ui.actionBarEl);
 
         gates[Phase.PLAYER_SELECT].open(state.selectedUnit);
 

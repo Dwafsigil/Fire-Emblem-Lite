@@ -4,7 +4,7 @@ import { createInitialState, Phase } from "./state.js";
 import { createUI } from "./ui.js";
 import { createGate } from "./gates.js";
 import { runGame } from "./runGame.js";
-import { initUIControls } from "./uiControls.js";
+// import { initUIControls } from "./uiControls.js";
 import { activateBoardInput } from "./boardInput.js";
 import { activateActionbarInput } from "./actionbarInput.js";
 import { activateGlobalInput } from "./globalInput.js";
@@ -39,7 +39,7 @@ preloadImage("assets/queen/smile.png");
 preloadImage("assets/queen/special.png");
 preloadImage("assets/queen/talk.png");
 
-initUIControls(ui);
+// initUIControls(ui);
 activateDialogueControls(ui, gates);
 skillListControls(ui, state, gates);
 itemListControls(ui, state, gates);
@@ -54,7 +54,7 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// Allow to hit x to back for skills and items
+// fix action bar
 // Add all the animations in
 // Want the units to be in the background of the dialogue
 // Optimize and Organize Code Logic

@@ -3,10 +3,10 @@
 import { Phase } from "./state.js";
 import { initGame } from "./gameInit.js";
 import { startMusic } from "./audio.js";
-import { setDisabled } from "./uiControls.js";
+import { setDisabled } from "./actionbarInput.js";
 import { checkAdjacent } from "./unitQueries.js";
-import { closeActionBar } from "./uiControls.js";
-import { focusBoard } from "./uiControls.js";
+// import { closeActionBar } from "./uiControls.js";
+// import { focusBoard } from "./uiControls.js";
 import { runEnemyTurn } from "./enemyAI.js";
 import { updateObstacle } from "./movement.js";
 import { showCondition } from "./helpers.js";
@@ -90,8 +90,12 @@ export async function runBattle(state, ui, gates) {
         }
 
         state.selectedUnit.node.classList.add("grayed");
-        closeActionBar(ui.actionBarEl);
-        focusBoard(ui.boardEl);
+        // ui.actionBarEl.classlist.add("hidden");
+        ui.actionBarEl.classList.add("hidden");
+
+        // closeActionBar(ui.actionBarEl);
+        // focusBoard(ui.boardEl);
+        ui.boardEl.focus();
         state.selectedUnit = null;
         setDisabled(ui.actionButtons.attack, false);
         if (await isBattleOver(state, ui)) break;
