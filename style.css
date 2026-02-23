@@ -619,10 +619,16 @@ button[button-disabled="true"]:focus {
   animation: wizardIdle 2s steps(1, end) infinite;
 }
 
-.player.wizard_1.attack::before {
+/* .player.wizard_1.attack::before {
   background-size: 400% 100%;
   background-image: url("assets/wizard_1/attack.png");
   animation: wizardAttack 0.5s steps(1, end) forwards;
+} */
+
+.player.wizard_1.attack::before {
+  background-size: 800% 100%;
+  background-image: url("assets/wizard_1/fireball.png");
+  animation: fireball 0.6s steps(1, end) forwards;
 }
 
 .player.wizard_1.hurt::before {
