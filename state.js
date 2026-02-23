@@ -12,6 +12,7 @@ export const Phase = {
   PLAYER_SKILL: "player_skill",
   PLAYER_ITEM: "player_item",
   ENEMY_TURN: "enemy_turn",
+  GAME_OVER: "game_over",
 };
 
 export function createInitialUnits() {
@@ -43,6 +44,7 @@ export function createInitialUnits() {
       strength: 4,
       inventory: [{ id: "potion" }],
       skills: [{ id: "fireball", uses: 2 }],
+      range: 2,
     }),
     new unitStats({
       playerId: 2,
@@ -109,6 +111,7 @@ export function createInitialState() {
 
     board: { rows: 12, cols: 12 },
     hover: { row: 0, col: 0 },
+    attackHover: { row: 0, col: 0 },
 
     selectedUnit: null,
     playerSelected: false,
@@ -195,5 +198,7 @@ export function createInitialState() {
     obstacles: [],
 
     highTile: [],
+
+    attackTile: [],
   };
 }

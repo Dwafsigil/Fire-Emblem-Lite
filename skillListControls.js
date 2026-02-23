@@ -41,11 +41,21 @@ export function skillListControls(ui, state, gates) {
 
         state.attackOn = true;
         state.isTargeting = true;
-        attackHighlight(state, ui);
+        attackHighlight(
+          state,
+          ui.boardEl,
+          state.board.rows,
+          state.board.cols,
+          state.selectedUnit.row,
+          state.selectedUnit.col,
+          state.selectedUnit.range,
+          state.attackTile,
+        );
         ui.boardEl.focus();
         // focusBoard(ui.boardEl);
         ui.description.classList.add("hidden");
-
+        state.attackHover.row = state.selectedUnit.row;
+        state.attackHover.col = state.selectedUnit.col;
         // skill marker
 
         return;

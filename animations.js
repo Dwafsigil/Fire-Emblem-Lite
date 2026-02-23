@@ -16,7 +16,7 @@ import { skills } from "./skills.js";
 
 export function playAnim(unit, className) {
   const el = unit.node;
-
+  console.log(className);
   if (el.dataset.dead === "1") return;
 
   el.classList.remove(className);
@@ -26,6 +26,12 @@ export function playAnim(unit, className) {
   el.addEventListener(
     "animationend",
     () => {
+      if (
+        unit.affiliation === 0 &&
+        (className === "attack" || className === "fireball")
+      ) {
+        unit.node.classList.add("grayed");
+      }
       el.classList.remove(className);
     },
     { once: true },
@@ -78,13 +84,32 @@ export function doAction(state, ui, action) {
       state.attackOn = true;
 
       state.isTargeting = true;
-      attackHighlight(state, ui);
+      // attack
+      // attackHighlight(state, ui);
+
+      attackHighlight(
+        state,
+        ui.boardEl,
+        state.board.rows,
+        state.board.cols,
+        state.selectedUnit.row,
+        state.selectedUnit.col,
+        state.selectedUnit.range,
+        state.attackTile,
+      );
+
+      // Centering attack hover on selected unit
+      state.attackHover.row = state.selectedUnit.row;
+      state.attackHover.col = state.selectedUnit.col;
+
       ui.boardEl.focus();
       // focusBoard(ui.boardEl);
       gates[Phase.PLAYER_ACTION].open("attack");
 
       break;
     case "skill":
+      state.attackHover.row = state.selectedUnit.row;
+      state.attackHover.col = state.selectedUnit.col;
       console.log("skill");
       const noUseLeft = state.selectedUnit.skills.every((skill) => {
         return skill.uses == 0;
@@ -129,6 +154,8 @@ export function doAction(state, ui, action) {
         state.currentUnitsQueue,
         state.selectedUnit,
       );
+
+      state.selectedUnit.node.classList.add("grayed");
 
       // battle log
       const el = document.createElement("li");

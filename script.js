@@ -57,7 +57,6 @@ runGame(state, ui, gates);
 
 // TODO Immediately:
 // add potion and weapon sprite
-// Add all the animations in
 
 // Optimize and Organize Code Logic
 

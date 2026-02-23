@@ -23,7 +23,7 @@ import {
 import { skills } from "./skills.js";
 import { showStats } from "./unitStatsUI.js";
 import { showTerrainInfo } from "./terrainInfo.js";
-
+import { tileAt } from "./board.js";
 import { showUnitInfo } from "./unitStatsUI.js";
 
 export function activateBoardInput(state, ui, gates) {
@@ -68,6 +68,14 @@ export function activateBoardInput(state, ui, gates) {
       if (state.phase === Phase.PLAYER_ATTACK) {
         removeAttackHighlight(state, ui);
         removeConfirmHiglight(state, ui);
+        tileAt(
+          ui.boardEl,
+          state.attackHover.row,
+          state.attackHover.col,
+        ).classList.remove("attack-confirm");
+        state.attackTile.forEach((u) => {
+          tileAt(ui.boardEl, u[0], u[1]).classList.remove("attack-border");
+        });
         // openActionBar(ui.actionBarEl);
 
         const firstButton = ui.actionBarEl.querySelector("button");
@@ -90,6 +98,14 @@ export function activateBoardInput(state, ui, gates) {
         let description = null;
         removeAttackHighlight(state, ui);
         removeConfirmHiglight(state, ui);
+        tileAt(
+          ui.boardEl,
+          state.attackHover.row,
+          state.attackHover.col,
+        ).classList.remove("attack-confirm");
+        state.attackTile.forEach((u) => {
+          tileAt(ui.boardEl, u[0], u[1]).classList.remove("attack-border");
+        });
 
         state.attackOn = false;
         state.isTargeting = false;
@@ -204,7 +220,11 @@ export function activateBoardInput(state, ui, gates) {
 
     // 3. Arrow Keys move and hover in 4 directions
 
-    if (moves[e.key] && !state.attackOn && state.phase !== Phase.DIALOGUE) {
+    if (
+      moves[e.key] &&
+      !state.attackOn &&
+      state.phase === Phase.PLAYER_SELECT
+    ) {
       // console.log(state.phase);
       if (state.playerSelected) {
         const floating =
@@ -231,89 +251,158 @@ export function activateBoardInput(state, ui, gates) {
       return;
     }
 
-    // 4. move attack hover onto enemy
+    // 4. move attack hover onto enemy.
     if (state.isTargeting) {
       removeConfirmHiglight(state, ui);
+      console.log("Detecting arrow keys");
+      // console.log(state.attackTile);
+
       switch (e.key) {
         case "ArrowUp":
           if (
-            enemyAt(
-              state.playerTurn,
-              state.units,
-              state.selectedUnit.row - 1,
-              state.selectedUnit.col,
+            state.attackTile.some(
+              (u) =>
+                u[0] === state.attackHover.row - 1 &&
+                u[1] === state.attackHover.col,
             )
-          )
-            confirmHighlight(
-              ui,
-              state.selectedUnit.row - 1,
-              state.selectedUnit.col,
-            );
-          attackedUnit(
-            state,
-            state.selectedUnit.row - 1,
-            state.selectedUnit.col,
-          );
+          ) {
+            tileAt(
+              ui.boardEl,
+              state.attackHover.row,
+              state.attackHover.col,
+            ).classList.remove("attack-confirm");
+            state.attackHover.row = state.attackHover.row - 1;
+            console.log("Worked");
+
+            confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
+          }
+          // if (
+          //   enemyAt(
+          //     state.playerTurn,
+          //     state.units,
+          //     state.selectedUnit.row - 1,
+          //     state.selectedUnit.col,
+          //   )
+          // )
+          //   confirmHighlight(
+          //     ui,
+          //     state.selectedUnit.row - 1,
+          //     state.selectedUnit.col,
+          //   );
+          // attackedUnit(
+          //   state,
+          //   state.selectedUnit.row - 1,
+          //   state.selectedUnit.col,
+          // );
           break;
         case "ArrowDown":
           if (
-            enemyAt(
-              state.playerTurn,
-              state.units,
-              state.selectedUnit.row + 1,
-              state.selectedUnit.col,
+            state.attackTile.some(
+              (u) =>
+                u[0] === state.attackHover.row + 1 &&
+                u[1] === state.attackHover.col,
             )
-          )
-            confirmHighlight(
-              ui,
-              state.selectedUnit.row + 1,
-              state.selectedUnit.col,
-            );
-          attackedUnit(
-            state,
-            state.selectedUnit.row + 1,
-            state.selectedUnit.col,
-          );
+          ) {
+            tileAt(
+              ui.boardEl,
+              state.attackHover.row,
+              state.attackHover.col,
+            ).classList.remove("attack-confirm");
+            state.attackHover.row = state.attackHover.row + 1;
+
+            confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
+          }
+          // if (
+          //   enemyAt(
+          //     state.playerTurn,
+          //     state.units,
+          //     state.selectedUnit.row + 1,
+          //     state.selectedUnit.col,
+          //   )
+          // )
+          //   confirmHighlight(
+          //     ui,
+          //     state.selectedUnit.row + 1,
+          //     state.selectedUnit.col,
+          //   );
+          // attackedUnit(
+          //   state,
+          //   state.selectedUnit.row + 1,
+          //   state.selectedUnit.col,
+          // );
           break;
         case "ArrowRight":
           if (
-            enemyAt(
-              state.playerTurn,
-              state.units,
-              state.selectedUnit.row,
-              state.selectedUnit.col + 1,
+            state.attackTile.some(
+              (u) =>
+                u[0] === state.attackHover.row &&
+                u[1] === state.attackHover.col + 1,
             )
-          )
-            confirmHighlight(
-              ui,
-              state.selectedUnit.row,
-              state.selectedUnit.col + 1,
-            );
-          attackedUnit(
-            state,
-            state.selectedUnit.row,
-            state.selectedUnit.col + 1,
-          );
+          ) {
+            tileAt(
+              ui.boardEl,
+              state.attackHover.row,
+              state.attackHover.col,
+            ).classList.remove("attack-confirm");
+
+            state.attackHover.col = state.attackHover.col + 1;
+
+            confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
+          }
+          // if (
+          //   enemyAt(
+          //     state.playerTurn,
+          //     state.units,
+          //     state.selectedUnit.row,
+          //     state.selectedUnit.col + 1,
+          //   )
+          // )
+          //   confirmHighlight(
+          //     ui,
+          //     state.selectedUnit.row,
+          //     state.selectedUnit.col + 1,
+          //   );
+          // attackedUnit(
+          //   state,
+          //   state.selectedUnit.row,
+          //   state.selectedUnit.col + 1,
+          // );
           break;
         case "ArrowLeft":
           if (
-            enemyAt(
-              state.playerTurn,
-              state.units,
-              state.selectedUnit.row,
-              state.selectedUnit.col - 1,
+            state.attackTile.some(
+              (u) =>
+                u[0] === state.attackHover.row &&
+                u[1] === state.attackHover.col - 1,
             )
-          )
-            confirmHighlight(
-              ui,
-              state.selectedUnit.row,
-              state.selectedUnit.col - 1,
-            );
-          attackedUnit(
-            state,
-            state.selectedUnit.row,
-            state.selectedUnit.col - 1,
-          );
+          ) {
+            tileAt(
+              ui.boardEl,
+              state.attackHover.row,
+              state.attackHover.col,
+            ).classList.remove("attack-confirm");
+            state.attackHover.col = state.attackHover.col - 1;
+
+            confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
+          }
+          // if (
+          //   enemyAt(
+          //     state.playerTurn,
+          //     state.units,
+          //     state.selectedUnit.row,
+          //     state.selectedUnit.col - 1,
+          //   )
+          // )
+          //   confirmHighlight(
+          //     ui,
+          //     state.selectedUnit.row,
+          //     state.selectedUnit.col - 1,
+          //   );
+          // attackedUnit(
+          //   state,
+          //   state.selectedUnit.row,
+          //   state.selectedUnit.col - 1,
+          // );
           break;
       }
 
@@ -323,15 +412,22 @@ export function activateBoardInput(state, ui, gates) {
     // 5. z confirm attack
 
     if (
-      state.unitHighlighted == true &&
-      state.receivingUnit !== null &&
+      // state.unitHighlighted == true &&
+      // state.receivingUnit !== null &&
       state.isTargeting == true &&
-      e.key == "z"
+      e.key == "z" &&
+      attackedUnit(state, state.attackHover.row, state.attackHover.col)
     ) {
       // console.log("inside attacking");
 
-      console.log(state.useSkill);
+      console.log(
+        tileAt(ui.boardEl, state.attackHover.row, state.attackHover.col),
+      );
 
+      console.log(state.useSkill);
+      console.log("hit z attack/skill");
+
+      // attackedUnit(state, state.attackHover.row, state.attackHover.col);
       const type = attack(
         state.selectedUnit,
         state.receivingUnit,

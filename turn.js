@@ -29,7 +29,7 @@ export async function runBattle(state, ui, gates) {
   // state.phase = Phase.PLAYER_SELECT;
   while (true) {
     try {
-      setDisabled(ui.actionButtons.attack, false);
+      // setDisabled(ui.actionButtons.attack, false);
       initPlayerTurn(state);
       showPhase(ui, "Player Phase");
 
@@ -46,9 +46,9 @@ export async function runBattle(state, ui, gates) {
 
         await gates[Phase.PLAYER_SELECT].wait();
 
-        if (!checkAdjacent(state, state.selectedUnit)) {
-          setDisabled(ui.actionButtons.attack, true);
-        }
+        // if (!checkAdjacent(state, state.selectedUnit)) {
+        //   setDisabled(ui.actionButtons.attack, true);
+        // }
 
         while (true) {
           // Player Action
@@ -71,6 +71,8 @@ export async function runBattle(state, ui, gates) {
                 console.log(state.phase);
 
                 await gates[Phase.PLAYER_ATTACK].wait();
+
+                //  await delay( state.selectedUnit.node.classList.add("grayed");
                 break;
 
               case "skill":
@@ -95,7 +97,7 @@ export async function runBattle(state, ui, gates) {
           }
         }
 
-        state.selectedUnit.node.classList.add("grayed");
+        // state.selectedUnit.node.classList.add("grayed");
         // ui.actionBarEl.classlist.add("hidden");
         ui.actionBarEl.classList.add("hidden");
 
@@ -103,7 +105,7 @@ export async function runBattle(state, ui, gates) {
         // focusBoard(ui.boardEl);
         ui.boardEl.focus();
         state.selectedUnit = null;
-        setDisabled(ui.actionButtons.attack, false);
+        // setDisabled(ui.actionButtons.attack, false);
         if (await isBattleOver(state, ui)) break;
       }
     } catch (e) {

@@ -6,8 +6,13 @@ import { showStats } from "./unitStatsUI.js";
 import { playAndRemove } from "./helpers.js";
 import { getAvoidWithTerrain, terrainBonus } from "./terrainInfo.js";
 import { skills } from "./skills.js";
+import { updateObstacle } from "./movement.js";
+import { ifObstacle } from "./movement.js";
 
 export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
+  state.attackTile.forEach((u) => {
+    tileAt(ui.boardEl, u[0], u[1]).classList.remove("attack-border");
+  });
   // check if attack will hit
   // if hit then check if crit
   console.log("In attack", skill);
@@ -121,31 +126,98 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
   }
 }
 
+// outdated
 export function attackedUnit(state, r, c) {
-  let matches;
-  matches = state.units.filter(
+  console.log("rannn");
+  let match = state.units.find(
     (u) => u.row === r && u.col === c && u.affiliation === 1,
   );
-  state.receivingUnit = matches[0];
-
+  if (match) {
+    state.receivingUnit = match;
+    console.log(state.receivingUnit);
+    return true;
+  }
+  return false;
   // state.selectedUnit.attackPlayer(state.receivingUnit);
 }
 
 // ✅
-export function attackHighlight(state, ui) {
-  const directions = [
-    [-1, 0],
-    [1, 0],
-    [0, -1],
-    [0, 1],
-  ];
+// export function attackHighlight(state, ui) {
+//   const directions = [
+//     [-1, 0],
+//     [1, 0],
+//     [0, -1],
+//     [0, 1],
+//   ];
 
-  for (const [dR, dC] of directions) {
-    const newRow = state.selectedUnit.row + dR;
-    const newCol = state.selectedUnit.col + dC;
-    if (tileAt(ui.boardEl, newRow, newCol) !== null)
-      tileAt(ui.boardEl, newRow, newCol).classList.add("attack-border");
+//   for (const [dR, dC] of directions) {
+//     const newRow = state.selectedUnit.row + dR;
+//     const newCol = state.selectedUnit.col + dC;
+//     if (tileAt(ui.boardEl, newRow, newCol) !== null)
+//       tileAt(ui.boardEl, newRow, newCol).classList.add("attack-border");
+//   }
+// }
+
+export function attackHighlight(
+  state,
+  boardEl,
+  row,
+  col,
+  startRow,
+  startCol,
+  attackRange,
+  attackTile,
+) {
+  updateObstacle(state);
+  attackTile.length = 0;
+  const reachable = new Set();
+  const queue = [[startRow, startCol, attackRange]];
+  const visited = new Set();
+
+  while (queue.length > 0) {
+    const [r, c, rangeLeft] = queue.shift();
+
+    reachable.add(`${r},${c}`);
+    if (rangeLeft === 0) continue;
+
+    const directions = [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+    ];
+
+    for (const [dR, dC] of directions) {
+      const newRow = r + dR;
+      const newCol = c + dC;
+      const key = `${newRow},${newCol}`;
+      if (state.mapObstacles.some((e) => e[0] == r && e[1] == c)) continue;
+      // if (ifObstacle(state.obstacles, newRow, newCol)) continue;
+
+      if (
+        newRow >= 0 &&
+        newRow < row &&
+        newCol >= 0 &&
+        newCol < col &&
+        !visited.has(key)
+      ) {
+        visited.add(key);
+        queue.push([newRow, newCol, rangeLeft - 1]);
+      }
+    }
   }
+
+  for (const key of reachable) {
+    let [r, c] = key.split(",").map(Number);
+    attackTile.push([r, c]);
+
+    // if map obstacle
+    // if (ifObstacle(state.obstacles, r, c)) continue;
+    if (state.mapObstacles.some((e) => e[0] == r && e[1] == c)) continue;
+    // console.log(state.mapObstacles);
+    tileAt(boardEl, r, c).classList.add("attack-border");
+  }
+  console.log("attack tiles", state.attackTile);
 }
 
 export function removeAttackHighlight(state, ui) {

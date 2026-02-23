@@ -13,13 +13,13 @@ export function placeUnits(state, ui, units) {
 }
 
 export function createPlayerNode(unit) {
-  console.log(unit.variant);
+  // console.log(unit.variant);
   const el = document.createElement("div");
 
   el.className = `player ${unit.variant} idle`;
   el.id = `player-${unit.playerId}`;
 
-  console.log(el);
+  // console.log(el);
 
   const healthBarContainer = document.createElement("div");
   healthBarContainer.classList.add("health-bar-container");
