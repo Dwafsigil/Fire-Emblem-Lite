@@ -18,31 +18,36 @@ export function showUnitInfo(state, ui) {
       state.selectedUnit;
 
     if (!state.playerSelected) {
-      hoveredUnit.inventory.forEach((item, index) => {
-        const el = document.createElement("button");
-        el.className = item;
-        console.log(hoveredUnit.equipped);
-        console.log(item);
+      // console.log(hoveredUnit.inventory);
+      if (hoveredUnit.inventory.length !== 0) {
+        hoveredUnit.inventory.forEach((item, index) => {
+          const el = document.createElement("button");
+          el.className = item;
+          // console.log(hoveredUnit.equipped);
+          // console.log(item);
 
-        if (item.id === hoveredUnit.equipped) {
-          el.style.color = "blue";
-        }
+          if (item.id === hoveredUnit.equipped) {
+            el.style.color = "blue";
+          }
 
-        el.dataset.index = index;
-        el.dataset.id = item.id;
-        el.textContent = items[item.id].name;
-        ui.itemList.appendChild(el);
-      });
+          el.dataset.index = index;
+          el.dataset.id = item.id;
+          el.textContent = items[item.id].name;
+          ui.itemList.appendChild(el);
+        });
+      }
 
-      hoveredUnit.skills.forEach((skill, index) => {
-        console.log(skill);
-        const el = document.createElement("button");
-        el.className = skill.id;
-        el.dataset.index = index;
-        el.dataset.id = skill.id;
-        el.textContent = `${skills[skill.id].name} ${skill.uses}/${skills[skill.id].uses}`;
-        ui.skillList.appendChild(el);
-      });
+      if (hoveredUnit.skills.length !== 0) {
+        hoveredUnit.skills.forEach((skill, index) => {
+          // console.log(skill);
+          const el = document.createElement("button");
+          el.className = skill.id;
+          el.dataset.index = index;
+          el.dataset.id = skill.id;
+          el.textContent = `${skills[skill.id].name} ${skill.uses}/${skills[skill.id].uses}`;
+          ui.skillList.appendChild(el);
+        });
+      }
     }
 
     showStats(state, ui, hoveredUnit);

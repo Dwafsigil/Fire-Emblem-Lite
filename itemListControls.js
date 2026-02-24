@@ -56,7 +56,7 @@ export function itemListControls(ui, state, gates) {
         return btn.dataset.index === String(current);
       });
 
-      console.log(foundElement);
+      // console.log(foundElement);
       // remove color and buff
 
       // Handles equipping weapon / using item
@@ -71,7 +71,7 @@ export function itemListControls(ui, state, gates) {
           // hard coded but add stats according to item
           state.selectedUnit.strength -= 2;
           showStats(state, ui, state.selectedUnit);
-          console.log("unequip");
+          // console.log("unequip");
         } else {
           // equip item
           foundElement.style.color = "blue";
@@ -81,10 +81,12 @@ export function itemListControls(ui, state, gates) {
           state.selectedUnit.strength += 2;
           showStats(state, ui, state.selectedUnit);
 
-          console.log("equip");
-          console.log(state.selectedUnit.equipped);
+          // console.log("equip");
+          // console.log(state.selectedUnit.equipped);
         }
       } else {
+        state.selectedUnit.node.classList.add("grayed");
+
         useItem(state, ui, gates, foundElement);
       }
 
@@ -92,7 +94,7 @@ export function itemListControls(ui, state, gates) {
     }
 
     if (state.phase === Phase.PLAYER_ITEM && e.key === "x") {
-      console.log("Inside");
+      // console.log("Inside");
       // openActionBar(ui.actionBarEl);
       const firstButton = ui.actionBarEl.querySelector("button");
       firstButton?.focus();

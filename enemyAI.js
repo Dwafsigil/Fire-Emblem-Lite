@@ -28,6 +28,9 @@ export async function runEnemyTurn(state, ui) {
       u,
       state.closestFriendly,
     );
+
+    // console.log("Closest friendly", state.closestFriendly);
+
     state.optimalMove = checkOptimalMove(
       state.enemyMoves,
       state.closestFriendly,

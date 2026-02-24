@@ -16,7 +16,7 @@ import { skills } from "./skills.js";
 
 export function playAnim(unit, className) {
   const el = unit.node;
-  console.log(className);
+  // console.log(className);
   if (el.dataset.dead === "1") return;
 
   el.classList.remove(className);
@@ -110,7 +110,7 @@ export function doAction(state, ui, action) {
     case "skill":
       state.attackHover.row = state.selectedUnit.row;
       state.attackHover.col = state.selectedUnit.col;
-      console.log("skill");
+      // console.log("skill");
       const noUseLeft = state.selectedUnit.skills.every((skill) => {
         return skill.uses == 0;
       });
@@ -127,12 +127,12 @@ export function doAction(state, ui, action) {
       ui.description.textContent = `${description}`;
       ui.description.classList.remove("hidden");
 
-      console.log("Hit Skill");
+      // console.log("Hit Skill");
       gates[Phase.PLAYER_ACTION].open("skill");
 
       break;
     case "item":
-      console.log("item running");
+      // console.log("item running");
       if (state.selectedUnit.inventory.length === 0) break;
 
       const firstItem = ui.itemList.querySelector("button");

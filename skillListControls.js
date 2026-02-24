@@ -66,7 +66,7 @@ export function skillListControls(ui, state, gates) {
         !state.attackOn &&
         e.key === "x"
       ) {
-        console.log("Inside");
+        // console.log("Inside");
         // openActionBar(ui.actionBarEl);
         const firstButton = ui.actionBarEl.querySelector("button");
         firstButton?.focus();

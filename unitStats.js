@@ -22,9 +22,9 @@ export class unitStats {
     affiliation = 0,
     row = 0,
     col = 0,
-    inventory = null,
+    inventory = [],
     equipped = null,
-    skills = null,
+    skills = [],
     range = 1,
   }) {
     this.playerId = playerId;
@@ -59,7 +59,7 @@ export class unitStats {
 
   get hitRate() {
     // fix
-    return this.skill * 2 + this.luck * 0.5 + 100;
+    return this.skill * 2 + this.luck * 0.5 + 50;
   }
 
   get avoidRate() {
@@ -67,7 +67,7 @@ export class unitStats {
   }
 
   get critRate() {
-    return this.skill / 2 + 30;
+    return this.skill / 2 + 10;
   }
 
   get terrainBonus() {

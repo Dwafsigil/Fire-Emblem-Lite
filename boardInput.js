@@ -49,7 +49,7 @@ export function activateBoardInput(state, ui, gates) {
 
     // 1. x go back
     if (e.key == "x") {
-      console.log("detecting x");
+      // console.log("detecting x");
       // cancel when player selected
       if (state.playerSelected && state.phase === Phase.PLAYER_SELECT) {
         placePlayer(state, ui, state.startRow, state.startCol);
@@ -131,7 +131,7 @@ export function activateBoardInput(state, ui, gates) {
 
     // 2. z selecting and deselecting player
     if (state.phase === Phase.PLAYER_SELECT && e.code === "KeyZ") {
-      console.log("Z");
+      // console.log("Z");
       if (
         isOccupied(state.units, state.hover.row, state.hover.col) &&
         !state.playerSelected
@@ -254,7 +254,7 @@ export function activateBoardInput(state, ui, gates) {
     // 4. move attack hover onto enemy.
     if (state.isTargeting) {
       removeConfirmHiglight(state, ui);
-      console.log("Detecting arrow keys");
+      // console.log("Detecting arrow keys");
       // console.log(state.attackTile);
 
       switch (e.key) {
@@ -272,7 +272,7 @@ export function activateBoardInput(state, ui, gates) {
               state.attackHover.col,
             ).classList.remove("attack-confirm");
             state.attackHover.row = state.attackHover.row - 1;
-            console.log("Worked");
+            // console.log("Worked");
 
             confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
           }
@@ -424,8 +424,8 @@ export function activateBoardInput(state, ui, gates) {
         tileAt(ui.boardEl, state.attackHover.row, state.attackHover.col),
       );
 
-      console.log(state.useSkill);
-      console.log("hit z attack/skill");
+      // console.log(state.useSkill);
+      // console.log("hit z attack/skill");
 
       // attackedUnit(state, state.attackHover.row, state.attackHover.col);
       const type = attack(
@@ -441,8 +441,8 @@ export function activateBoardInput(state, ui, gates) {
       if (state.useSkill) {
         const removeSkillUse = state.useSkill.dataset.id;
 
-        console.log(removeSkillUse);
-        console.log(state.selectedUnit.skills);
+        // console.log(removeSkillUse);
+        // console.log(state.selectedUnit.skills);
         const skill = state.selectedUnit.skills.find((skill) => {
           return skill.id === removeSkillUse;
         });

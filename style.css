@@ -1062,6 +1062,27 @@ button[button-disabled="true"]:focus {
   color: #ffffff;
   border: 2px solid #444;
   padding: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.combat-log::-webkit-scrollbar {
+  width: 10px;
+}
+
+.combat-log::-webkit-scrollbar-track {
+  background: #c5c5c5;
+  border-radius: 10px;
+}
+
+.combat-log::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  border: 2px solid #020202; /* creates padding effect */
+}
+
+/* Hover effect */
+.combat-log::-webkit-scrollbar-thumb:hover {
+  background: #6f6f6f;
 }
 
 .combat-log li {
@@ -1081,9 +1102,10 @@ button[button-disabled="true"]:focus {
   border: 2px solid #444;
   padding: 12px;
 }
+
 .character-image {
   position: absolute;
-  top: calc(68% + 3px);
+  top: calc(48% + 4px);
   left: calc(69%);
   image-rendering: pixelated;
 
@@ -1131,7 +1153,7 @@ button[button-disabled="true"]:focus {
 
   /* width: clamp(150px, 6vw, 240px); */
   height: 20%;
-  width: 75%;
+  width: 100%;
   font-size: 14px;
   text-align: left;
   background: #111;

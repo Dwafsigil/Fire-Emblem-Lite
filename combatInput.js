@@ -15,7 +15,7 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
   });
   // check if attack will hit
   // if hit then check if crit
-  console.log("In attack", skill);
+  // console.log("In attack", skill);
 
   let randomHitInt = Math.floor(Math.random() * 100 + 1);
   let randomCritInt = Math.floor(Math.random() * 100 + 1);
@@ -25,7 +25,7 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
 
   let skillBonus = skill ? skills[skill.dataset.id].bonus : 0;
   let skillSpecial = skill ? skills[skill.dataset.id].special : null;
-  console.log(skillBonus);
+  skillBonus;
   if (!receivingUnit) return false;
 
   if (randomHitInt <= hitChance) {
@@ -128,13 +128,14 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
 
 // outdated
 export function attackedUnit(state, r, c) {
-  console.log("rannn");
+  // console.log("rannn");
   let match = state.units.find(
     (u) => u.row === r && u.col === c && u.affiliation === 1,
   );
   if (match) {
     state.receivingUnit = match;
-    console.log(state.receivingUnit);
+    // console.log(state.receivingUnit.name);
+    // console.log(state.receivingUnit);
     return true;
   }
   return false;
@@ -217,7 +218,7 @@ export function attackHighlight(
     // console.log(state.mapObstacles);
     tileAt(boardEl, r, c).classList.add("attack-border");
   }
-  console.log("attack tiles", state.attackTile);
+  // console.log("attack tiles", state.attackTile);
 }
 
 export function removeAttackHighlight(state, ui) {

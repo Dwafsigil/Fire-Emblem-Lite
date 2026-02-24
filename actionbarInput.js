@@ -4,7 +4,7 @@ import { playSfx, btnClick } from "./audio.js";
 
 export function activateActionbarInput(state, ui) {
   ui.actionBarEl.addEventListener("keydown", (e) => {
-    console.log("inside", e.key);
+    // console.log("inside", e.key);
     let active = document.activeElement;
 
     let actionButtons = ui.actionBarEl.querySelectorAll("button");
@@ -36,7 +36,7 @@ export function activateActionbarInput(state, ui) {
         return btn.dataset.index === String(current);
       });
 
-      console.log(foundElement.dataset.action);
+      // console.log(foundElement.dataset.action);
       // ui.actionBarEl.tabIndex = -1;
       doAction(state, ui, foundElement.dataset.action);
       return;

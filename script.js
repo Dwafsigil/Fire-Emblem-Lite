@@ -56,6 +56,7 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
+// fix turn 1
 // add potion and weapon sprite
 
 // Optimize and Organize Code Logic

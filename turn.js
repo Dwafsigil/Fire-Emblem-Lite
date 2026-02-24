@@ -32,14 +32,14 @@ export async function runBattle(state, ui, gates) {
       // setDisabled(ui.actionButtons.attack, false);
       initPlayerTurn(state);
       showPhase(ui, "Player Phase");
+      const el = document.createElement("li");
+      el.textContent = `Turn ${state.turnCounter}:`;
+      ui.combatLog.appendChild(el);
 
       while (hasPlayableUnits(state)) {
         ui.turnText.textContent = `Turn: ${state.turnCounter}`;
 
         // battle log
-        const el = document.createElement("li");
-        el.textContent = `Turn ${state.turnCounter}:`;
-        ui.combatLog.appendChild(el);
 
         if (await isBattleOver(state, ui)) break;
         state.phase = Phase.PLAYER_SELECT;
@@ -68,7 +68,7 @@ export async function runBattle(state, ui, gates) {
             switch (actionType) {
               case "attack":
                 state.phase = Phase.PLAYER_ATTACK;
-                console.log(state.phase);
+                // console.log(state.phase);
 
                 await gates[Phase.PLAYER_ATTACK].wait();
 
@@ -77,7 +77,7 @@ export async function runBattle(state, ui, gates) {
 
               case "skill":
                 state.phase = Phase.PLAYER_SKILL;
-                console.log(state.phase);
+                // console.log(state.phase);
 
                 await gates[Phase.PLAYER_SKILL].wait();
                 break;
@@ -177,7 +177,7 @@ export async function isBattleOver(state, ui) {
   if (seizedCastle) {
     ui.gameOverCover.textContent = "Castle Captured";
     await delay(1000);
-    console.log(state.units);
+    // console.log(state.units);
     // state.units.forEach((unit) => {
     //   let t = tileAt(ui.boardEl, unit.row, unit.col);
     //   t.removeChild(unit.node);

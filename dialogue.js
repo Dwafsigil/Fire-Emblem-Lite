@@ -3,36 +3,36 @@ import { Phase } from "./state.js";
 export const dialogue = [
   {
     speaker: "???",
-    text: "Hello, I'm mainly focused on doing code logic stuff so the design and stuff is going to suck.",
+    text: "Yo! The project is code focused so the ui, art, etc are going to suck, but the game concept is there!",
     url: "talk",
   },
   {
     speaker: "???",
-    text: "So yeah...",
+    text: "The objective is to rout the enemies or siege the castle.",
     url: "talk",
   },
   {
     speaker: "???",
-    text: "Be a little nice okay?",
+    text: "Enjoy!",
     url: "smile",
   },
-  {
-    speaker: "???",
-    text: "Gosh, I really sunk so many hours into this.",
-    url: "sadness",
-  },
-  {
-    speaker: "???",
-    text: "Anyways, enjoy the game I guess.",
-    url: "talk",
-  },
+  //   {
+  //     speaker: "???",
+  //     text: "Gosh, I really sunk so many hours into this.",
+  //     url: "sadness",
+  //   },
+  //   {
+  //     speaker: "???",
+  //     text: "Anyways, enjoy the game I guess.",
+  //     url: "talk",
+  //   },
 ];
 
 let currentLine = 0;
 let dialogueActive = false;
 
 export function initDialogue(ui) {
-  console.log(ui.descriptionBox);
+  // console.log(ui.descriptionBox);
   ui.speakerName.classList.remove("hidden");
   ui.description.classList.remove("hidden");
   ui.characterImage.classList.remove("hidden");
