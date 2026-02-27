@@ -23,8 +23,6 @@ export function showUnitInfo(state, ui) {
         hoveredUnit.inventory.forEach((item, index) => {
           const el = document.createElement("button");
           el.className = item;
-          // console.log(hoveredUnit.equipped);
-          // console.log(item);
 
           if (item.id === hoveredUnit.equipped) {
             el.style.color = "blue";

@@ -8,6 +8,11 @@ export const dialogue = [
   },
   {
     speaker: "???",
+    text: "So be nice!",
+    url: "aggression",
+  },
+  {
+    speaker: "???",
     text: "The objective is to rout the enemies or siege the castle.",
     url: "talk",
   },
@@ -31,7 +36,7 @@ export const dialogue = [
 let currentLine = 0;
 let dialogueActive = false;
 
-export function initDialogue(ui) {
+export function initDialogue(state, ui) {
   // console.log(ui.descriptionBox);
   ui.speakerName.classList.remove("hidden");
   ui.description.classList.remove("hidden");

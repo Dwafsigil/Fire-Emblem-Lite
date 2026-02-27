@@ -72,6 +72,11 @@ export function placePlayer(state, ui, r, c) {
 export async function removeDead(state, ui, deadUnit) {
   // console.log("Running", deadUnit);
   deadAnimation(deadUnit);
+
+  const el = document.createElement("li");
+  el.textContent = `${deadUnit.name} has been slain`;
+  ui.combatLog.appendChild(el);
+
   state.units = state.units.filter((e) => e !== deadUnit);
   let t = tileAt(ui.boardEl, deadUnit.row, deadUnit.col);
   setTimeout(() => {

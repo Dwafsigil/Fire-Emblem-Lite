@@ -109,7 +109,7 @@ export function itemListControls(ui, state, gates) {
 
     let itemDescription = items[currentID].description;
     ui.description.textContent = `${itemDescription}`;
-
+    // ui.characterImage.src = `${items[currentID].image}`;
     // }
   });
 }

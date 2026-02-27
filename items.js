@@ -7,6 +7,7 @@ export const items = {
     type: "consumable",
     heal: 5,
     description: "Heal selected unit for 5 hp.",
+    image: "assets/potions/potions1.png",
   },
   ironSword: {
     id: "ironSword",

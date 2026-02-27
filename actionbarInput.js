@@ -26,7 +26,8 @@ export function activateActionbarInput(state, ui) {
       next = (current - 1 + actionButtons.length) % actionButtons.length;
     }
 
-    if (e.key === "z") {
+    if (e.code === "KeyZ") {
+      console.log("IN aCTION BAR");
       e.preventDefault();
       playSfx(btnClick, 0.5, 0);
 

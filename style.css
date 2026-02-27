@@ -105,9 +105,11 @@ body {
   border-radius: 10px;
   z-index: 100;
 }
+
 .action-bar.hidden {
   display: none;
 }
+
 .action-bar button {
   padding: 8px 12px;
   /* border-style: none; */
@@ -212,7 +214,6 @@ button[button-disabled="true"]:focus {
   /* padding: 0 20px; */
   align-items: center;
   justify-content: center;
-  /* background-color: rgba(26, 26, 128, 0.7); */
   background: linear-gradient(to right, #07688f, #1e068b);
   /* background: linear-gradient(to right, rgb(238, 99, 99), rgb(68, 0, 0)); */
   opacity: 0.85;
@@ -259,6 +260,7 @@ button[button-disabled="true"]:focus {
   letter-spacing: 2px;
   word-spacing: 2px;
   gap: 6px;
+  border: 2px solid #444;
 }
 
 .start-cover h1 {
@@ -274,7 +276,7 @@ button[button-disabled="true"]:focus {
   background: #ffffff;
   height: 50px;
   width: 200px;
-  color: #7b5214;
+  color: #636363;
   cursor: pointer;
   font-weight: 300;
 }
@@ -299,7 +301,7 @@ button[button-disabled="true"]:focus {
   height: 408px;
   width: 408px;
   z-index: 10;
-  color: #e0e0e0;
+  color: #ffffff;
   letter-spacing: 2px;
   word-spacing: 2px;
   gap: 6px;
@@ -325,7 +327,7 @@ button[button-disabled="true"]:focus {
   height: 408px;
   width: 408px;
   z-index: 10;
-  color: #e0e0e0;
+  color: #ffffff;
   letter-spacing: 2px;
   word-spacing: 2px;
   gap: 6px;
@@ -1004,7 +1006,7 @@ button[button-disabled="true"]:focus {
   height: 30%;
   font-size: 11px;
 
-  background: #111;
+  background: #000000;
   color: #ffffff;
   border: 2px solid #444;
   padding: 12px;
@@ -1025,12 +1027,16 @@ button[button-disabled="true"]:focus {
   width: clamp(150px, 6vw, 240px);
   height: 33%;
 
-  /* font-size: 10px; */
+  font-size: 10px;
 
-  background: #111;
+  background: #000000;
   color: #ffffff;
   border: 2px solid #444;
   padding: 12px;
+}
+
+.skill-list button {
+  font-size: 11px;
 }
 
 .item-list {
@@ -1039,13 +1045,16 @@ button[button-disabled="true"]:focus {
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
   height: 33.2%;
-
   /* font-size: 10px; */
 
-  background: #111;
+  background: #000000;
   color: #ffffff;
   border: 2px solid #444;
   padding: 12px;
+}
+
+.item-list button {
+  font-size: 11px;
 }
 
 .combat-log {
@@ -1058,7 +1067,7 @@ button[button-disabled="true"]:focus {
   font-size: 9px;
   line-height: 12px;
 
-  background: #111;
+  background: #000000;
   color: #ffffff;
   border: 2px solid #444;
   padding: 12px;
@@ -1097,7 +1106,7 @@ button[button-disabled="true"]:focus {
   height: 11.5%;
   /* font-size: 10px; */
 
-  background: #111;
+  background: #000000;
   color: #ffffff;
   border: 2px solid #444;
   padding: 12px;

@@ -9,6 +9,7 @@ export async function runGame(state, ui, gates) {
 
   // initDialogue(ui);
   // await gates[Phase.DIALOGUE].wait();
-  runBattle(state, ui, gates);
+  await runBattle(state, ui, gates);
+  ui.boardEl.focus();
   state.phase = Phase.GAME_OVER;
 }

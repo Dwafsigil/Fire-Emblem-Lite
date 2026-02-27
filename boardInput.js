@@ -491,5 +491,10 @@ export function activateBoardInput(state, ui, gates) {
 
       return;
     }
+
+    // if game is over
+    // if (state.phase === Phase.GAME_OVER && e.key === "z") {
+    //   console.log("Game Restarted");
+    // }
   });
 }

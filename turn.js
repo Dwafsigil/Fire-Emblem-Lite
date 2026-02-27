@@ -23,8 +23,9 @@ export async function runBattle(state, ui, gates) {
   startMusic(0);
   showCondition(ui);
   // dialogue
-  initDialogue(ui);
   state.phase = Phase.DIALOGUE;
+  initDialogue(state, ui);
+
   await gates[Phase.DIALOGUE].wait();
   // state.phase = Phase.PLAYER_SELECT;
   while (true) {
@@ -164,7 +165,7 @@ export function updatePlayable(playerTurn, currentUnitsQueue, selectedUnit) {
   //   );
 }
 
-// ✅
+// end the game
 export async function isBattleOver(state, ui) {
   let friendlyUnit = state.units.filter((e) => e.affiliation == 0);
   let enemyUnit = state.units.filter((e) => e.affiliation == 1);
@@ -177,12 +178,8 @@ export async function isBattleOver(state, ui) {
   if (seizedCastle) {
     ui.gameOverCover.textContent = "Castle Captured";
     await delay(1000);
-    // console.log(state.units);
-    // state.units.forEach((unit) => {
-    //   let t = tileAt(ui.boardEl, unit.row, unit.col);
-    //   t.removeChild(unit.node);
-    // });
     ui.gameOverCover.classList.remove("hidden");
+
     return true;
   }
 
@@ -192,6 +189,7 @@ export async function isBattleOver(state, ui) {
     ui.gameOverCover.textContent = "Game Over";
     await delay(2000);
     ui.gameOverCover.classList.remove("hidden");
+
     return true;
   }
 
@@ -201,11 +199,15 @@ export async function isBattleOver(state, ui) {
     ui.gameOverCover.textContent = "Enemy Routed";
     await delay(2000);
     ui.gameOverCover.classList.remove("hidden");
+
     return true;
   }
 
   return false;
 }
+
+// restart game
+export function restartGame() {}
 
 // ✅
 export function showPhase(ui, text) {

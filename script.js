@@ -56,10 +56,10 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// fix turn 1
 // add potion and weapon sprite
+// if enemy is waiting
+// toggle bgm button
 
 // Optimize and Organize Code Logic
 
 // BUG LIST:
-// 4. Unit requires items or skills otherwise the game bugs.
