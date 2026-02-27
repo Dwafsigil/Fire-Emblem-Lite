@@ -38,6 +38,8 @@ preloadImage("assets/queen/sadness.png");
 preloadImage("assets/queen/smile.png");
 preloadImage("assets/queen/special.png");
 preloadImage("assets/queen/talk.png");
+preloadImage("assets/potions/potions1.png");
+preloadImage("assets/weapons/bronzeSword.png");
 
 // initUIControls(ui);
 activateDialogueControls(ui, gates);
@@ -56,9 +58,6 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// add potion and weapon sprite
-// if enemy is waiting
-// toggle bgm button
 
 // Optimize and Organize Code Logic
 

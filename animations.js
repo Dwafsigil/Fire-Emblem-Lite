@@ -145,6 +145,15 @@ export function doAction(state, ui, action) {
 
       ui.description.textContent = `${description}`;
       ui.description.classList.remove("hidden");
+
+      // Item images
+      ui.itemImage.src = `${items[currentID].image}`;
+      ui.itemImage.style.setProperty(`--top`, `${items[currentID].top}%`);
+      ui.itemImage.style.setProperty(`--left`, `${items[currentID].left}%`);
+      ui.itemImage.style.setProperty(`--height`, `${items[currentID].height}%`);
+
+      ui.itemImage.classList.remove("hidden");
+
       gates[Phase.PLAYER_ACTION].open("item");
 
       break;

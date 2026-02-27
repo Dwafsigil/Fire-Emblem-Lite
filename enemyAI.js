@@ -47,6 +47,10 @@ export async function runEnemyTurn(state, ui) {
       if (checkAdjacent(state, u)) {
         enemyAttack(state, ui, u, state.closestFriendly);
         // if (state.closestFriendly.checkDead()) removeDead(state, ui);
+      } else {
+        const el = document.createElement("li");
+        el.textContent = `${u.name} is waiting`;
+        ui.combatLog.appendChild(el);
       }
     }
 

@@ -8,13 +8,20 @@ export const items = {
     heal: 5,
     description: "Heal selected unit for 5 hp.",
     image: "assets/potions/potions1.png",
+    top: 76,
+    left: 76,
+    height: 25,
   },
-  ironSword: {
-    id: "ironSword",
-    name: "Iron Sword",
+  bronzeSword: {
+    id: "bronzeSword",
+    name: "Bronze Sword",
     type: "weapon",
     bonuses: { strength: 2 },
     description: "+2 Physical Attack Damage",
+    image: "assets/weapons/bronzeSword.png",
+    top: 84,
+    left: 84,
+    height: 12,
   },
 };
 

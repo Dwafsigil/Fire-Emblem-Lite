@@ -72,6 +72,9 @@ export function itemListControls(ui, state, gates) {
           state.selectedUnit.strength -= 2;
           showStats(state, ui, state.selectedUnit);
           // console.log("unequip");
+          const el = document.createElement("li");
+          el.textContent = `${state.selectedUnit.name} unequipped ${items[foundElement.dataset.id].name}`;
+          ui.combatLog.appendChild(el);
         } else {
           // equip item
           foundElement.style.color = "blue";
@@ -80,12 +83,16 @@ export function itemListControls(ui, state, gates) {
 
           state.selectedUnit.strength += 2;
           showStats(state, ui, state.selectedUnit);
+          const el = document.createElement("li");
+          el.textContent = `${state.selectedUnit.name} equipped ${items[foundElement.dataset.id].name}`;
+          ui.combatLog.appendChild(el);
 
           // console.log("equip");
           // console.log(state.selectedUnit.equipped);
         }
       } else {
         state.selectedUnit.node.classList.add("grayed");
+        ui.itemImage.classList.add("hidden");
 
         useItem(state, ui, gates, foundElement);
       }
@@ -99,6 +106,8 @@ export function itemListControls(ui, state, gates) {
       const firstButton = ui.actionBarEl.querySelector("button");
       firstButton?.focus();
       ui.description.classList.add("hidden");
+      ui.itemImage.classList.add("hidden");
+
       gates[Phase.PLAYER_ITEM].cancel();
       return;
     }
@@ -109,6 +118,11 @@ export function itemListControls(ui, state, gates) {
 
     let itemDescription = items[currentID].description;
     ui.description.textContent = `${itemDescription}`;
+    ui.itemImage.src = `${items[currentID].image}`;
+    ui.itemImage.style.setProperty(`--top`, `${items[currentID].top}%`);
+    ui.itemImage.style.setProperty(`--left`, `${items[currentID].left}%`);
+    ui.itemImage.style.setProperty(`--height`, `${items[currentID].height}%`);
+
     // ui.characterImage.src = `${items[currentID].image}`;
     // }
   });

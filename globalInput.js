@@ -56,6 +56,19 @@ export function activateGlobalInput(state, ui, gates) {
     }
   });
 
+  document.addEventListener("keydown", (e) => {
+    // console.log("toggle");
+
+    if (e.key == "b") {
+      bgmMuted = !bgmMuted;
+      if (bgmMuted == true) {
+        bgm.pause();
+      } else {
+        bgm.play();
+      }
+    }
+  });
+
   // click to toggle bgm
   let bgmMuted = false;
   // toggleBGM.addEventListener("click", () => {

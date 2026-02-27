@@ -49,6 +49,7 @@ export function createUI() {
     speakerName: document.querySelector(".speaker-name"),
     characterImage: document.querySelector(".character-image"),
     screen: document.querySelector(".content"),
+    itemImage: document.querySelector(".item-image"),
     // descriptionBox: document.querySelector(".description-box"),
   };
 }

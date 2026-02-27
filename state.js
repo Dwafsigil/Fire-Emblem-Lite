@@ -31,7 +31,7 @@ export function createInitialUnits() {
       health: 35,
       skill: 50,
       equipped: null,
-      inventory: [{ id: "potion" }, { id: "potion" }, { id: "ironSword" }],
+      inventory: [{ id: "potion" }, { id: "potion" }, { id: "bronzeSword" }],
       skills: [{ id: "empoweredStrike", uses: 3 }],
       // intelligence: 10,
     }),
