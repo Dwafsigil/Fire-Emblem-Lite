@@ -16,6 +16,8 @@ export function showTerrainInfo(state, ui) {
     }
   }
 
+  console.log(terrain);
+
   switch (terrain) {
     case "rock":
       ui.terrainStat.textContent = "Hill";
@@ -29,6 +31,9 @@ export function showTerrainInfo(state, ui) {
     case "grass":
       ui.terrainStat.textContent = "Grass";
       break;
+    case "castleGate":
+      ui.terrainStat.textContent = "Castle Gate";
+      break;
   }
 }
 
@@ -37,6 +42,8 @@ export function terrainBonus(state, r, c) {
 
   switch (terrainType) {
     case "grass":
+      return 0;
+    case "castleGate":
       return 0;
     case "forest":
       return 30;

@@ -1000,10 +1000,10 @@ button[button-disabled="true"]:focus {
 
 .unit-stats {
   position: absolute;
-  top: 0;
+  top: -1px;
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
-  height: 30%;
+  height: calc(30% + 1px);
   font-size: 11px;
 
   background: #000000;
@@ -1059,10 +1059,10 @@ button[button-disabled="true"]:focus {
 
 .combat-log {
   position: absolute;
-  top: 0;
+  top: -1px;
   right: calc(-39% + 1px);
   width: clamp(150px, 6vw, 240px);
-  height: 87%;
+  height: calc(87% + 1px);
 
   font-size: 9px;
   line-height: 12px;
