@@ -8,8 +8,8 @@ export const dialogue = [
   },
   {
     speaker: "???",
-    text: "So be nice!",
-    url: "aggression",
+    text: "Also, the entire game is played through the keyboard. If you click anywhere with your mouse it might screw up the game.",
+    url: "talk",
   },
   {
     speaker: "???",

@@ -62,3 +62,4 @@ runGame(state, ui, gates);
 // Optimize and Organize Code Logic
 
 // BUG LIST:
+// Mouse clicking destroys the controls of the game
