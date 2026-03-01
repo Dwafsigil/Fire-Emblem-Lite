@@ -3,17 +3,27 @@ import { Phase } from "./state.js";
 export const dialogue = [
   {
     speaker: "???",
-    text: "Yo! The project is code focused so the ui, art, etc are going to suck, but the game concept is there!",
+    text: "Sup bozo, hope you read the controls.",
     url: "talk",
   },
   {
     speaker: "???",
-    text: "Also, the entire game is played through the keyboard. If you click anywhere with your mouse it might screw up the game.",
+    text: "The entire game is played through the keyboard. If you click anywhere with your mouse it will probably screw up the game.",
+    url: "talk",
+  },
+  {
+    speaker: "???",
+    text: "The game is inspired from Fire Emblem, hence the name. The goal was to make a simple gba version of the game.",
     url: "talk",
   },
   {
     speaker: "???",
     text: "The objective is to rout the enemies or siege the castle.",
+    url: "talk",
+  },
+  {
+    speaker: "???",
+    text: "Other than the animation, ui, and sounds. Give me a list of things you want added, fixed, or removed that would improve the game.",
     url: "talk",
   },
   {
