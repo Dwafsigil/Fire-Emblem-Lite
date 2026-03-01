@@ -26,6 +26,8 @@ export class unitStats {
     equipped = null,
     skills = [],
     range = 1,
+    hasMove = true,
+    hasAction = true,
   }) {
     this.playerId = playerId;
     this.name = name;
@@ -48,6 +50,8 @@ export class unitStats {
     this.equipped = equipped;
     this.skills = skills;
     this.range = range;
+    this.hasMove = hasMove;
+    this.hasAction = hasAction;
 
     if (affiliation !== 0 && affiliation !== 1) {
       throw new Error("Affiliation Value Error");

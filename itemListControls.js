@@ -23,28 +23,12 @@ export function itemListControls(ui, state, gates) {
     if (e.key === "ArrowDown") {
       e.preventDefault();
       next = (current + 1) % itemButtons.length;
-
-      // to find current button
-
-      // itemButtons[next].focus();
-      // active = document.activeElement;
-      // console.log(active);
     }
 
     if (e.key === "ArrowUp") {
       e.preventDefault();
 
       next = (current - 1 + itemButtons.length) % itemButtons.length;
-
-      // const itemButtons = [...ui.itemList.querySelectorAll("button")];
-
-      // const foundElement = itemButtons.find((btn) => {
-      //   return btn.dataset.index === String(current);
-      // });
-      // console.log(foundElement);
-      // itemButtons[next].focus();
-      // active = document.activeElement;
-      // console.log(active);
     }
 
     if (e.key === "z") {
@@ -55,9 +39,6 @@ export function itemListControls(ui, state, gates) {
       const foundElement = itemButtons.find((btn) => {
         return btn.dataset.index === String(current);
       });
-
-      // console.log(foundElement);
-      // remove color and buff
 
       // Handles equipping weapon / using item
       if (items[foundElement.dataset.id].type === "weapon") {
@@ -91,7 +72,11 @@ export function itemListControls(ui, state, gates) {
           // console.log(state.selectedUnit.equipped);
         }
       } else {
-        state.selectedUnit.node.classList.add("grayed");
+        if (state.selectedUnit.hasMove) {
+          const firstButton = ui.actionBarEl.querySelector("button");
+          firstButton?.focus();
+        }
+
         ui.itemImage.classList.add("hidden");
 
         useItem(state, ui, gates, foundElement);

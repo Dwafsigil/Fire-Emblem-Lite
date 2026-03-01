@@ -1,6 +1,6 @@
 // sprite/css animations
 
-import { updatePlayable } from "./turn.js";
+import { removePlayable } from "./turn.js";
 import { gates } from "./script.js";
 import { Phase } from "./state.js";
 import { playSfx } from "./audio.js";
@@ -13,6 +13,7 @@ import { attackHighlight } from "./combatInput.js";
 // import { focusBoard } from "./uiControls.js";
 import { items } from "./items.js";
 import { skills } from "./skills.js";
+import { highlightMove } from "./movement.js";
 
 export function playAnim(unit, className) {
   const el = unit.node;
@@ -79,8 +80,8 @@ export function doAction(state, ui, action) {
   let description = null;
   switch (action) {
     case "attack":
-      if (ui.actionButtons.attack.getAttribute("button-disabled") === "true")
-        return;
+      if (state.selectedUnit.hasAction === false) return;
+
       state.attackOn = true;
 
       state.isTargeting = true;
@@ -103,11 +104,31 @@ export function doAction(state, ui, action) {
       state.attackHover.col = state.selectedUnit.col;
 
       ui.boardEl.focus();
+
       // focusBoard(ui.boardEl);
       gates[Phase.PLAYER_ACTION].open("attack");
 
       break;
+    case "move":
+      if (state.selectedUnit.hasMove === false) return;
+      highlightMove(
+        state,
+        ui.boardEl,
+        state.board.rows,
+        state.board.cols,
+        state.selectedUnit.row,
+        state.selectedUnit.col,
+        state.selectedUnit.movement,
+        state.highTile,
+      );
+
+      ui.boardEl.focus();
+      gates[Phase.PLAYER_ACTION].open("move");
+      console.log("In Move");
+      break;
     case "skill":
+      if (state.selectedUnit.hasAction === false) return;
+
       state.attackHover.row = state.selectedUnit.row;
       state.attackHover.col = state.selectedUnit.col;
       // console.log("skill");
@@ -132,6 +153,8 @@ export function doAction(state, ui, action) {
 
       break;
     case "item":
+      if (state.selectedUnit.hasAction === false) return;
+
       // console.log("item running");
       if (state.selectedUnit.inventory.length === 0) break;
 
@@ -158,11 +181,11 @@ export function doAction(state, ui, action) {
 
       break;
     case "wait":
-      updatePlayable(
-        state.playerTurn,
-        state.currentUnitsQueue,
-        state.selectedUnit,
-      );
+      // removePlayable(
+      //   state.playerTurn,
+      //   state.currentUnitsQueue,
+      //   state.selectedUnit,
+      // );
 
       state.selectedUnit.node.classList.add("grayed");
 

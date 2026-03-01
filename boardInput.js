@@ -1,8 +1,8 @@
 import { Phase } from "./state.js";
-import { updatePlayable, checkPlayable, isBattleOver } from "./turn.js";
+import { removePlayable, checkPlayable, isBattleOver } from "./turn.js";
 import { isOccupied, enemyAt, unitAt } from "./unitQueries.js";
 // import { openActionBar } from "./uiControls.js";
-import { removeHover, moveHover } from "./hoverView.js";
+import { removeHover, moveHover, showHoverAt } from "./hoverView.js";
 import {
   removeAttackHighlight,
   removeConfirmHiglight,
@@ -21,7 +21,7 @@ import {
   movePlayer,
 } from "./movement.js";
 import { skills } from "./skills.js";
-import { showStats } from "./unitStatsUI.js";
+import { removeUnitInfo, showStats } from "./unitStatsUI.js";
 import { showTerrainInfo } from "./terrainInfo.js";
 import { tileAt } from "./board.js";
 import { showUnitInfo } from "./unitStatsUI.js";
@@ -48,24 +48,33 @@ export function activateBoardInput(state, ui, gates) {
     if (handleKeys.has(e.key)) e.preventDefault();
 
     // 1. x go back
-    if (e.key == "x") {
-      // console.log("detecting x");
+    if (e.code == "KeyX") {
+      console.log("detecting x");
       // cancel when player selected
-      if (state.playerSelected && state.phase === Phase.PLAYER_SELECT) {
+      if (state.playerSelected && state.phase === Phase.PLAYER_MOVE) {
         placePlayer(state, ui, state.startRow, state.startCol);
-        state.currentUnitsQueue.push(state.selectedUnit);
+        // state.currentUnitsQueue.push(state.selectedUnit);
         // state.selectedUnit.strengthValue.classList.add("hidden");
 
-        state.playerSelected = false;
-        state.selectedUnit = null;
+        // state.playerSelected = false;
+        // state.selectedUnit = null;
 
         playSfx(btnClick, 0.5, 0);
         removeHighlight(ui.boardEl, state.highTile);
         clearHighTile(state.highTile);
+        removeHover(state, ui);
+        showHoverAt(state, ui, state.selectedUnit.row, state.selectedUnit.col);
+        ui.actionBarEl.focus();
+        // ui.actionBarEl.classList.remove("hidden");
+
+        const firstButton = ui.actionBarEl.querySelector("button");
+        firstButton?.focus();
+        gates[Phase.PLAYER_MOVE].cancel();
         return;
       }
-      // cancel in targeting
+      // cancel ATTACK in targeting
       if (state.phase === Phase.PLAYER_ATTACK) {
+        console.log("attack cancel");
         removeAttackHighlight(state, ui);
         removeConfirmHiglight(state, ui);
         tileAt(
@@ -129,56 +138,56 @@ export function activateBoardInput(state, ui, gates) {
       return;
     }
 
-    // 2. z selecting and deselecting player
+    // 2.5 Selecting a Player
     if (state.phase === Phase.PLAYER_SELECT && e.code === "KeyZ") {
-      // console.log("Z");
+      // Check if occupied
       if (
         isOccupied(state.units, state.hover.row, state.hover.col) &&
         !state.playerSelected
       ) {
+        // Set selectedUnit
         state.selectedUnit = unitAt(
           state.units,
           state.hover.row,
           state.hover.col,
         );
 
+        // Check if unit is playable
         if (checkPlayable(state.currentUnitsQueue, state.selectedUnit)) {
           state.startRow = state.hover.row;
           state.startCol = state.hover.col;
 
           state.playerSelected = true;
 
-          updateObstacle(state);
+          // updateObstacle(state);
 
-          updatePlayable(
-            state.playerTurn,
-            state.currentUnitsQueue,
-            state.selectedUnit,
-          );
-
-          highlightMove(
-            state,
-            ui.boardEl,
-            state.board.rows,
-            state.board.cols,
-            state.selectedUnit.row,
-            state.selectedUnit.col,
-            state.selectedUnit.movement,
-            state.highTile,
-          );
+          // removePlayable(
+          //   state.playerTurn,
+          //   state.currentUnitsQueue,
+          //   state.selectedUnit,
+          // );
 
           playSfx(btnClick, 0.5, 0);
 
-          // state.selectedUnit.strengthValue.classList.remove("hidden");
+          ui.actionBarEl.classList.remove("hidden");
 
-          // console.log(state.selectedUnit.hitRate);
+          const firstButton = ui.actionBarEl.querySelector("button");
+          firstButton?.focus();
+
+          // openActionBar(ui.actionBarEl);
+
+          gates[Phase.PLAYER_SELECT].open(state.selectedUnit);
 
           return;
         }
-        return;
       }
+    }
 
+    // Player Move Logic
+    // 2. Placing unit
+    if (state.phase === Phase.PLAYER_MOVE && e.code === "KeyZ") {
       if (state.playerSelected) {
+        // if hovering another unit return
         const hoveringOtherUnit = state.units.some(
           (u) =>
             u.row == state.hover.row &&
@@ -191,27 +200,33 @@ export function activateBoardInput(state, ui, gates) {
         removeHighlight(ui.boardEl, state.highTile);
         clearHighTile(state.highTile);
 
-        state.playerSelected = false;
+        // state.playerSelected = false;
 
         updateObstacle(state);
-        updatePlayable(
-          state.playerTurn,
-          state.currentUnitsQueue,
-          state.selectedUnit,
-        );
+
+        // removePlayable(
+        //   state.playerTurn,
+        //   state.currentUnitsQueue,
+        //   state.selectedUnit,
+        // );
 
         // Testing
         playSfx(btnClick, 0.5, 0);
 
         // actionbar stuff
-        ui.actionBarEl.classList.remove("hidden");
+        // ui.actionBarEl.classList.remove("hidden");
 
-        const firstButton = ui.actionBarEl.querySelector("button");
-        firstButton?.focus();
+        // const firstButton = ui.actionBarEl.querySelector("button");
+        // firstButton?.focus();
 
         // openActionBar(ui.actionBarEl);
 
-        gates[Phase.PLAYER_SELECT].open(state.selectedUnit);
+        if (state.selectedUnit.hasAction) {
+          const firstButton = ui.actionBarEl.querySelector("button");
+
+          firstButton?.focus();
+        }
+        gates[Phase.PLAYER_MOVE].open();
 
         return;
       }
@@ -220,19 +235,20 @@ export function activateBoardInput(state, ui, gates) {
 
     // 3. Arrow Keys move and hover in 4 directions
 
+    // If arrowkey direction
     if (
       moves[e.key] &&
       !state.attackOn &&
-      state.phase === Phase.PLAYER_SELECT
+      (state.phase === Phase.PLAYER_MOVE || state.phase === Phase.PLAYER_SELECT)
     ) {
-      // console.log(state.phase);
-      if (state.playerSelected) {
-        const floating =
-          state.selectedUnit.node.querySelector(".floating-value");
-        if (floating) {
-          floating.remove();
-        }
-      }
+      // Remove the floating value
+      // if (state.playerSelected) {
+      //   const floating =
+      //     state.selectedUnit.node.querySelector(".floating-value");
+      //   if (floating) {
+      //     floating.remove();
+      //   }
+      // }
 
       removeHover(state, ui);
       moveHover(state, ui, ...moves[e.key]);
@@ -243,7 +259,11 @@ export function activateBoardInput(state, ui, gates) {
       }
 
       if (state.playerSelected) {
-        // console.log("Moving Player");
+        const floating =
+          state.selectedUnit.node.querySelector(".floating-value");
+        if (floating) {
+          floating.remove();
+        }
         movePlayer(state, ui, ...moves[e.key]);
       }
       showTerrainInfo(state, ui);
@@ -254,8 +274,6 @@ export function activateBoardInput(state, ui, gates) {
     // 4. move attack hover onto enemy.
     if (state.isTargeting) {
       removeConfirmHiglight(state, ui);
-      // console.log("Detecting arrow keys");
-      // console.log(state.attackTile);
 
       switch (e.key) {
         case "ArrowUp":
@@ -276,24 +294,7 @@ export function activateBoardInput(state, ui, gates) {
 
             confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
           }
-          // if (
-          //   enemyAt(
-          //     state.playerTurn,
-          //     state.units,
-          //     state.selectedUnit.row - 1,
-          //     state.selectedUnit.col,
-          //   )
-          // )
-          //   confirmHighlight(
-          //     ui,
-          //     state.selectedUnit.row - 1,
-          //     state.selectedUnit.col,
-          //   );
-          // attackedUnit(
-          //   state,
-          //   state.selectedUnit.row - 1,
-          //   state.selectedUnit.col,
-          // );
+
           break;
         case "ArrowDown":
           if (
@@ -312,24 +313,7 @@ export function activateBoardInput(state, ui, gates) {
 
             confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
           }
-          // if (
-          //   enemyAt(
-          //     state.playerTurn,
-          //     state.units,
-          //     state.selectedUnit.row + 1,
-          //     state.selectedUnit.col,
-          //   )
-          // )
-          //   confirmHighlight(
-          //     ui,
-          //     state.selectedUnit.row + 1,
-          //     state.selectedUnit.col,
-          //   );
-          // attackedUnit(
-          //   state,
-          //   state.selectedUnit.row + 1,
-          //   state.selectedUnit.col,
-          // );
+
           break;
         case "ArrowRight":
           if (
@@ -385,24 +369,9 @@ export function activateBoardInput(state, ui, gates) {
 
             confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
           }
-          // if (
-          //   enemyAt(
-          //     state.playerTurn,
-          //     state.units,
-          //     state.selectedUnit.row,
-          //     state.selectedUnit.col - 1,
-          //   )
-          // )
-          //   confirmHighlight(
-          //     ui,
-          //     state.selectedUnit.row,
-          //     state.selectedUnit.col - 1,
-          //   );
-          // attackedUnit(
-          //   state,
-          //   state.selectedUnit.row,
-          //   state.selectedUnit.col - 1,
-          // );
+
+          console.log(state.hover.row, state.hover.col);
+          // console.log(state.hover.row);
           break;
       }
 
@@ -418,16 +387,10 @@ export function activateBoardInput(state, ui, gates) {
       e.key == "z" &&
       attackedUnit(state, state.attackHover.row, state.attackHover.col)
     ) {
-      // console.log("inside attacking");
-
       console.log(
         tileAt(ui.boardEl, state.attackHover.row, state.attackHover.col),
       );
 
-      // console.log(state.useSkill);
-      // console.log("hit z attack/skill");
-
-      // attackedUnit(state, state.attackHover.row, state.attackHover.col);
       const type = attack(
         state.selectedUnit,
         state.receivingUnit,
@@ -441,25 +404,17 @@ export function activateBoardInput(state, ui, gates) {
       if (state.useSkill) {
         const removeSkillUse = state.useSkill.dataset.id;
 
-        // console.log(removeSkillUse);
-        // console.log(state.selectedUnit.skills);
         const skill = state.selectedUnit.skills.find((skill) => {
           return skill.id === removeSkillUse;
         });
 
         skill.uses--;
 
-        if (skill.uses == 0) {
-          const index = state.selectedUnit.skills.findIndex(
-            (skill) => skill.id === removeSkillUse,
-          );
+        console.log(skill.uses);
+        // ui.skillList.replaceChildren();
+        // ui.itemList.replaceChildren();
 
-          // state.selectedUnit.skills.splice(index, 1);
-        }
-        ui.skillList.replaceChildren();
-        ui.itemList.replaceChildren();
-
-        showUnitInfo(state, ui);
+        // showUnitInfo(state, ui);
       }
 
       // console.log(type);
@@ -488,6 +443,12 @@ export function activateBoardInput(state, ui, gates) {
       if (state.phase === Phase.PLAYER_ATTACK) {
         gates[Phase.PLAYER_ATTACK].open();
       }
+
+      if (state.selectedUnit.hasMove) {
+        const firstButton = ui.actionBarEl.querySelector("button");
+        firstButton?.focus();
+      }
+      showUnitInfo(state, ui);
 
       return;
     }

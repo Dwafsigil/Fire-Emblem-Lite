@@ -40,56 +40,72 @@ export async function runBattle(state, ui, gates) {
       while (hasPlayableUnits(state)) {
         ui.turnText.textContent = `Turn: ${state.turnCounter}`;
 
-        // battle log
-
         if (await isBattleOver(state, ui)) break;
         state.phase = Phase.PLAYER_SELECT;
 
+        // marker
+        console.log("Player Select");
+
+        // ui.actionBarEl.classList.add("hidden");
+        // ui.boardEl.focus();
+        console.log(state.currentUnitsQueue);
+
+        enableActionButtons(ui);
         await gates[Phase.PLAYER_SELECT].wait();
 
         // if (!checkAdjacent(state, state.selectedUnit)) {
         //   setDisabled(ui.actionButtons.attack, true);
         // }
 
-        while (true) {
+        while (state.selectedUnit.hasAction || state.selectedUnit.hasMove) {
+          if (await isBattleOver(state, ui)) break;
+
           // Player Action
           state.phase = Phase.PLAYER_ACTION;
+          updateActionButtons(state, ui);
 
-          updatePlayable(
-            state.playerTurn,
-            state.currentUnitsQueue,
-            state.selectedUnit,
-          );
+          console.log("Player Action");
 
           const actionType = await gates[Phase.PLAYER_ACTION].wait();
-
-          if (actionType === "wait") break;
 
           try {
             switch (actionType) {
               case "attack":
                 state.phase = Phase.PLAYER_ATTACK;
-                // console.log(state.phase);
 
                 await gates[Phase.PLAYER_ATTACK].wait();
+                state.selectedUnit.hasAction = false;
 
-                //  await delay( state.selectedUnit.node.classList.add("grayed");
+                break;
+              case "move":
+                state.phase = Phase.PLAYER_MOVE;
+                await gates[Phase.PLAYER_MOVE].wait();
+
+                state.selectedUnit.hasMove = false;
+
+                // console.log(state.selectedUnit.hasMove);
+
                 break;
 
               case "skill":
                 state.phase = Phase.PLAYER_SKILL;
-                // console.log(state.phase);
 
                 await gates[Phase.PLAYER_SKILL].wait();
+                state.selectedUnit.hasAction = false;
+
                 break;
               case "item":
                 state.phase = Phase.PLAYER_ITEM;
 
                 await gates[Phase.PLAYER_ITEM].wait();
+                state.selectedUnit.hasAction = false;
+                break;
+              case "wait":
+                // console.log("inside wait");
+                state.selectedUnit.hasAction = false;
+                state.selectedUnit.hasMove = false;
                 break;
             }
-
-            break;
           } catch (e) {
             if (e === CANCEL) {
               continue;
@@ -98,16 +114,36 @@ export async function runBattle(state, ui, gates) {
           }
         }
 
-        // state.selectedUnit.node.classList.add("grayed");
-        // ui.actionBarEl.classlist.add("hidden");
-        ui.actionBarEl.classList.add("hidden");
+        // console.log("outside");
+        // ui.actionBarEl.classList.add("hidden");
 
-        // closeActionBar(ui.actionBarEl);
-        // focusBoard(ui.boardEl);
-        ui.boardEl.focus();
-        state.selectedUnit = null;
-        // setDisabled(ui.actionButtons.attack, false);
+        // ui.boardEl.focus();
+
+        // if the unit completely has no more actions/move
+
+        // updateObstacle(state);
+        console.log("After Unit Action");
+        if (!state.selectedUnit.hasMove && !state.selectedUnit.hasAction) {
+          removePlayable(
+            state.playerTurn,
+            state.currentUnitsQueue,
+            state.selectedUnit,
+          );
+          console.log("After Removing Unit");
+          ui.actionBarEl.classList.add("hidden");
+          ui.boardEl.focus();
+
+          state.selectedUnit.node.classList.add("grayed");
+
+          state.selectedUnit = null;
+          state.playerSelected = false;
+          // ui.actionBarEl.classList.add("hidden");
+        }
+
+        // console.log(state.currentUnitsQueue);
+
         if (await isBattleOver(state, ui)) break;
+        // console.log("outside 2");
       }
     } catch (e) {
       if (e == CANCEL) {
@@ -142,6 +178,11 @@ export async function runBattle(state, ui, gates) {
 // ✅
 export function initPlayerTurn(state) {
   state.currentUnitsQueue = state.units.filter((u) => u.affiliation == 0);
+
+  state.currentUnitsQueue.forEach((unit) => {
+    unit.hasMove = true;
+    unit.hasAction = true;
+  });
 }
 
 // ✅
@@ -150,7 +191,7 @@ export function hasPlayableUnits(state) {
 }
 
 // ✅
-export function updatePlayable(playerTurn, currentUnitsQueue, selectedUnit) {
+export function removePlayable(playerTurn, currentUnitsQueue, selectedUnit) {
   if (!playerTurn || !selectedUnit) return;
 
   for (let i = currentUnitsQueue.length - 1; i >= 0; i--) {
@@ -159,10 +200,6 @@ export function updatePlayable(playerTurn, currentUnitsQueue, selectedUnit) {
       break;
     }
   }
-  // if (playerTurn) {
-  //   currentUnitsQueue = currentUnitsQueue.filter(
-  //     (u) => u.playerId !== selectedUnit.playerId,
-  //   );
 }
 
 // end the game
@@ -236,4 +273,26 @@ export function initEnemyTurn() {
 // ✅
 export function checkPlayable(currentUnitsQueue, unit) {
   return currentUnitsQueue.some((e) => e.playerId == unit.playerId);
+}
+
+export function updateActionButtons(state, ui) {
+  ui.actionBarEl.querySelectorAll("button").forEach((btn) => {
+    const a = btn.dataset.action;
+
+    if (a === "move") {
+      setDisabled(btn, !state.selectedUnit.hasMove);
+    } else if (a === "wait") {
+      setDisabled(btn, "false");
+    } else {
+      setDisabled(btn, !state.selectedUnit.hasAction);
+    }
+  });
+
+  // console.log();
+}
+
+export function enableActionButtons(ui) {
+  ui.actionBarEl.querySelectorAll("button").forEach((btn) => {
+    setDisabled(btn, "false");
+  });
 }

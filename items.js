@@ -62,4 +62,5 @@ export function useItem(state, ui, gates, foundElement) {
 
   ui.description.classList.add("hidden");
   gates[Phase.PLAYER_ITEM].open();
+  console.log("Went through");
 }

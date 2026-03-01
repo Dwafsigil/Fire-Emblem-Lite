@@ -27,7 +27,7 @@ export function activateActionbarInput(state, ui) {
     }
 
     if (e.code === "KeyZ") {
-      console.log("IN aCTION BAR");
+      // console.log("IN aCTION BAR");
       e.preventDefault();
       playSfx(btnClick, 0.5, 0);
 
