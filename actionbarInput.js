@@ -16,12 +16,14 @@ export function activateActionbarInput(state, ui) {
       e.preventDefault();
       playSfx(btnClick, 0.5, 0);
 
+      active.classList.remove("buttonGlow");
       next = (current + 1) % actionButtons.length;
     }
 
     if (e.key === "ArrowLeft") {
       e.preventDefault();
       playSfx(btnClick, 0.5, 0);
+      active.classList.remove("buttonGlow");
 
       next = (current - 1 + actionButtons.length) % actionButtons.length;
     }
@@ -39,11 +41,15 @@ export function activateActionbarInput(state, ui) {
 
       // console.log(foundElement.dataset.action);
       // ui.actionBarEl.tabIndex = -1;
+      active.classList.remove("buttonGlow");
       doAction(state, ui, foundElement.dataset.action);
       return;
     }
 
     actionButtons[next].focus();
+
+    console.log(actionButtons[next]);
+    document.activeElement.classList.add("buttonGlow");
   });
 }
 

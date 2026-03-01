@@ -69,6 +69,8 @@ export function activateBoardInput(state, ui, gates) {
 
         const firstButton = ui.actionBarEl.querySelector("button");
         firstButton?.focus();
+        firstButton.classList.add("buttonGlow");
+
         gates[Phase.PLAYER_MOVE].cancel();
         return;
       }
@@ -89,6 +91,7 @@ export function activateBoardInput(state, ui, gates) {
 
         const firstButton = ui.actionBarEl.querySelector("button");
         firstButton?.focus();
+        firstButton.classList.add("buttonGlow");
 
         state.attackOn = false;
         state.isTargeting = false;
@@ -96,6 +99,14 @@ export function activateBoardInput(state, ui, gates) {
         state.receivingUnit = null;
 
         playSfx(btnClick, 0.5, 0);
+
+        const t = tileAt(
+          ui.boardEl,
+          state.selectedUnit.row,
+          state.selectedUnit.col,
+        );
+
+        t.classList.add("hover");
         gates[Phase.PLAYER_ATTACK].cancel();
         return;
       }
@@ -120,6 +131,14 @@ export function activateBoardInput(state, ui, gates) {
         state.isTargeting = false;
         state.unitHighlighted = false;
         state.receivingUnit = null;
+
+        const t = tileAt(
+          ui.boardEl,
+          state.selectedUnit.row,
+          state.selectedUnit.col,
+        );
+
+        t.classList.add("hover");
 
         const firstSkill = ui.skillList.querySelector("button");
         firstSkill?.focus();
@@ -173,6 +192,11 @@ export function activateBoardInput(state, ui, gates) {
 
           const firstButton = ui.actionBarEl.querySelector("button");
           firstButton?.focus();
+          firstButton.classList.add("buttonGlow");
+
+          console.log(firstButton);
+
+          firstButton.classList.add("buttonGlow");
 
           // openActionBar(ui.actionBarEl);
 
@@ -225,6 +249,7 @@ export function activateBoardInput(state, ui, gates) {
           const firstButton = ui.actionBarEl.querySelector("button");
 
           firstButton?.focus();
+          firstButton.classList.add("buttonGlow");
         }
         gates[Phase.PLAYER_MOVE].open();
 
@@ -292,7 +317,12 @@ export function activateBoardInput(state, ui, gates) {
             state.attackHover.row = state.attackHover.row - 1;
             // console.log("Worked");
 
-            confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
+            confirmHighlight(
+              state,
+              ui,
+              state.attackHover.row,
+              state.attackHover.col,
+            );
           }
 
           break;
@@ -311,7 +341,12 @@ export function activateBoardInput(state, ui, gates) {
             ).classList.remove("attack-confirm");
             state.attackHover.row = state.attackHover.row + 1;
 
-            confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
+            confirmHighlight(
+              state,
+              ui,
+              state.attackHover.row,
+              state.attackHover.col,
+            );
           }
 
           break;
@@ -331,7 +366,12 @@ export function activateBoardInput(state, ui, gates) {
 
             state.attackHover.col = state.attackHover.col + 1;
 
-            confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
+            confirmHighlight(
+              state,
+              ui,
+              state.attackHover.row,
+              state.attackHover.col,
+            );
           }
           // if (
           //   enemyAt(
@@ -367,7 +407,12 @@ export function activateBoardInput(state, ui, gates) {
             ).classList.remove("attack-confirm");
             state.attackHover.col = state.attackHover.col - 1;
 
-            confirmHighlight(ui, state.attackHover.row, state.attackHover.col);
+            confirmHighlight(
+              state,
+              ui,
+              state.attackHover.row,
+              state.attackHover.col,
+            );
           }
 
           console.log(state.hover.row, state.hover.col);
@@ -447,8 +492,17 @@ export function activateBoardInput(state, ui, gates) {
       if (state.selectedUnit.hasMove) {
         const firstButton = ui.actionBarEl.querySelector("button");
         firstButton?.focus();
+        firstButton.classList.add("buttonGlow");
       }
       showUnitInfo(state, ui);
+
+      const t = tileAt(
+        ui.boardEl,
+        state.selectedUnit.row,
+        state.selectedUnit.col,
+      );
+
+      t.classList.add("hover");
 
       return;
     }

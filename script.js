@@ -59,14 +59,11 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// allows units to attack and move or move then attack
 
 // Undo a move
-// health potions are too weak
 // Improve enemy ai
 // change stat page, Johnny, healthbar, then stats
 // joseph wanted icons like arrowkeys and z keys to show what keys are available
-// make visuals not static
 // change up stat square to show the healthj better
 // separator on action log
 
@@ -74,6 +71,3 @@ runGame(state, ui, gates);
 
 // BUG LIST:
 // Mouse clicking destroys the controls of the game
-
-// something is causing the unit move to not be used
-// moving a unit then cancelling it breaks the unitqueue. however it doesnt give aditional turn, it just makes it where u need to click the unit to fix it

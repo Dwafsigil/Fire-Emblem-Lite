@@ -3,6 +3,7 @@ import { attackHighlight } from "./combatInput.js";
 // import { focusBoard } from "./uiControls.js";
 import { skills } from "./skills.js";
 // import { openActionBar } from "./uiControls.js";
+import { tileAt } from "./board.js";
 
 export function skillListControls(ui, state, gates) {
   ui.skillList.addEventListener("keydown", (e) => {
@@ -58,6 +59,14 @@ export function skillListControls(ui, state, gates) {
         state.attackHover.col = state.selectedUnit.col;
         // skill marker
 
+        const t = tileAt(
+          ui.boardEl,
+          state.selectedUnit.row,
+          state.selectedUnit.col,
+        );
+
+        t.classList.remove("hover");
+
         return;
       }
 
@@ -70,6 +79,10 @@ export function skillListControls(ui, state, gates) {
         // openActionBar(ui.actionBarEl);
         const firstButton = ui.actionBarEl.querySelector("button");
         firstButton?.focus();
+        firstButton.classList.add("buttonGlow");
+
+        ui.skillList.classList.remove("glow");
+
         ui.description.classList.add("hidden");
         gates[Phase.PLAYER_SKILL].cancel();
         return;

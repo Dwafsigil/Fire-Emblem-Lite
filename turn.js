@@ -60,6 +60,9 @@ export async function runBattle(state, ui, gates) {
         while (state.selectedUnit.hasAction || state.selectedUnit.hasMove) {
           if (await isBattleOver(state, ui)) break;
 
+          ui.itemList.classList.remove("glow");
+          ui.skillList.classList.remove("glow");
+
           // Player Action
           state.phase = Phase.PLAYER_ACTION;
           updateActionButtons(state, ui);

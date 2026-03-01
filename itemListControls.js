@@ -75,6 +75,7 @@ export function itemListControls(ui, state, gates) {
         if (state.selectedUnit.hasMove) {
           const firstButton = ui.actionBarEl.querySelector("button");
           firstButton?.focus();
+          firstButton.classList.add("buttonGlow");
         }
 
         ui.itemImage.classList.add("hidden");
@@ -90,6 +91,10 @@ export function itemListControls(ui, state, gates) {
       // openActionBar(ui.actionBarEl);
       const firstButton = ui.actionBarEl.querySelector("button");
       firstButton?.focus();
+      firstButton.classList.add("buttonGlow");
+
+      ui.skillList.classList.remove("glow");
+
       ui.description.classList.add("hidden");
       ui.itemImage.classList.add("hidden");
 

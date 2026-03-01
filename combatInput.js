@@ -237,8 +237,12 @@ export function removeAttackHighlight(state, ui) {
   }
 }
 
-export function confirmHighlight(ui, r, c) {
+export function confirmHighlight(state, ui, r, c) {
   tileAt(ui.boardEl, r, c).classList.add("attack-confirm");
+
+  if (attackedUnit(state, state.attackHover.row, state.attackHover.col)) {
+    tileAt(ui.boardEl, r, c).classList.add("selected");
+  }
 }
 
 export function removeConfirmHiglight(state, ui) {

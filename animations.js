@@ -14,6 +14,7 @@ import { attackHighlight } from "./combatInput.js";
 import { items } from "./items.js";
 import { skills } from "./skills.js";
 import { highlightMove } from "./movement.js";
+import { tileAt } from "./board.js";
 
 export function playAnim(unit, className) {
   const el = unit.node;
@@ -104,6 +105,13 @@ export function doAction(state, ui, action) {
       state.attackHover.col = state.selectedUnit.col;
 
       ui.boardEl.focus();
+      const t = tileAt(
+        ui.boardEl,
+        state.selectedUnit.row,
+        state.selectedUnit.col,
+      );
+
+      t.classList.remove("hover");
 
       // focusBoard(ui.boardEl);
       gates[Phase.PLAYER_ACTION].open("attack");
@@ -147,7 +155,8 @@ export function doAction(state, ui, action) {
 
       ui.description.textContent = `${description}`;
       ui.description.classList.remove("hidden");
-
+      // Glow
+      ui.skillList.classList.add("glow");
       // console.log("Hit Skill");
       gates[Phase.PLAYER_ACTION].open("skill");
 
@@ -176,6 +185,7 @@ export function doAction(state, ui, action) {
       ui.itemImage.style.setProperty(`--height`, `${items[currentID].height}%`);
 
       ui.itemImage.classList.remove("hidden");
+      ui.itemList.classList.add("glow");
 
       gates[Phase.PLAYER_ACTION].open("item");
 

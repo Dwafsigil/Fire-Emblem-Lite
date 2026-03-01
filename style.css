@@ -134,6 +134,22 @@ button[button-disabled="true"]:focus {
   outline: 2px solid #7aa2ff;
 }
 
+.buttonGlow {
+  animation: buttonGlow 2s ease-in-out infinite;
+}
+
+@keyframes buttonGlow {
+  0% {
+    outline: 2px solid rgb(255, 255, 255);
+  }
+  50% {
+    outline: 2px solid #444;
+  }
+  100% {
+    outline: 2px solid rgb(255, 255, 255);
+  }
+}
+
 .floating-value {
   position: absolute;
   top: -5px;
@@ -387,8 +403,30 @@ button[button-disabled="true"]:focus {
 }
 
 .hover {
+  /* border: 1px solid rgb(31, 10, 223); */
+  z-index: 4;
+}
+
+.tile.hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* box-sizing: border-box; */
   border: 1px solid rgb(31, 10, 223);
   z-index: 4;
+  animation: pulse 1s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .attack-border {
@@ -399,6 +437,23 @@ button[button-disabled="true"]:focus {
 .attack-confirm {
   background: rgb(255, 98, 98, 0.6);
   z-index: 4;
+  animation: attackPulse 2s ease-in-out infinite;
+}
+
+.attack-confirm.selected {
+  animation: none;
+}
+
+@keyframes attackPulse {
+  0% {
+    background: rgb(255, 98, 98, 0.6);
+  }
+  50% {
+    background: transparent;
+  }
+  100% {
+    background: rgb(255, 98, 98, 0.6);
+  }
 }
 
 /* The frame */
@@ -1055,6 +1110,22 @@ button[button-disabled="true"]:focus {
 
 .item-list button {
   font-size: 11px;
+}
+
+.glow {
+  animation: glowAnim 2s ease-in-out infinite;
+}
+
+@keyframes glowAnim {
+  0% {
+    border: 2px solid rgb(255, 255, 255);
+  }
+  50% {
+    border: 2px solid #444;
+  }
+  100% {
+    border: 2px solid rgb(255, 255, 255);
+  }
 }
 
 .combat-log {

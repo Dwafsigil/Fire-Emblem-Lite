@@ -12,7 +12,12 @@ export function showHoverAt(state, ui, r, c) {
   state.hover.row = r;
   state.hover.col = c;
   const t = tileAt(ui.boardEl, r, c);
-  if (t && !t.classList.contains("hover")) t.classList.add("hover");
+  if (t && !t.classList.contains("hover")) {
+    // t.classList.add("hover");
+    t.classList.add("hover");
+
+    console.log(t);
+  }
 }
 
 // ✅
