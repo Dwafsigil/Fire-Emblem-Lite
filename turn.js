@@ -34,11 +34,22 @@ export async function runBattle(state, ui, gates) {
       initPlayerTurn(state);
       showPhase(ui, "Player Phase");
       const el = document.createElement("li");
-      el.textContent = `Turn ${state.turnCounter}:`;
+      const space = document.createElement("li");
+      // const space2 = document.createElement("li");
+      space.textContent = `---------------------------------------`;
+      // space2.textContent = ``;
+
+      el.textContent = `Turn ${state.turnCounter}`;
+
+      if (state.turnCounter > 1) {
+        ui.combatLog.appendChild(space);
+      }
       ui.combatLog.appendChild(el);
+      // ui.combatLog.appendChild(space2);
 
       while (hasPlayableUnits(state)) {
         ui.turnText.textContent = `Turn: ${state.turnCounter}`;
+        // ui.turnText.textContent = `Turn: ${state.turnCounter}`;
 
         if (await isBattleOver(state, ui)) break;
         state.phase = Phase.PLAYER_SELECT;
