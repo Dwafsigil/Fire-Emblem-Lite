@@ -241,7 +241,7 @@ export async function isBattleOver(state, ui) {
     ui.gameOverCover.textContent = "Castle Captured";
     await delay(1000);
     ui.gameOverCover.classList.remove("hidden");
-
+    ui.actionBarEl.classList.add("hidden");
     return true;
   }
 
@@ -251,7 +251,7 @@ export async function isBattleOver(state, ui) {
     ui.gameOverCover.textContent = "Game Over";
     await delay(2000);
     ui.gameOverCover.classList.remove("hidden");
-
+    ui.actionBarEl.classList.add("hidden");
     return true;
   }
 
@@ -261,7 +261,7 @@ export async function isBattleOver(state, ui) {
     ui.gameOverCover.textContent = "Enemy Routed";
     await delay(2000);
     ui.gameOverCover.classList.remove("hidden");
-
+    ui.actionBarEl.classList.add("hidden");
     return true;
   }
 

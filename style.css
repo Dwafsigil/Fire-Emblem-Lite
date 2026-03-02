@@ -1148,8 +1148,20 @@ button[button-disabled="true"]:focus {
   list-style: none;
 }
 
+.stat-list {
+  display: flex;
+}
+
 .stat-list.hidden {
   display: none;
+}
+
+.normal-stat-list {
+  flex: 1;
+}
+
+.combat-stat-list {
+  flex: 1;
 }
 
 .skill-list {

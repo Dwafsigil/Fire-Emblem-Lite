@@ -16,7 +16,7 @@ export class unitStats {
     skill = 10,
     speed = 10,
     luck = 10,
-    defense = 0,
+    defense = 10,
     resistance = 10,
     movement = 2,
     affiliation = 0,
@@ -63,15 +63,15 @@ export class unitStats {
 
   get hitRate() {
     // fix
-    return this.skill * 2 + this.luck * 0.5 + 50;
+    return this.skill * 2 + this.luck * 2;
   }
 
   get avoidRate() {
-    return this.speed * 2 + this.luck - 20;
+    return this.speed * 0.5 + this.luck;
   }
 
   get critRate() {
-    return this.skill / 2 + 10;
+    return this.skill * 1.75;
   }
 
   get terrainBonus() {

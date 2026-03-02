@@ -110,10 +110,28 @@ export function showStats(state, ui, unit) {
     ui.unitAttackStat.textContent = `STR: ${unit.strength}`;
   }
   ui.unitDefenseStat.textContent = `DEF: ${unit.defense}`;
+  ui.unitResistanceStat.textContent = `RES: ${unit.resistance}`;
+  ui.unitSkillStat.textContent = `SKL: ${unit.skill}`;
+  ui.unitLuckStat.textContent = `LCK: ${unit.luck}`;
+  ui.unitSpeedStat.textContent = `SPD: ${unit.speed}`;
+
   ui.unitMovementStat.textContent = `MOV: ${unit.movement}`;
-  ui.unitHitStat.textContent = `HIT: ${unit.hitRate}`;
-  ui.unitAvoidStat.textContent = `AVO: ${getAvoidWithTerrain(state, unit)} `;
-  ui.unitCritStat.textContent = `CRIT: ${unit.critRate}`;
+  ui.unitHitStat.textContent = `HIT: ${Math.floor(unit.hitRate)}`;
+  ui.unitAvoidStat.textContent = `AVO: ${Math.floor(getAvoidWithTerrain(state, unit))} `;
+  ui.unitCritStat.textContent = `CRIT: ${Math.floor(unit.critRate)}`;
+
+  // Hard coding
+  if (unit.equipped) {
+    console.log(items[unit.equipped].bonuses);
+
+    for (const key in items[unit.equipped].bonuses) {
+      if (key === "strength") {
+        ui.unitAttackStat.style.color = "#84eab3";
+      }
+    }
+  } else {
+    ui.unitAttackStat.style.removeProperty("color");
+  }
 }
 
 export function healthBarUI(ui, unit) {
