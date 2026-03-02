@@ -49,7 +49,10 @@ export function activateBoardInput(state, ui, gates) {
 
     // 1. x go back
     if (e.code == "KeyX") {
-      console.log("detecting x");
+      // console.log("detecting x");
+
+      // cancel player select
+
       // cancel when player selected
       if (state.playerSelected && state.phase === Phase.PLAYER_MOVE) {
         placePlayer(state, ui, state.startRow, state.startCol);
@@ -76,7 +79,7 @@ export function activateBoardInput(state, ui, gates) {
       }
       // cancel ATTACK in targeting
       if (state.phase === Phase.PLAYER_ATTACK) {
-        console.log("attack cancel");
+        // console.log("attack cancel");
         removeAttackHighlight(state, ui);
         removeConfirmHiglight(state, ui);
         tileAt(
@@ -157,7 +160,7 @@ export function activateBoardInput(state, ui, gates) {
       return;
     }
 
-    // 2.5 Selecting a Player
+    // 1.5 Selecting a Player
     if (state.phase === Phase.PLAYER_SELECT && e.code === "KeyZ") {
       // Check if occupied
       if (
@@ -194,9 +197,7 @@ export function activateBoardInput(state, ui, gates) {
           firstButton?.focus();
           firstButton.classList.add("buttonGlow");
 
-          console.log(firstButton);
-
-          firstButton.classList.add("buttonGlow");
+          // console.log(firstButton);
 
           // openActionBar(ui.actionBarEl);
 
@@ -432,9 +433,9 @@ export function activateBoardInput(state, ui, gates) {
       e.key == "z" &&
       attackedUnit(state, state.attackHover.row, state.attackHover.col)
     ) {
-      console.log(
-        tileAt(ui.boardEl, state.attackHover.row, state.attackHover.col),
-      );
+      // console.log(
+      //   tileAt(ui.boardEl, state.attackHover.row, state.attackHover.col),
+      // );
 
       const type = attack(
         state.selectedUnit,
@@ -455,7 +456,7 @@ export function activateBoardInput(state, ui, gates) {
 
         skill.uses--;
 
-        console.log(skill.uses);
+        // console.log(skill.uses);
         // ui.skillList.replaceChildren();
         // ui.itemList.replaceChildren();
 

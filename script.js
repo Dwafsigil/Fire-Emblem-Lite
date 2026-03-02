@@ -61,11 +61,9 @@ runGame(state, ui, gates);
 // TODO Immediately:
 
 // Undo a move
+
 // Improve enemy ai
-// change stat page, Johnny, healthbar, then stats
 // joseph wanted icons like arrowkeys and z keys to show what keys are available
-// change up stat square to show the healthj better
-// separator on action log
 
 // Optimize and Organize Code Logic
 

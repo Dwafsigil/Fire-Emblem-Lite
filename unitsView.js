@@ -27,15 +27,15 @@ export function createPlayerNode(unit) {
   const healthBarBackground = document.createElement("div");
   healthBarBackground.classList.add("health-bar-background");
 
-  const healthValue = document.createElement("div");
-  healthValue.classList.add("health-value");
-  healthValue.textContent = "30/40";
+  // const healthValue = document.createElement("div");
+  // healthValue.classList.add("health-value");
+  // healthValue.textContent = "30/40";
 
   const healthBarFill = document.createElement("div");
   healthBarFill.classList.add("health-bar-fill");
   healthBarFill.style.width = "100%";
 
-  healthBarContainer.appendChild(healthValue);
+  // healthBarContainer.appendChild(healthValue);
   healthBarBackground.appendChild(healthBarFill);
   healthBarContainer.appendChild(healthBarBackground);
 
@@ -45,7 +45,7 @@ export function createPlayerNode(unit) {
 
   unit.setHealthBar(healthBarFill);
   // unit.setStrength(strengthValue);
-  unit.setHealthValue(healthValue);
+  // unit.setHealthValue(healthValue);
 
   return el;
 }

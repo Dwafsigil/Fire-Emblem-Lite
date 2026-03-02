@@ -11,7 +11,7 @@ import { hurtAnimation } from "./animations.js";
 import { attackAnimation } from "./animations.js";
 import { attack } from "./combatInput.js";
 import { removeDead } from "./unitsView.js";
-
+import { healthBarUI } from "./unitStatsUI.js";
 export async function runEnemyTurn(state, ui) {
   // console.log("Running Enemy Turn");
   let enemyUnit = state.units.filter((e) => e.affiliation == 1);
@@ -41,11 +41,14 @@ export async function runEnemyTurn(state, ui) {
     // console.log(checkAdjacent(state, u));
     if (checkAdjacent(state, u)) {
       enemyAttack(state, ui, u, state.closestFriendly);
+      healthBarUI(ui, state.closestFriendly);
       // if (state.closestFriendly.checkDead()) removeDead(state, ui);
     } else {
       await enemyMove(state, ui, u);
       if (checkAdjacent(state, u)) {
         enemyAttack(state, ui, u, state.closestFriendly);
+        healthBarUI(ui, state.closestFriendly);
+
         // if (state.closestFriendly.checkDead()) removeDead(state, ui);
       } else {
         const el = document.createElement("li");

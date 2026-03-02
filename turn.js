@@ -13,6 +13,7 @@ import { showCondition } from "./helpers.js";
 import { CANCEL } from "./gates.js";
 import { tileAt } from "./board.js";
 import { initDialogue } from "./dialogue.js";
+import { showUnitInfo } from "./unitStatsUI.js";
 
 export const delay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
@@ -54,6 +55,8 @@ export async function runBattle(state, ui, gates) {
         if (await isBattleOver(state, ui)) break;
         state.phase = Phase.PLAYER_SELECT;
 
+        showUnitInfo(state, ui);
+
         // marker
         console.log("Player Select");
 
@@ -64,68 +67,76 @@ export async function runBattle(state, ui, gates) {
         enableActionButtons(ui);
         await gates[Phase.PLAYER_SELECT].wait();
 
-        // if (!checkAdjacent(state, state.selectedUnit)) {
-        //   setDisabled(ui.actionButtons.attack, true);
-        // }
+        // TRY BLOCK FOR PLAYER SELECT
+        try {
+          // if (!checkAdjacent(state, state.selectedUnit)) {
+          //   setDisabled(ui.actionButtons.attack, true);
+          // }
 
-        while (state.selectedUnit.hasAction || state.selectedUnit.hasMove) {
-          if (await isBattleOver(state, ui)) break;
+          while (state.selectedUnit.hasAction || state.selectedUnit.hasMove) {
+            if (await isBattleOver(state, ui)) break;
 
-          ui.itemList.classList.remove("glow");
-          ui.skillList.classList.remove("glow");
+            ui.itemList.classList.remove("glow");
+            ui.skillList.classList.remove("glow");
 
-          // Player Action
-          state.phase = Phase.PLAYER_ACTION;
-          updateActionButtons(state, ui);
+            // Player Action
+            state.phase = Phase.PLAYER_ACTION;
+            updateActionButtons(state, ui);
 
-          console.log("Player Action");
+            console.log("Player Action");
 
-          const actionType = await gates[Phase.PLAYER_ACTION].wait();
+            const actionType = await gates[Phase.PLAYER_ACTION].wait();
 
-          try {
-            switch (actionType) {
-              case "attack":
-                state.phase = Phase.PLAYER_ATTACK;
+            try {
+              switch (actionType) {
+                case "attack":
+                  state.phase = Phase.PLAYER_ATTACK;
 
-                await gates[Phase.PLAYER_ATTACK].wait();
-                state.selectedUnit.hasAction = false;
+                  await gates[Phase.PLAYER_ATTACK].wait();
+                  state.selectedUnit.hasAction = false;
 
-                break;
-              case "move":
-                state.phase = Phase.PLAYER_MOVE;
-                await gates[Phase.PLAYER_MOVE].wait();
+                  break;
+                case "move":
+                  state.phase = Phase.PLAYER_MOVE;
+                  await gates[Phase.PLAYER_MOVE].wait();
 
-                state.selectedUnit.hasMove = false;
+                  state.selectedUnit.hasMove = false;
 
-                // console.log(state.selectedUnit.hasMove);
+                  // console.log(state.selectedUnit.hasMove);
 
-                break;
+                  break;
 
-              case "skill":
-                state.phase = Phase.PLAYER_SKILL;
+                case "skill":
+                  state.phase = Phase.PLAYER_SKILL;
 
-                await gates[Phase.PLAYER_SKILL].wait();
-                state.selectedUnit.hasAction = false;
+                  await gates[Phase.PLAYER_SKILL].wait();
+                  state.selectedUnit.hasAction = false;
 
-                break;
-              case "item":
-                state.phase = Phase.PLAYER_ITEM;
+                  break;
+                case "item":
+                  state.phase = Phase.PLAYER_ITEM;
 
-                await gates[Phase.PLAYER_ITEM].wait();
-                state.selectedUnit.hasAction = false;
-                break;
-              case "wait":
-                // console.log("inside wait");
-                state.selectedUnit.hasAction = false;
-                state.selectedUnit.hasMove = false;
-                break;
+                  await gates[Phase.PLAYER_ITEM].wait();
+                  state.selectedUnit.hasAction = false;
+                  break;
+                case "wait":
+                  // console.log("inside wait");
+                  state.selectedUnit.hasAction = false;
+                  state.selectedUnit.hasMove = false;
+                  break;
+              }
+            } catch (e) {
+              if (e === CANCEL) {
+                continue;
+              }
+              throw e;
             }
-          } catch (e) {
-            if (e === CANCEL) {
-              continue;
-            }
-            throw e;
           }
+        } catch (e) {
+          if (e === CANCEL) {
+            continue;
+          }
+          throw e;
         }
 
         // console.log("outside");

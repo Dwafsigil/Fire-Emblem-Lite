@@ -132,7 +132,7 @@ export function doAction(state, ui, action) {
 
       ui.boardEl.focus();
       gates[Phase.PLAYER_ACTION].open("move");
-      console.log("In Move");
+      // console.log("In Move");
       break;
     case "skill":
       if (state.selectedUnit.hasAction === false) return;

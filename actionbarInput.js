@@ -1,6 +1,8 @@
 // import { nextIndex, setActive } from "./uiControls.js";
 import { doAction } from "./animations.js";
 import { playSfx, btnClick } from "./audio.js";
+import { Phase } from "./state.js";
+import { gates } from "./script.js";
 
 export function activateActionbarInput(state, ui) {
   ui.actionBarEl.addEventListener("keydown", (e) => {
@@ -46,9 +48,24 @@ export function activateActionbarInput(state, ui) {
       return;
     }
 
+    if (e.code === "KeyX") {
+      if (state.phase === Phase.PLAYER_ACTION) {
+        console.log("Player Select Cancelled");
+        state.selectedUnit = null;
+        state.playerSelected = null;
+
+        active.classList.remove("buttonGlow");
+
+        ui.actionBarEl.classList.add("hidden");
+
+        ui.boardEl.focus();
+        gates[Phase.PLAYER_ACTION].cancel();
+      }
+    }
+
     actionButtons[next].focus();
 
-    console.log(actionButtons[next]);
+    // console.log(actionButtons[next]);
     document.activeElement.classList.add("buttonGlow");
   });
 }

@@ -16,7 +16,7 @@ export function showHoverAt(state, ui, r, c) {
     // t.classList.add("hover");
     t.classList.add("hover");
 
-    console.log(t);
+    // console.log(t);
   }
 }
 

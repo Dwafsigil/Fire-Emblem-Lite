@@ -9,10 +9,16 @@ import { getAvoidWithTerrain } from "./terrainInfo.js";
 export function showUnitInfo(state, ui) {
   // TURN INTO A FUNCTION LATER UPDATES UNIT STATS + POPULATE ITEM LIST
 
+  ui.unitNameContent.classList.remove("hidden");
+  ui.statList.classList.remove("hidden");
+
   ui.skillList.replaceChildren();
   ui.itemList.replaceChildren();
   if (state.playerSelected) {
     const unit = state.selectedUnit;
+
+    // show healthbar
+    healthBarUI(ui, state.selectedUnit);
 
     // show selected player inventory
     if (unit.inventory.length !== 0) {
@@ -54,6 +60,9 @@ export function showUnitInfo(state, ui) {
   ) {
     const hoveredUnit = unitAt(state.units, state.hover.row, state.hover.col);
 
+    // health bar
+    healthBarUI(ui, hoveredUnit);
+
     // inveotry
     if (hoveredUnit.inventory.length !== 0) {
       hoveredUnit.inventory.forEach((item, index) => {
@@ -84,23 +93,20 @@ export function showUnitInfo(state, ui) {
       });
     }
     showStats(state, ui, hoveredUnit);
+  } else {
+    ui.unitNameContent.classList.add("hidden");
+    ui.statList.classList.add("hidden");
   }
-
-  //       ui.statList.classList.remove("hidden");
-  //     } else {
-  //       ui.statList.classList.add("hidden");
-  //       // removes all children of an element
-
-  //     }
 }
 
 export function showStats(state, ui, unit) {
   ui.unitName.textContent = `${unit.name}`;
-  ui.unitHealthStat.textContent = `HP: ${unit.health}/${unit.maxHealth}`;
-  if (unit.unitType == "wizard") {
+  ui.unitClass.textContent = `${unit.unitType}`;
+  ui.unitHealthStat.textContent = `${unit.health}/${unit.maxHealth}`;
+  if (unit.unitType == "Wizard") {
     ui.unitAttackStat.textContent = `INT: ${unit.intelligence}`;
   }
-  if (unit.unitType == "knight") {
+  if (unit.unitType == "Knight") {
     ui.unitAttackStat.textContent = `STR: ${unit.strength}`;
   }
   ui.unitDefenseStat.textContent = `DEF: ${unit.defense}`;
@@ -108,6 +114,28 @@ export function showStats(state, ui, unit) {
   ui.unitHitStat.textContent = `HIT: ${unit.hitRate}`;
   ui.unitAvoidStat.textContent = `AVO: ${getAvoidWithTerrain(state, unit)} `;
   ui.unitCritStat.textContent = `CRIT: ${unit.critRate}`;
+}
+
+export function healthBarUI(ui, unit) {
+  const pct = Math.max(0, Math.min(100, (unit.health / unit.maxHealth) * 100));
+  let color;
+
+  // console.log(pct);
+
+  if (pct < 33) {
+    color = "red";
+    // console.log("red");
+  } else if (pct < 66) {
+    color = "yellow";
+    // console.log("yellow");
+  } else {
+    color = "#4ade80";
+    // console.log("green");
+  }
+
+  ui.healthBarFillUI.style.backgroundColor = `${color}`;
+
+  ui.healthBarFillUI.style.width = `${pct}%`;
 }
 
 export function removeUnitInfo(ui) {

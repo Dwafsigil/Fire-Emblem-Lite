@@ -201,10 +201,83 @@ button[button-disabled="true"]:focus {
 
 .health-bar-fill {
   height: 100%;
-  background-color: #4ade80; /* Green */
+  background-color: #4ade80;
 }
 
-.health-value {
+.unit-name-health {
+  position: absolute;
+  /* top: 13%; */
+  right: calc(100% + 8px);
+  width: clamp(150px, 6vw, 240px);
+  height: calc(18%);
+  font-size: 11px;
+
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #444;
+  padding: 12px;
+}
+
+/* .unit-name-health.hidden {
+  display: none;
+} */
+
+.unit-name {
+  position: absolute;
+  left: 8%;
+}
+
+.unit-class {
+  position: absolute;
+  left: 72%;
+}
+
+.unit-hp-text {
+  position: absolute;
+  top: 47%;
+  left: 15%;
+}
+
+.unit-health-stat {
+  position: absolute;
+  top: 70%;
+  left: 74%;
+}
+
+.health-container-ui {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  width: 80%;
+  height: 10%;
+}
+
+.health-background-ui {
+  width: 80%;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgb(255, 255, 255);
+
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.health-fill-ui {
+  height: 100%;
+  width: 100%;
+  background-color: #4ade80;
+  /* background-color: red; */
+}
+
+/* .health-container-ui.hidden {
+  display: none;
+} */
+
+.unit-name-content.hidden {
+  display: none;
+}
+
+/* .health-value {
   position: absolute;
   left: 60%;
   transform: translateX(-33%);
@@ -214,8 +287,8 @@ button[button-disabled="true"]:focus {
   letter-spacing: 1px;
   color: black;
   font-weight: bold;
-  font-family: Helvetica, Arial;
-}
+  font-family: Helvetica, Arial; */
+/* } */
 
 .current-phase {
   position: absolute;
@@ -1053,12 +1126,16 @@ button[button-disabled="true"]:focus {
   /* transform: scale(1.8); */
 }
 
+.unit-name-health li {
+  list-style: none;
+}
+
 .unit-stats {
   position: absolute;
-  top: -1px;
+  top: 19%;
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
-  height: calc(30% + 1px);
+  height: calc(24% + 1px);
   font-size: 11px;
 
   background: #000000;
@@ -1077,10 +1154,10 @@ button[button-disabled="true"]:focus {
 
 .skill-list {
   position: absolute;
-  top: calc(30% + 8px);
+  top: calc(44% + 2px);
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
-  height: 33%;
+  height: 27%;
 
   font-size: 10px;
 
@@ -1096,10 +1173,10 @@ button[button-disabled="true"]:focus {
 
 .item-list {
   position: absolute;
-  top: calc(65% + 8px);
+  top: calc(73% + 1px);
   right: calc(100% + 8px);
   width: clamp(150px, 6vw, 240px);
-  height: 33.2%;
+  height: 27%;
   /* font-size: 10px; */
 
   background: #000000;

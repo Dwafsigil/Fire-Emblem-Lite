@@ -50,6 +50,13 @@ export function createUI() {
     characterImage: document.querySelector(".character-image"),
     screen: document.querySelector(".content"),
     itemImage: document.querySelector(".item-image"),
+    unitNameHealth: document.querySelector(".unit-name-health"),
+    healthBarContainerUI: document.querySelector(".health-container-ui"),
+    healthBarBackgroundUI: document.querySelector(".health-background-ui"),
+    healthBarFillUI: document.querySelector(".health-fill-ui"),
+    unitNameContent: document.querySelector(".unit-name-content"),
+    unitClass: document.querySelector(".unit-class"),
+
     // descriptionBox: document.querySelector(".description-box"),
   };
 }

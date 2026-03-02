@@ -21,7 +21,7 @@ export function createInitialUnits() {
     new unitStats({
       playerId: 0,
       name: "Johnny",
-      unitType: "knight",
+      unitType: "Knight",
       variant: "knight_1",
       affiliation: 0,
       row: 2,
@@ -39,7 +39,7 @@ export function createInitialUnits() {
     new unitStats({
       playerId: 1,
       name: "Abram",
-      unitType: "wizard",
+      unitType: "Wizard",
       variant: "wizard_1",
       affiliation: 0,
       maxHealth: 20,
@@ -71,7 +71,7 @@ export function createInitialUnits() {
     new unitStats({
       playerId: 3,
       name: "Tyler",
-      unitType: "knight",
+      unitType: "Knight",
       variant: "knight_2",
       affiliation: 1,
       row: 7,

@@ -83,9 +83,9 @@ export class unitStats {
     this.updateHealthValue();
   }
 
-  updateHealthValue() {
-    this.healthValue.textContent = `${this.health}/${this.maxHealth}`;
-  }
+  // updateHealthValue() {
+  //   this.healthValue.textContent = `${this.health}/${this.maxHealth}`;
+  // }
 
   setHealthBar(el) {
     this.healthBarFill = el;
@@ -97,6 +97,22 @@ export class unitStats {
       0,
       Math.min(100, (this.health / this.maxHealth) * 100),
     );
+
+    let color;
+
+    if (pct < 33) {
+      color = "red";
+      // console.log("red");
+    } else if (pct < 66) {
+      color = "yellow";
+      // console.log("yellow");
+    } else {
+      color = "#4ade80";
+      // console.log("green");
+    }
+
+    this.healthBarFill.style.backgroundColor = `${color}`;
+
     this.healthBarFill.style.width = `${pct}%`;
   }
 
@@ -119,7 +135,8 @@ export class unitStats {
   takeDamage(damage) {
     this.health = Math.max(0, this.health - damage);
     this.updateHealthBar();
-    this.updateHealthValue();
+
+    // this.updateHealthValue();
   }
 
   playerWait() {
