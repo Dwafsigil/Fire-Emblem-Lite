@@ -10,5 +10,6 @@ export async function runGame(state, ui, gates) {
 
   await runBattle(state, ui, gates);
   ui.boardEl.focus();
+  ui.actionBarEl.classList.add("hidden");
   state.phase = Phase.GAME_OVER;
 }

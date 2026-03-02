@@ -1,5 +1,6 @@
 import { playAndRemove } from "./helpers.js";
 import { Phase } from "./state.js";
+import { showUnitInfo } from "./unitStatsUI.js";
 export const items = {
   potion: {
     id: "potion",
@@ -39,7 +40,7 @@ export function useItem(state, ui, gates, foundElement) {
     ) {
       state.selectedUnit.health = state.selectedUnit.maxHealth;
     }
-    state.selectedUnit.updateHealthValue(state.selectedUnit);
+    // state.selectedUnit.updateHealthValue(state.selectedUnit)
     state.selectedUnit.updateHealthBar();
     ui.unitHealthStat.textContent = `HP: ${state.selectedUnit.health}`;
     ui.itemList.removeChild(foundElement);
@@ -59,6 +60,7 @@ export function useItem(state, ui, gates, foundElement) {
     );
     state.selectedUnit.inventory.splice(index, 1);
   }
+  showUnitInfo(state, ui);
 
   ui.description.classList.add("hidden");
   gates[Phase.PLAYER_ITEM].open();
