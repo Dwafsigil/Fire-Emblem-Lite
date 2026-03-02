@@ -48,6 +48,11 @@ export function activateActionbarInput(state, ui) {
       return;
     }
 
+    actionButtons[next].focus();
+
+    // console.log(actionButtons[next]);
+    document.activeElement.classList.add("buttonGlow");
+
     if (e.code === "KeyX") {
       if (state.phase === Phase.PLAYER_ACTION) {
         console.log("Player Select Cancelled");
@@ -62,11 +67,6 @@ export function activateActionbarInput(state, ui) {
         gates[Phase.PLAYER_ACTION].cancel();
       }
     }
-
-    actionButtons[next].focus();
-
-    // console.log(actionButtons[next]);
-    document.activeElement.classList.add("buttonGlow");
   });
 }
 

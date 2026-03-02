@@ -60,8 +60,6 @@ runGame(state, ui, gates);
 
 // TODO Immediately:
 
-// Undo a move
-
 // Improve enemy ai
 // joseph wanted icons like arrowkeys and z keys to show what keys are available
 
