@@ -313,12 +313,17 @@ export function updateActionButtons(state, ui) {
       return skill.uses == 0;
     });
 
+    // console.log(state)
+
     if (a === "move") {
       setDisabled(btn, !state.selectedUnit.hasMove);
     } else if (a === "wait") {
       setDisabled(btn, "false");
     } else if (a === "item") {
       setDisabled(btn, "false");
+      if (state.selectedUnit.inventory.length === 0) {
+        setDisabled(btn, "true");
+      }
     } else if (a === "skill") {
       {
         if (noUseLeft || state.selectedUnit.hasAction === false) {

@@ -65,7 +65,7 @@ export class unitStats {
 
   get hitRate() {
     // fix
-    return this.skill * 2 + this.luck * 2;
+    return this.skill * 2.5 + this.luck * 2;
   }
 
   get avoidRate() {
