@@ -162,7 +162,7 @@ export function doAction(state, ui, action) {
 
       break;
     case "item":
-      if (state.selectedUnit.hasAction === false) return;
+      // if (state.selectedUnit.hasAction === false) return;
 
       // console.log("item running");
       if (state.selectedUnit.inventory.length === 0) break;

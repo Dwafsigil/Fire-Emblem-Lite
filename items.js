@@ -24,6 +24,25 @@ export const items = {
     left: 84,
     height: 12,
   },
+  heroSword: {
+    id: "heroSword",
+    name: "Hero Sword",
+    type: "weapon",
+    bonuses: {
+      strength: 10,
+      defense: 10,
+      resistance: 10,
+      skill: 10,
+      luck: 10,
+      speed: 10,
+      movement: 2,
+    },
+    description: "Artifact. Gifts the user the abilities of a demi-god.",
+    image: "assets/weapons/heroSword.png",
+    top: 84,
+    left: 84,
+    height: 12,
+  },
 };
 
 export function useItem(state, ui, gates, foundElement) {

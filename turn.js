@@ -74,6 +74,8 @@ export async function runBattle(state, ui, gates) {
           // }
 
           while (state.selectedUnit.hasAction || state.selectedUnit.hasMove) {
+            showUnitInfo(state, ui);
+
             if (await isBattleOver(state, ui)) break;
 
             ui.itemList.classList.remove("glow");
@@ -307,6 +309,8 @@ export function updateActionButtons(state, ui) {
     if (a === "move") {
       setDisabled(btn, !state.selectedUnit.hasMove);
     } else if (a === "wait") {
+      setDisabled(btn, "false");
+    } else if (a === "item") {
       setDisabled(btn, "false");
     } else {
       setDisabled(btn, !state.selectedUnit.hasAction);

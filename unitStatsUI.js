@@ -6,6 +6,7 @@ import { skills } from "./skills.js";
 
 import { unitAt } from "./unitQueries.js";
 import { getAvoidWithTerrain } from "./terrainInfo.js";
+import { setDisabled } from "./actionbarInput.js";
 export function showUnitInfo(state, ui) {
   // TURN INTO A FUNCTION LATER UPDATES UNIT STATS + POPULATE ITEM LIST
 
@@ -25,6 +26,16 @@ export function showUnitInfo(state, ui) {
       unit.inventory.forEach((item, index) => {
         const el = document.createElement("button");
         el.className = item;
+
+        console.log("inside selected player");
+
+        if (unit.hasAction === false) {
+          console.log(items[item.id].type);
+          console.log("selectedunit");
+          if (items[item.id].type === "consumable") {
+            setDisabled(el, "true");
+          }
+        }
 
         if (item.id === unit.equipped) {
           el.style.color = "blue";
@@ -63,11 +74,21 @@ export function showUnitInfo(state, ui) {
     // health bar
     healthBarUI(ui, hoveredUnit);
 
-    // inveotry
+    // inventory
     if (hoveredUnit.inventory.length !== 0) {
       hoveredUnit.inventory.forEach((item, index) => {
         const el = document.createElement("button");
         el.className = item;
+
+        console.log(item);
+        if (hoveredUnit.hasAction === false) {
+          console.log("hoveredunit");
+          console.log(state.selectedUnit);
+          console.log(items[item.id].type);
+          if (items[item.id].type === "consumable") {
+            setDisabled(el, "true");
+          }
+        }
 
         if (item.id === hoveredUnit.equipped) {
           el.style.color = "blue";
@@ -122,15 +143,37 @@ export function showStats(state, ui, unit) {
 
   // Hard coding
   if (unit.equipped) {
-    console.log(items[unit.equipped].bonuses);
-
     for (const key in items[unit.equipped].bonuses) {
       if (key === "strength") {
         ui.unitAttackStat.style.color = "#84eab3";
       }
+      if (key === "defense") {
+        ui.unitDefenseStat.style.color = "#84eab3";
+      }
+      if (key === "resistance") {
+        ui.unitResistanceStat.style.color = "#84eab3";
+      }
+      if (key === "skill") {
+        ui.unitSkillStat.style.color = "#84eab3";
+      }
+      if (key === "luck") {
+        ui.unitLuckStat.style.color = "#84eab3";
+      }
+      if (key === "speed") {
+        ui.unitSpeedStat.style.color = "#84eab3";
+      }
+      if (key === "movement") {
+        ui.unitMovementStat.style.color = "#84eab3";
+      }
     }
   } else {
     ui.unitAttackStat.style.removeProperty("color");
+    ui.unitDefenseStat.style.removeProperty("color");
+    ui.unitResistanceStat.style.removeProperty("color");
+    ui.unitSkillStat.style.removeProperty("color");
+    ui.unitLuckStat.style.removeProperty("color");
+    ui.unitSpeedStat.style.removeProperty("color");
+    ui.unitMovementStat.style.removeProperty("color");
   }
 }
 

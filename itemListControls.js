@@ -40,21 +40,36 @@ export function itemListControls(ui, state, gates) {
         return btn.dataset.index === String(current);
       });
 
-      // Handles equipping weapon / using item
+      const item = foundElement.dataset.id;
+
+      console.log(foundElement);
+      if (state.selectedUnit.hasAction === false) {
+        if (items[item].type === "consumable") {
+          return;
+        }
+      }
+
       if (items[foundElement.dataset.id].type === "weapon") {
+        // Handles equipping weapon / using item
         if (
           state.selectedUnit.equipped &&
           state.selectedUnit.equipped === foundElement.dataset.id
         ) {
           // remove item
           foundElement.style.color = "black";
+          // remove stats
+          for (const [stat, value] of Object.entries(
+            items[state.selectedUnit.equipped].bonuses,
+          )) {
+            state.selectedUnit[stat] -= value;
+          }
+
           state.selectedUnit.equipped = null;
-          // hard coded but add stats according to item
-          state.selectedUnit.strength -= 2;
+
           showStats(state, ui, state.selectedUnit);
           // console.log("unequip");
           const el = document.createElement("li");
-          el.textContent = `${state.selectedUnit.name} unequipped ${items[foundElement.dataset.id].name}`;
+          // el.textContent = `${state.selectedUnit.name} unequipped ${items[foundElement.dataset.id].name}`;
           ui.combatLog.appendChild(el);
         } else {
           // equip item
@@ -62,10 +77,19 @@ export function itemListControls(ui, state, gates) {
           state.selectedUnit.equipped = foundElement.dataset.id;
           // hard coded but remove stats according to item
 
-          state.selectedUnit.strength += 2;
+          // Iterable way of applying buffs to unit stats
+          for (const [stat, value] of Object.entries(
+            items[state.selectedUnit.equipped].bonuses,
+          )) {
+            console.log(stat, value);
+            console.log("done");
+            state.selectedUnit[stat] += value;
+          }
+
+          // state.selectedUnit.strength += 2;
           showStats(state, ui, state.selectedUnit);
           const el = document.createElement("li");
-          el.textContent = `${state.selectedUnit.name} equipped ${items[foundElement.dataset.id].name}`;
+          // el.textContent = `${state.selectedUnit.name} equipped ${items[foundElement.dataset.id].name}`;
           ui.combatLog.appendChild(el);
 
           // console.log("equip");
