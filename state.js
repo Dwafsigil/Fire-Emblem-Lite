@@ -124,6 +124,7 @@ export function createInitialUnits() {
       unitType: "Wizard",
       variant: "wizard_2",
       affiliation: 1,
+      intelligence: 15,
       row: 8,
       col: 2,
       skill: 20,
