@@ -10,7 +10,7 @@ export const critHit = new Audio("sounds/sword_crit.mp3");
 export const missHit = new Audio("sounds/sword_miss.mp3");
 export const menuBGM = new Audio("sounds/menu_bgm.mp3");
 
-menuBGM.volume = 0.06;
+menuBGM.volume = 0.02;
 menuBGM.loop = true;
 
 bgm.volume = 0.06;

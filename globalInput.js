@@ -1,6 +1,7 @@
 import { runGame } from "./runGame.js";
 import { bgm } from "./audio.js";
 import { Phase } from "./state.js";
+import { btnClick, playSfx } from "./audio.js";
 import { renderMenu } from "./menu.js";
 
 export function activateGlobalInput(state, ui, gates) {
@@ -24,23 +25,31 @@ export function activateGlobalInput(state, ui, gates) {
       switch (btn.dataset.action) {
         case "start": {
           // console.log("start");
+          playSfx(btnClick, 0.5, 0);
+
           ui.startCover.classList.add("hidden");
           gates[Phase.MENU].open();
           break;
         }
         case "controls": {
+          playSfx(btnClick, 0.5, 0);
+
           // console.log("controls");
           state.currentMenu = "controls";
           renderMenu(state, ui);
           break;
         }
         case "credits": {
+          playSfx(btnClick, 0.5, 0);
+
           // console.log("credits");
           state.currentMenu = "credits";
           renderMenu(state, ui);
           break;
         }
         case "back": {
+          playSfx(btnClick, 0.5, 0);
+
           // console.log("back");
           state.currentMenu = "main";
           renderMenu(state, ui);
