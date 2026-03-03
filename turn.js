@@ -49,7 +49,7 @@ export async function runBattle(state, ui, gates) {
       // ui.combatLog.appendChild(space2);
 
       while (hasPlayableUnits(state)) {
-        ui.turnText.textContent = `Turn: ${state.turnCounter}`;
+        // ui.turnText.textContent = `Turn: ${state.turnCounter}`;
         // ui.turnText.textContent = `Turn: ${state.turnCounter}`;
 
         if (await isBattleOver(state, ui)) break;

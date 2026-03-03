@@ -59,9 +59,8 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// Make it where specific items are disabled
+// Add Archer Class
 
 // Optimize and Organize Code Logic
 
 // BUG LIST:
-// Mouse clicking destroys the controls of the game

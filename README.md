@@ -1,8 +1,6 @@
 # Fire Emblem Lite
 
-A browser-based tactical RPG inspired by Fire Emblem, featuring grid-based movement, sprite animations, and turn-based combat - all built from JavaScript, HTML, and CSS.
-
-# Demo
+A browser-based tactical RPG inspired by Fire Emblem, featuring grid-based movement and turn-based combat - entirely built from JavaScript, HTML, and CSS.
 
 ## Snapshot
 
@@ -14,39 +12,27 @@ https://fire-emblem-lite.netlify.app/
 
 # Features
 
-- Grid-based movement with BFS pathfinding.
-- Turn-based combat with player and enemy phases.
-- Enemy AI targets the closest player unit (BFS and Manhattan distance)
-- Selectable units highlight move range.
-- Sprite animations (attack, move, idle, hurt, death)
-- Single map with terrain
-
-# How to Play
-
-1. Use the arrow keys to traverse the board and the space bar to select a unit. "X" will allow the player to revert their input.
-2. With a unit selected, move the unit to a highlighted tile.
-3. Choose a unit action (attack or wait)
-4. If an enemy unit is adjacent, the friendly unit will attack the enemy unit via the attack action.
-5. Once all friendly units act, the player phase will end, beginning the enemy phase.
+- Turn based combat and grid based movement.
+- The use of skills, items, and equipment.
+- Fully designed enemy AI
+- Sprite animation, sound effects, and background music
+- Terrain with stat effects
+- Multiple win conditions
 
 # Future Plans
 
 - More unit variety with animations (Wizard and Archer).
 - More terrain types, and allow some to be traversable with special effects.
-- More combat-defining stats such as accuracy, evasion, etc.
-- The use of items and abilities.
 - Weapon effectiveness triangle.
-- Battle log
 - Unique special units that have their own stats and abilities.
 - Multiple objectives, such as capturing a point or defeating enemies within a certain number of turns.
 - Bigger map
 - Enemy reinforcements
-- Fix clunky movement animations
 - Along with a ton more improvements!
 
 # Credits
 
-- Inspired by _Fire Emblem_ (Nintendo/Intelligent Systems)
+- Inspired by _Fire Emblem_ (Nintendo)
 - Background Music: Decisive Battle - Azali
 
 # Personal Note
