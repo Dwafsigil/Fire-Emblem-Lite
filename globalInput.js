@@ -56,6 +56,7 @@ export function activateGlobalInput(state, ui, gates) {
     }
   });
 
+  let bgmMuted = false;
   document.addEventListener("keydown", (e) => {
     // console.log("toggle");
 

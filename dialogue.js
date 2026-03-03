@@ -1,4 +1,6 @@
+import { btnClick } from "./audio.js";
 import { Phase } from "./state.js";
+import { playSfx } from "./audio.js";
 
 export const dialogue = [
   {
@@ -68,6 +70,8 @@ export function activateDialogueControls(ui, gates) {
 
     if (e.code === "KeyZ" && dialogueActive) {
       currentLine++;
+
+      playSfx(btnClick, 0.5, 0);
 
       if (currentLine === dialogue.length) {
         ui.speakerName.classList.add("hidden");

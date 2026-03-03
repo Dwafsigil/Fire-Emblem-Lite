@@ -4,6 +4,7 @@ import { attackHighlight } from "./combatInput.js";
 import { skills } from "./skills.js";
 // import { openActionBar } from "./uiControls.js";
 import { tileAt } from "./board.js";
+import { playSfx, btnClick } from "./audio.js";
 
 export function skillListControls(ui, state, gates) {
   ui.skillList.addEventListener("keydown", (e) => {
@@ -17,6 +18,8 @@ export function skillListControls(ui, state, gates) {
     if (state.phase === Phase.PLAYER_SKILL) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
+        playSfx(btnClick, 0.5, 0);
+
         next = (current + 1) % skillButtons.length;
 
         active = document.activeElement;
@@ -24,6 +27,7 @@ export function skillListControls(ui, state, gates) {
 
       if (e.key === "ArrowUp") {
         e.preventDefault();
+        playSfx(btnClick, 0.5, 0);
 
         next = (current - 1 + skillButtons.length) % skillButtons.length;
       }
@@ -31,6 +35,7 @@ export function skillListControls(ui, state, gates) {
       // Confirm ability with Z
       if (e.key === "z") {
         e.preventDefault();
+        playSfx(btnClick, 0.5, 0);
 
         const skillButtons = [...ui.skillList.querySelectorAll("button")];
 
@@ -75,6 +80,8 @@ export function skillListControls(ui, state, gates) {
         !state.attackOn &&
         e.key === "x"
       ) {
+        playSfx(btnClick, 0.5, 0);
+
         // console.log("Inside");
         // openActionBar(ui.actionBarEl);
         const firstButton = ui.actionBarEl.querySelector("button");

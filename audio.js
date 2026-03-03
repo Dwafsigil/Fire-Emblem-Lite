@@ -8,9 +8,23 @@ export const hurtGrunt = new Audio("sounds/hurt_sound.wav");
 export const deadGrunt = new Audio("sounds/dead_sound.wav");
 export const critHit = new Audio("sounds/sword_crit.mp3");
 export const missHit = new Audio("sounds/sword_miss.mp3");
+export const menuBGM = new Audio("sounds/menu_bgm.mp3");
+
+menuBGM.volume = 0.06;
+menuBGM.loop = true;
 
 bgm.volume = 0.06;
 bgm.loop = true;
+
+export function stopMusic(music) {
+  music.pause;
+}
+
+export function playMenu(delay = 0) {
+  setTimeout(() => {
+    menuBGM.play().catch(() => {});
+  }, delay);
+}
 
 export function startMusic(delay = 0) {
   setTimeout(() => {

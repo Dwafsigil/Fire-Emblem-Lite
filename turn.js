@@ -123,8 +123,8 @@ export async function runBattle(state, ui, gates) {
                   break;
                 case "wait":
                   // console.log("inside wait");
-                  state.selectedUnit.hasAction = false;
-                  state.selectedUnit.hasMove = false;
+                  // state.selectedUnit.hasAction = false;
+                  // state.selectedUnit.hasMove = false;
                   state.selectedUnit.hasWait = false;
 
                   break;

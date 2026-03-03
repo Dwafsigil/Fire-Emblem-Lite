@@ -2,6 +2,8 @@ import { useItem } from "./items.js";
 import { Phase } from "./state.js";
 import { items } from "./items.js";
 import { showUnitInfo, showStats } from "./unitStatsUI.js";
+import { playSfx } from "./audio.js";
+import { btnClick } from "./audio.js";
 // import { openActionBar } from "./uiControls.js";
 
 export function itemListControls(ui, state, gates) {
@@ -23,12 +25,14 @@ export function itemListControls(ui, state, gates) {
     if (e.key === "ArrowDown") {
       e.preventDefault();
       next = (current + 1) % itemButtons.length;
+      playSfx(btnClick, 0.5, 0);
     }
 
     if (e.key === "ArrowUp") {
       e.preventDefault();
 
       next = (current - 1 + itemButtons.length) % itemButtons.length;
+      playSfx(btnClick, 0.5, 0);
     }
 
     if (e.key === "z") {
@@ -55,6 +59,8 @@ export function itemListControls(ui, state, gates) {
           state.selectedUnit.equipped &&
           state.selectedUnit.equipped === foundElement.dataset.id
         ) {
+          playSfx(btnClick, 0.5, 0);
+
           // remove item
           foundElement.style.color = "black";
           // remove stats
@@ -73,6 +79,8 @@ export function itemListControls(ui, state, gates) {
           ui.combatLog.appendChild(el);
         } else {
           // equip item
+          playSfx(btnClick, 0.5, 0);
+
           foundElement.style.color = "blue";
           state.selectedUnit.equipped = foundElement.dataset.id;
           // hard coded but remove stats according to item
@@ -97,6 +105,8 @@ export function itemListControls(ui, state, gates) {
         }
       } else {
         if (state.selectedUnit.hasWait) {
+          playSfx(btnClick, 0.5, 0);
+
           const firstButton = ui.actionBarEl.querySelector("button");
           firstButton?.focus();
           firstButton.classList.add("buttonGlow");
@@ -113,6 +123,8 @@ export function itemListControls(ui, state, gates) {
     if (state.phase === Phase.PLAYER_ITEM && e.key === "x") {
       // console.log("Inside");
       // openActionBar(ui.actionBarEl);
+      playSfx(btnClick, 0.5, 0);
+
       const firstButton = ui.actionBarEl.querySelector("button");
       firstButton?.focus();
       firstButton.classList.add("buttonGlow");
@@ -136,7 +148,6 @@ export function itemListControls(ui, state, gates) {
     ui.itemImage.style.setProperty(`--top`, `${items[currentID].top}%`);
     ui.itemImage.style.setProperty(`--left`, `${items[currentID].left}%`);
     ui.itemImage.style.setProperty(`--height`, `${items[currentID].height}%`);
-
     // ui.characterImage.src = `${items[currentID].image}`;
     // }
   });

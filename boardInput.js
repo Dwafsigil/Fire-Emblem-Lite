@@ -25,6 +25,7 @@ import { removeUnitInfo, showStats } from "./unitStatsUI.js";
 import { showTerrainInfo } from "./terrainInfo.js";
 import { tileAt } from "./board.js";
 import { showUnitInfo } from "./unitStatsUI.js";
+import { hoverSound } from "./audio.js";
 
 export function activateBoardInput(state, ui, gates) {
   ui.boardEl.addEventListener("keydown", (e) => {
@@ -79,6 +80,8 @@ export function activateBoardInput(state, ui, gates) {
       }
       // cancel ATTACK in targeting
       if (state.phase === Phase.PLAYER_ATTACK) {
+        playSfx(btnClick, 0.5, 0);
+
         // console.log("attack cancel");
         removeAttackHighlight(state, ui);
         removeConfirmHiglight(state, ui);
@@ -116,6 +119,8 @@ export function activateBoardInput(state, ui, gates) {
 
       // cancel skill targeting
       if (state.phase === Phase.PLAYER_SKILL && state.attackOn) {
+        playSfx(btnClick, 0.5, 0);
+
         let active = null;
         let currentID = null;
         let description = null;
@@ -311,6 +316,7 @@ export function activateBoardInput(state, ui, gates) {
                 u[1] === state.attackHover.col,
             )
           ) {
+            playSfx(hoverSound, 0.2, 0);
             tileAt(
               ui.boardEl,
               state.attackHover.row,
@@ -329,6 +335,7 @@ export function activateBoardInput(state, ui, gates) {
 
           break;
         case "ArrowDown":
+          playSfx(hoverSound, 0.2, 0);
           if (
             state.attackTile.some(
               (u) =>
@@ -353,6 +360,7 @@ export function activateBoardInput(state, ui, gates) {
 
           break;
         case "ArrowRight":
+          playSfx(hoverSound, 0.2, 0);
           if (
             state.attackTile.some(
               (u) =>
@@ -395,6 +403,7 @@ export function activateBoardInput(state, ui, gates) {
           // );
           break;
         case "ArrowLeft":
+          playSfx(hoverSound, 0.2, 0);
           if (
             state.attackTile.some(
               (u) =>
@@ -437,7 +446,7 @@ export function activateBoardInput(state, ui, gates) {
       // console.log(
       //   tileAt(ui.boardEl, state.attackHover.row, state.attackHover.col),
       // );
-
+      playSfx(hoverSound, 0.2, 0);
       const type = attack(
         state.selectedUnit,
         state.receivingUnit,
