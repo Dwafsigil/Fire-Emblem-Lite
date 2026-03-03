@@ -134,6 +134,7 @@ export function activateBoardInput(state, ui, gates) {
         state.isTargeting = false;
         state.unitHighlighted = false;
         state.receivingUnit = null;
+        state.useSkill = null;
 
         const t = tileAt(
           ui.boardEl,
@@ -246,7 +247,7 @@ export function activateBoardInput(state, ui, gates) {
 
         // openActionBar(ui.actionBarEl);
 
-        if (state.selectedUnit.hasAction) {
+        if (state.selectedUnit.hasWait) {
           const firstButton = ui.actionBarEl.querySelector("button");
 
           firstButton?.focus();
@@ -490,7 +491,7 @@ export function activateBoardInput(state, ui, gates) {
         gates[Phase.PLAYER_ATTACK].open();
       }
 
-      if (state.selectedUnit.hasMove) {
+      if (state.selectedUnit.hasWait) {
         const firstButton = ui.actionBarEl.querySelector("button");
         firstButton?.focus();
         firstButton.classList.add("buttonGlow");

@@ -73,7 +73,7 @@ export async function runBattle(state, ui, gates) {
           //   setDisabled(ui.actionButtons.attack, true);
           // }
 
-          while (state.selectedUnit.hasAction || state.selectedUnit.hasMove) {
+          while (state.selectedUnit.hasWait === true) {
             showUnitInfo(state, ui);
 
             if (await isBattleOver(state, ui)) break;
@@ -125,6 +125,8 @@ export async function runBattle(state, ui, gates) {
                   // console.log("inside wait");
                   state.selectedUnit.hasAction = false;
                   state.selectedUnit.hasMove = false;
+                  state.selectedUnit.hasWait = false;
+
                   break;
               }
             } catch (e) {
@@ -150,7 +152,7 @@ export async function runBattle(state, ui, gates) {
 
         // updateObstacle(state);
         console.log("After Unit Action");
-        if (!state.selectedUnit.hasMove && !state.selectedUnit.hasAction) {
+        if (!state.selectedUnit.hasWait) {
           removePlayable(
             state.playerTurn,
             state.currentUnitsQueue,
@@ -209,6 +211,7 @@ export function initPlayerTurn(state) {
   state.currentUnitsQueue.forEach((unit) => {
     unit.hasMove = true;
     unit.hasAction = true;
+    unit.hasWait = true;
   });
 }
 
@@ -306,12 +309,22 @@ export function updateActionButtons(state, ui) {
   ui.actionBarEl.querySelectorAll("button").forEach((btn) => {
     const a = btn.dataset.action;
 
+    const noUseLeft = state.selectedUnit.skills.every((skill) => {
+      return skill.uses == 0;
+    });
+
     if (a === "move") {
       setDisabled(btn, !state.selectedUnit.hasMove);
     } else if (a === "wait") {
       setDisabled(btn, "false");
     } else if (a === "item") {
       setDisabled(btn, "false");
+    } else if (a === "skill") {
+      {
+        if (noUseLeft || state.selectedUnit.hasAction === false) {
+          setDisabled(btn, true);
+        }
+      }
     } else {
       setDisabled(btn, !state.selectedUnit.hasAction);
     }

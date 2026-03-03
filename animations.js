@@ -144,7 +144,8 @@ export function doAction(state, ui, action) {
         return skill.uses == 0;
       });
 
-      if (noUseLeft) break;
+      if (noUseLeft) return;
+
       const firstSkill = ui.skillList.querySelector("button");
       firstSkill?.focus();
 

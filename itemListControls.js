@@ -96,7 +96,7 @@ export function itemListControls(ui, state, gates) {
           // console.log(state.selectedUnit.equipped);
         }
       } else {
-        if (state.selectedUnit.hasMove) {
+        if (state.selectedUnit.hasWait) {
           const firstButton = ui.actionBarEl.querySelector("button");
           firstButton?.focus();
           firstButton.classList.add("buttonGlow");

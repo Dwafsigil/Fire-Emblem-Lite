@@ -33,7 +33,7 @@ export function createInitialUnits() {
       skill: 20,
       equipped: null,
       inventory: [{ id: "potion" }, { id: "potion" }, { id: "heroSword" }],
-      skills: [{ id: "empoweredStrike", uses: 3 }],
+      skills: [{ id: "empoweredStrike", uses: 0 }],
       // intelligence: 10,
     }),
     new unitStats({

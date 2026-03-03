@@ -28,6 +28,7 @@ export class unitStats {
     range = 1,
     hasMove = true,
     hasAction = true,
+    hasWait = true,
   }) {
     this.playerId = playerId;
     this.name = name;
@@ -52,6 +53,7 @@ export class unitStats {
     this.range = range;
     this.hasMove = hasMove;
     this.hasAction = hasAction;
+    this.hasWait = hasWait;
 
     if (affiliation !== 0 && affiliation !== 1) {
       throw new Error("Affiliation Value Error");
