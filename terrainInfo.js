@@ -16,7 +16,7 @@ export function showTerrainInfo(state, ui) {
     }
   }
 
-  console.log(terrain);
+  // console.log(terrain);
 
   switch (terrain) {
     case "rock":

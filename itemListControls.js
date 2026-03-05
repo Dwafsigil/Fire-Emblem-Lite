@@ -46,7 +46,7 @@ export function itemListControls(ui, state, gates) {
 
       const item = foundElement.dataset.id;
 
-      console.log(foundElement);
+      // console.log(foundElement);
       if (state.selectedUnit.hasAction === false) {
         if (items[item].type === "consumable") {
           return;
@@ -62,7 +62,12 @@ export function itemListControls(ui, state, gates) {
           playSfx(btnClick, 0.5, 0);
 
           // remove item
-          foundElement.style.color = "black";
+          // foundElement.style.color = "black";
+
+          // Equip indicator
+          const equipIndicator = foundElement.querySelector(".equip-indicator");
+          foundElement.removeChild(equipIndicator);
+
           // remove stats
           for (const [stat, value] of Object.entries(
             items[state.selectedUnit.equipped].bonuses,
@@ -77,11 +82,12 @@ export function itemListControls(ui, state, gates) {
           const el = document.createElement("li");
           // el.textContent = `${state.selectedUnit.name} unequipped ${items[foundElement.dataset.id].name}`;
           ui.combatLog.appendChild(el);
+          // showUnitInfo(state, ui);
         } else {
           // equip item
           playSfx(btnClick, 0.5, 0);
 
-          foundElement.style.color = "blue";
+          // foundElement.style.color = "blue";
           state.selectedUnit.equipped = foundElement.dataset.id;
           // hard coded but remove stats according to item
 
@@ -89,16 +95,26 @@ export function itemListControls(ui, state, gates) {
           for (const [stat, value] of Object.entries(
             items[state.selectedUnit.equipped].bonuses,
           )) {
-            console.log(stat, value);
-            console.log("done");
+            // console.log(stat, value);
+            // console.log("done");
             state.selectedUnit[stat] += value;
           }
 
+          // Equip Indicator
+          const equipIndicator = document.createElement("span");
+
+          // el.style.color = "blue";
+          equipIndicator.classList.add("equip-indicator");
+
+          equipIndicator.textContent = "[E]";
+
+          foundElement.appendChild(equipIndicator);
+
           // state.selectedUnit.strength += 2;
           showStats(state, ui, state.selectedUnit);
-          const el = document.createElement("li");
+          // const el = document.createElement("li");
           // el.textContent = `${state.selectedUnit.name} equipped ${items[foundElement.dataset.id].name}`;
-          ui.combatLog.appendChild(el);
+          // ui.combatLog.appendChild(el);
 
           // console.log("equip");
           // console.log(state.selectedUnit.equipped);

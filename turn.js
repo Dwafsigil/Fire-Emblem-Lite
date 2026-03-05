@@ -58,11 +58,11 @@ export async function runBattle(state, ui, gates) {
         showUnitInfo(state, ui);
 
         // marker
-        console.log("Player Select");
+        // console.log("Player Select");
 
         // ui.actionBarEl.classList.add("hidden");
         // ui.boardEl.focus();
-        console.log(state.currentUnitsQueue);
+        // console.log(state.currentUnitsQueue);
 
         enableActionButtons(ui);
         await gates[Phase.PLAYER_SELECT].wait();
@@ -85,7 +85,7 @@ export async function runBattle(state, ui, gates) {
             state.phase = Phase.PLAYER_ACTION;
             updateActionButtons(state, ui);
 
-            console.log("Player Action");
+            // console.log("Player Action");
 
             const actionType = await gates[Phase.PLAYER_ACTION].wait();
 
@@ -151,14 +151,14 @@ export async function runBattle(state, ui, gates) {
         // if the unit completely has no more actions/move
 
         // updateObstacle(state);
-        console.log("After Unit Action");
+        // console.log("After Unit Action");
         if (!state.selectedUnit.hasWait) {
           removePlayable(
             state.playerTurn,
             state.currentUnitsQueue,
             state.selectedUnit,
           );
-          console.log("After Removing Unit");
+          // console.log("After Removing Unit");
           ui.actionBarEl.classList.add("hidden");
           ui.boardEl.focus();
 

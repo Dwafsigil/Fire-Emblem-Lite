@@ -25,25 +25,39 @@ export function showUnitInfo(state, ui) {
     if (unit.inventory.length !== 0) {
       unit.inventory.forEach((item, index) => {
         const el = document.createElement("button");
-        el.className = item;
+        const itemText = document.createElement("span");
+        itemText.className = "item-text";
 
-        console.log("inside selected player");
+        // el.className = item;
 
         if (unit.hasAction === false) {
-          console.log(items[item.id].type);
-          console.log("selectedunit");
           if (items[item.id].type === "consumable") {
             setDisabled(el, "true");
           }
         }
 
+        itemText.textContent = items[item.id].name;
+
+        el.appendChild(itemText);
+
+        // if it's the item that's equipped
         if (item.id === unit.equipped) {
-          el.style.color = "blue";
+          const equipIndicator = document.createElement("span");
+          // el.style.color = "blue";
+          equipIndicator.className = "equip-indicator";
+          equipIndicator.textContent = "[E]";
+          console.log(el);
+
+          el.appendChild(equipIndicator);
         }
 
         el.dataset.index = index;
         el.dataset.id = item.id;
-        el.textContent = items[item.id].name;
+        itemText.textContent = items[item.id].name;
+
+        // el.appendChild(itemText);
+
+        // el.textContent = items[item.id].name;
         ui.itemList.appendChild(el);
       });
     }
@@ -56,7 +70,20 @@ export function showUnitInfo(state, ui) {
         el.className = skill.id;
         el.dataset.index = index;
         el.dataset.id = skill.id;
-        el.textContent = `${skills[skill.id].name} ${skill.uses}/${skills[skill.id].uses}`;
+
+        const skillName = document.createElement("span");
+        skillName.className = "skill-name";
+
+        const skillUses = document.createElement("span");
+        skillUses.className = "skill-uses";
+
+        skillName.textContent = `${skills[skill.id].name}`;
+        skillUses.textContent = ` (${skill.uses}/${skills[skill.id].uses})`;
+
+        // el.textContent = `${skills[skill.id].name} ${skill.uses}/${skills[skill.id].uses}`;
+        el.appendChild(skillName);
+        el.appendChild(skillUses);
+
         ui.skillList.appendChild(el);
       });
     }
@@ -79,24 +106,35 @@ export function showUnitInfo(state, ui) {
       hoveredUnit.inventory.forEach((item, index) => {
         const el = document.createElement("button");
         el.className = item;
+        const itemText = document.createElement("span");
+        itemText.className = "item-text";
 
-        console.log(item);
+        // console.log(item);
         if (hoveredUnit.hasAction === false) {
-          console.log("hoveredunit");
-          console.log(state.selectedUnit);
-          console.log(items[item.id].type);
+          // console.log("hoveredunit");
+          // console.log(state.selectedUnit);
+          // console.log(items[item.id].type);
           if (items[item.id].type === "consumable") {
             setDisabled(el, "true");
           }
         }
 
+        itemText.textContent = items[item.id].name;
+        el.appendChild(itemText);
+
         if (item.id === hoveredUnit.equipped) {
-          el.style.color = "blue";
+          const equipIndicator = document.createElement("span");
+          // el.style.color = "blue";
+          equipIndicator.className = "equip-indicator";
+          equipIndicator.textContent = "[E]";
+          console.log(el);
+          el.appendChild(equipIndicator);
         }
 
         el.dataset.index = index;
         el.dataset.id = item.id;
-        el.textContent = items[item.id].name;
+
+        // el.textContent = items[item.id].name;
         ui.itemList.appendChild(el);
       });
     }
@@ -109,7 +147,21 @@ export function showUnitInfo(state, ui) {
         el.className = skill.id;
         el.dataset.index = index;
         el.dataset.id = skill.id;
-        el.textContent = `${skills[skill.id].name} ${skill.uses}/${skills[skill.id].uses}`;
+
+        // splitting
+        const skillName = document.createElement("span");
+        skillName.className = "skill-name";
+
+        const skillUses = document.createElement("span");
+        skillUses.className = "skill-uses";
+
+        skillName.textContent = `${skills[skill.id].name}`;
+        skillUses.textContent = `(${skill.uses}/${skills[skill.id].uses})`;
+
+        // el.textContent = `${skills[skill.id].name} ${skill.uses}/${skills[skill.id].uses}`;
+        el.appendChild(skillName);
+        el.appendChild(skillUses);
+
         ui.skillList.appendChild(el);
       });
     }

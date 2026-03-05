@@ -1179,12 +1179,33 @@ button[button-disabled="true"]:focus {
   background: #000000;
   color: #ffffff;
   border: 2px solid #444;
-  padding: 12px;
+  padding: 10px;
+  margin-bottom: 2px;
+
+  /* align-items: left; */
 }
 
 .skill-list button {
-  font-size: 11px;
+  /* font-size: 11px; */
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  /* padding: 10px; */
+  /* text-align: left; */
+  /* align-items: left; */
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+.skill-list .skill-name {
+  font-size: 11px;
+}
+
+.skill-list .skill-uses {
+  font-size: 9px;
+  font-weight: bold;
+  /* padding-top: 1px; */
+  padding-top: 1.5px;
 }
 
 .item-list {
@@ -1202,8 +1223,30 @@ button[button-disabled="true"]:focus {
 }
 
 .item-list button {
-  font-size: 11px;
+  /* font-size: 11px; */
   width: 100%;
+  display: flex;
+  margin-bottom: 2px;
+  justify-content: space-between;
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+.item-list .item-text {
+  font-size: 11px;
+  /* margin-left: auto; */
+  /* width: 100%; */
+  /* align-items: left; */
+}
+
+.item-list .equip-indicator {
+  font-size: 9px;
+  /* color: rgb(0, 0, 0); */
+  font-weight: bold;
+  /* margin-left: auto; */
+  padding-top: 1.3px;
+
+  /* width: 100%; */
   /* align-items: left; */
 }
 

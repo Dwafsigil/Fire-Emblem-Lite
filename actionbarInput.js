@@ -57,7 +57,7 @@ export function activateActionbarInput(state, ui) {
       if (state.phase === Phase.PLAYER_ACTION) {
         playSfx(btnClick, 0.5, 0);
 
-        console.log("Player Select Cancelled");
+        // console.log("Player Select Cancelled");
         state.selectedUnit = null;
         state.playerSelected = null;
 
