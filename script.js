@@ -59,6 +59,9 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
+// Better equip indicator
+// Add Seize button
+// Add Wizard Sound Effects
 // Add Archer Class
 
 // Optimize and Organize Code Logic

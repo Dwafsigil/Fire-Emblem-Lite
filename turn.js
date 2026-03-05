@@ -25,7 +25,7 @@ export async function runBattle(state, ui, gates) {
   showCondition(ui);
   // dialogue
   state.phase = Phase.DIALOGUE;
-  initDialogue(state, ui);
+  initDialogue(ui);
 
   await gates[Phase.DIALOGUE].wait();
   // state.phase = Phase.PLAYER_SELECT;

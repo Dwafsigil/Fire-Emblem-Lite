@@ -9,6 +9,7 @@ export const deadGrunt = new Audio("sounds/dead_sound.wav");
 export const critHit = new Audio("sounds/sword_crit.mp3");
 export const missHit = new Audio("sounds/sword_miss.mp3");
 export const menuBGM = new Audio("sounds/menu_bgm.mp3");
+export const textBlip = new Audio("sounds/text_blip4.mp3");
 
 menuBGM.volume = 0.02;
 menuBGM.loop = true;
