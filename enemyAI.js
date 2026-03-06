@@ -2,7 +2,7 @@
 
 import { inBounds } from "./board.js";
 import { ifObstacle } from "./movement.js";
-import { isOccupied } from "./unitQueries.js";
+import { checkUnitAdjacent, isOccupied } from "./unitQueries.js";
 import { checkAdjacent } from "./unitQueries.js";
 import { delay } from "./turn.js";
 import { runAnimation } from "./animations.js";
@@ -35,13 +35,14 @@ export async function runEnemyTurn(state, ui) {
       state.obstacles,
     );
 
-    if (checkAdjacent(state, u)) {
+    if (checkUnitAdjacent(u, state.closestFriendly)) {
       enemyAttack(state, ui, u, state.closestFriendly);
       healthBarUI(ui, state.closestFriendly);
       // if (state.closestFriendly.checkDead()) removeDead(state, ui);
     } else {
+      // fix here
       await enemyMove(state, ui, u);
-      if (checkAdjacent(state, u)) {
+      if (checkUnitAdjacent(u, state.closestFriendly)) {
         enemyAttack(state, ui, u, state.closestFriendly);
         healthBarUI(ui, state.closestFriendly);
 

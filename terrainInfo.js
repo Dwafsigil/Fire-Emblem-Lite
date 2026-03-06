@@ -49,7 +49,6 @@ export function terrainBonus(state, r, c) {
 }
 
 export function getAvoidWithTerrain(state, unit) {
-  // console.log(unit.avoidRate);
   const unitAvoid = unit.avoidRate;
 
   const bonus = terrainBonus(state, unit.row, unit.col);
