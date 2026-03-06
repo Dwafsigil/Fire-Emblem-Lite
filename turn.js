@@ -25,7 +25,7 @@ export async function runBattle(state, ui, gates) {
   showCondition(ui);
   // dialogue
   state.phase = Phase.DIALOGUE;
-  initDialogue(ui);
+  initDialogue(state, ui);
 
   await gates[Phase.DIALOGUE].wait();
   // state.phase = Phase.PLAYER_SELECT;
@@ -52,7 +52,10 @@ export async function runBattle(state, ui, gates) {
         // ui.turnText.textContent = `Turn: ${state.turnCounter}`;
         // ui.turnText.textContent = `Turn: ${state.turnCounter}`;
 
-        if (await isBattleOver(state, ui)) break;
+        if (await isBattleOver(state, ui, gates)) {
+          console.log("Check 1");
+          return;
+        }
         state.phase = Phase.PLAYER_SELECT;
 
         showUnitInfo(state, ui);
@@ -76,7 +79,10 @@ export async function runBattle(state, ui, gates) {
           while (state.selectedUnit.hasWait === true) {
             showUnitInfo(state, ui);
 
-            if (await isBattleOver(state, ui)) break;
+            if (await isBattleOver(state, ui, gates)) {
+              console.log("Check 2");
+              return;
+            }
 
             ui.itemList.classList.remove("glow");
             ui.skillList.classList.remove("glow");
@@ -171,8 +177,10 @@ export async function runBattle(state, ui, gates) {
 
         // console.log(state.currentUnitsQueue);
 
-        if (await isBattleOver(state, ui)) break;
-        // console.log("outside 2");
+        if (await isBattleOver(state, ui, gates)) {
+          console.log("Check 3");
+          return;
+        }
       }
     } catch (e) {
       if (e == CANCEL) {
@@ -181,7 +189,10 @@ export async function runBattle(state, ui, gates) {
       throw e;
     }
 
-    if (await isBattleOver(state, ui)) break;
+    if (await isBattleOver(state, ui, gates)) {
+      console.log("Check 4");
+      return;
+    }
     state.playerTurn = false;
 
     await delay(1500);
@@ -199,7 +210,10 @@ export async function runBattle(state, ui, gates) {
     updateObstacle(state);
 
     state.playerTurn = true;
-    if (await isBattleOver(state, ui)) break;
+    if (await isBattleOver(state, ui, gates)) {
+      console.log("Check 5");
+      return;
+    }
     state.turnCounter++;
   }
 }
@@ -233,7 +247,7 @@ export function removePlayable(playerTurn, currentUnitsQueue, selectedUnit) {
 }
 
 // end the game
-export async function isBattleOver(state, ui) {
+export async function isBattleOver(state, ui, gates) {
   let friendlyUnit = state.units.filter((e) => e.affiliation == 0);
   let enemyUnit = state.units.filter((e) => e.affiliation == 1);
 
@@ -245,6 +259,19 @@ export async function isBattleOver(state, ui) {
   if (seizedCastle) {
     ui.gameOverCover.textContent = "Castle Captured";
     await delay(1000);
+
+    state.phase = Phase.GAME_OVER;
+
+    state.playerWon = true;
+    // await gates[Phase.DIALOGUE].wait();
+
+    initDialogue(state, ui);
+    ui.actionBarEl.classList.add("hidden");
+
+    await gates[Phase.DIALOGUE].wait();
+
+    // initDialogue(state, ui);
+
     ui.gameOverCover.classList.remove("hidden");
     ui.actionBarEl.classList.add("hidden");
     return true;
@@ -255,8 +282,21 @@ export async function isBattleOver(state, ui) {
   if (friendlyUnit.length == 0) {
     ui.gameOverCover.textContent = "Game Over";
     await delay(2000);
-    ui.gameOverCover.classList.remove("hidden");
+    state.phase = Phase.GAME_OVER;
+
+    state.playerWon = false;
+
+    // await gates[Phase.DIALOGUE].wait();
+
+    initDialogue(state, ui);
     ui.actionBarEl.classList.add("hidden");
+
+    await gates[Phase.DIALOGUE].wait();
+
+    // initDialogue(state, ui);
+
+    ui.gameOverCover.classList.remove("hidden");
+    // ui.actionBarEl.classList.add("hidden");
     return true;
   }
 
@@ -265,8 +305,18 @@ export async function isBattleOver(state, ui) {
   if (enemyUnit.length == 0) {
     ui.gameOverCover.textContent = "Enemy Routed";
     await delay(2000);
-    ui.gameOverCover.classList.remove("hidden");
+    state.phase = Phase.GAME_OVER;
+
+    state.playerWon = true;
+    // await gates[Phase.DIALOGUE].wait();
+
+    initDialogue(state, ui);
     ui.actionBarEl.classList.add("hidden");
+
+    await gates[Phase.DIALOGUE].wait();
+
+    ui.gameOverCover.classList.remove("hidden");
+    // ui.actionBarEl.classList.add("hidden");
     return true;
   }
 

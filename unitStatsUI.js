@@ -127,7 +127,7 @@ export function showUnitInfo(state, ui) {
           // el.style.color = "blue";
           equipIndicator.className = "equip-indicator";
           equipIndicator.textContent = "[E]";
-          console.log(el);
+          // console.log(el);
           el.appendChild(equipIndicator);
         }
 

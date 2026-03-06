@@ -3,6 +3,9 @@ import { Phase } from "./state.js";
 import { playSfx } from "./audio.js";
 import { textBlip } from "./audio.js";
 import { delay } from "./turn.js";
+// import { gates } from "./script.js";
+// import { Phase } from "./state.js";
+
 export const dialogue = [
   {
     speaker: "???",
@@ -14,14 +17,14 @@ export const dialogue = [
     text: "The game is inspired from Fire Emblem. I decided to do this little project to learn more Javascript.",
     url: "talk",
   },
+  // {
+  //   speaker: "???",
+  //   text: "If you have any feedback to improve the game, let me know!",
+  //   url: "talk",
+  // },
   {
     speaker: "???",
-    text: "If you have any feedback to improve the game, let me know!",
-    url: "talk",
-  },
-  {
-    speaker: "???",
-    text: "The objective for this game is to either rout the enemies or sieze the castle.",
+    text: "The objective is to either wipe out the enemies or sieze the castle.",
     url: "talk",
   },
   {
@@ -41,29 +44,79 @@ export const dialogue = [
   //   },
 ];
 
+export const dialogueWon = [
+  {
+    speaker: "???",
+    text: "Well done! You've won!",
+    url: "talk",
+  },
+  {
+    speaker: "???",
+    text: "Hope you enjoyed the demo. Don't forget to leave some feedback!",
+    url: "smile",
+  },
+];
+
+export const dialogueLoss = [
+  {
+    speaker: "???",
+    text: "Aw, better luck next time!",
+    url: "talk",
+  },
+  {
+    speaker: "???",
+    text: "Hope you enjoyed the demo. Don't forget to leave some feedback!",
+    url: "smile",
+  },
+];
+
 let isTyping = false;
 let skipTyping = false;
-let currentLine = 0;
 let dialogueActive = false;
+let currentLine;
 
-export function initDialogue(ui) {
+// let currentLine = 0;
+
+export function initDialogue(state, ui) {
+  currentLine = 0;
   ui.speakerName.classList.remove("hidden");
   ui.description.classList.remove("hidden");
   ui.characterImage.classList.remove("hidden");
 
+  bgm.volume = 0.02;
+
+  // special one off function that makes the animation run on next frame
+  requestAnimationFrame(() => {
+    ui.characterImage.classList.add("animation");
+  });
+  // ui.characterImage.classList.add("animation");
   ui.description.focus();
 
   dialogueActive = true;
 
-  showDialogue(ui, currentLine);
+  showDialogue(state, ui, currentLine);
 }
 
-export async function showDialogue(ui, currentLine) {
-  const line = dialogue[currentLine];
+export async function showDialogue(state, ui, currentLine) {
+  let line;
+  let currentDialogue;
 
-  ui.speakerName.textContent = dialogue[currentLine].speaker;
+  if (state.phase === Phase.GAME_OVER) {
+    if (state.playerWon === true) {
+      line = dialogueWon[currentLine];
+      currentDialogue = dialogueWon;
+    } else if (state.playerWon === false) {
+      line = dialogueLoss[currentLine];
+      currentDialogue = dialogueLoss;
+    }
+  } else {
+    line = dialogue[currentLine];
+    currentDialogue = dialogue;
+  }
+
+  ui.speakerName.textContent = currentDialogue[currentLine].speaker;
   // ui.description.textContent = dialogue[currentLine].text;
-  ui.characterImage.src = `assets/queen/${dialogue[currentLine].url}.png`;
+  ui.characterImage.src = `assets/queen/${currentDialogue[currentLine].url}.png`;
   //   ui.descriptionBox.classList.add("hidden");
 
   // type writer effect
@@ -109,7 +162,7 @@ export async function showDialogue(ui, currentLine) {
   ui.description.textContent = text;
 }
 
-export function activateDialogueControls(ui, gates) {
+export function activateDialogueControls(state, ui, gates) {
   //   use document to read the entire thing
   document.addEventListener("keydown", (e) => {
     e.preventDefault();
@@ -124,17 +177,33 @@ export function activateDialogueControls(ui, gates) {
 
       currentLine++;
 
-      if (currentLine === dialogue.length) {
+      let dialogueLength;
+
+      if (state.phase === Phase.DIALOGUE) dialogueLength = dialogue.length;
+      if (state.phase === Phase.GAME_OVER && state.playerWon === true)
+        dialogueLength = dialogueWon.length;
+      if (state.phase === Phase.GAME_OVER && state.playerWon === false)
+        dialogueLength = dialogueWon.length;
+
+      if (currentLine === dialogueLength) {
         ui.speakerName.classList.add("hidden");
         ui.description.classList.add("hidden");
         ui.characterImage.classList.add("hidden");
+
+        // ui.characterImage.src = "";
+
         // ui.descriptionBox.classList.add("hidden");
 
         //   Open phase to move on
-        gates[Phase.DIALOGUE].open();
         dialogueActive = false;
+
+        ui.characterImage.src = `assets/queen/talk.png`;
+        ui.characterImage.classList.remove("animation");
+        bgm.volume = 0.06;
+
+        gates[Phase.DIALOGUE].open();
       } else {
-        showDialogue(ui, currentLine);
+        showDialogue(state, ui, currentLine);
       }
     }
   });

@@ -43,7 +43,7 @@ preloadImage("assets/potions/potions1.png");
 preloadImage("assets/weapons/bronzeSword.png");
 
 // initUIControls(ui);
-activateDialogueControls(ui, gates);
+activateDialogueControls(state, ui, gates);
 skillListControls(ui, state, gates);
 itemListControls(ui, state, gates);
 activateBoardInput(state, ui, gates);
@@ -59,9 +59,9 @@ runGame(state, ui, gates);
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
-// Better equip indicator
-// Add Seize button
-// Add Wizard Sound Effects
+
+// only grey scale on wait
+
 // Add Archer Class
 
 // Optimize and Organize Code Logic
