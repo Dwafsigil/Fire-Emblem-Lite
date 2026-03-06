@@ -46,7 +46,6 @@ export function showUnitInfo(state, ui) {
           // el.style.color = "blue";
           equipIndicator.className = "equip-indicator";
           equipIndicator.textContent = "[E]";
-          console.log(el);
 
           el.appendChild(equipIndicator);
         }
@@ -65,7 +64,6 @@ export function showUnitInfo(state, ui) {
     // show selected player skills
     if (unit.skills.length !== 0) {
       unit.skills.forEach((skill, index) => {
-        // console.log(skill);
         const el = document.createElement("button");
         el.className = skill.id;
         el.dataset.index = index;
@@ -109,11 +107,7 @@ export function showUnitInfo(state, ui) {
         const itemText = document.createElement("span");
         itemText.className = "item-text";
 
-        // console.log(item);
         if (hoveredUnit.hasAction === false) {
-          // console.log("hoveredunit");
-          // console.log(state.selectedUnit);
-          // console.log(items[item.id].type);
           if (items[item.id].type === "consumable") {
             setDisabled(el, "true");
           }
@@ -127,7 +121,7 @@ export function showUnitInfo(state, ui) {
           // el.style.color = "blue";
           equipIndicator.className = "equip-indicator";
           equipIndicator.textContent = "[E]";
-          // console.log(el);
+
           el.appendChild(equipIndicator);
         }
 
@@ -142,7 +136,6 @@ export function showUnitInfo(state, ui) {
     // skills
     if (hoveredUnit.skills.length !== 0) {
       hoveredUnit.skills.forEach((skill, index) => {
-        // console.log(skill);
         const el = document.createElement("button");
         el.className = skill.id;
         el.dataset.index = index;
@@ -233,17 +226,12 @@ export function healthBarUI(ui, unit) {
   const pct = Math.max(0, Math.min(100, (unit.health / unit.maxHealth) * 100));
   let color;
 
-  // console.log(pct);
-
   if (pct < 33) {
     color = "red";
-    // console.log("red");
   } else if (pct < 66) {
     color = "yellow";
-    // console.log("yellow");
   } else {
     color = "#4ade80";
-    // console.log("green");
   }
 
   ui.healthBarFillUI.style.backgroundColor = `${color}`;

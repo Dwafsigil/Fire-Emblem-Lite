@@ -82,7 +82,6 @@ export function skillListControls(ui, state, gates) {
       ) {
         playSfx(btnClick, 0.5, 0);
 
-        // console.log("Inside");
         // openActionBar(ui.actionBarEl);
         const firstButton = ui.actionBarEl.querySelector("button");
         firstButton?.focus();

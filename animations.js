@@ -18,7 +18,7 @@ import { tileAt } from "./board.js";
 
 export function playAnim(unit, className) {
   const el = unit.node;
-  // console.log(className);
+
   if (el.dataset.dead === "1") return;
 
   el.classList.remove(className);
@@ -41,9 +41,6 @@ export function playAnim(unit, className) {
 }
 
 export function attackAnimation(unit, type, skill = null) {
-  // console.log(unit.node.classList);
-  // console.log(skill);
-
   let skillName = skill ? skill.dataset.id : 0;
 
   if (skillName === "fireball") {
@@ -132,14 +129,14 @@ export function doAction(state, ui, action) {
 
       ui.boardEl.focus();
       gates[Phase.PLAYER_ACTION].open("move");
-      // console.log("In Move");
+
       break;
     case "skill":
       if (state.selectedUnit.hasAction === false) return;
 
       state.attackHover.row = state.selectedUnit.row;
       state.attackHover.col = state.selectedUnit.col;
-      // console.log("skill");
+
       const noUseLeft = state.selectedUnit.skills.every((skill) => {
         return skill.uses == 0;
       });
@@ -158,14 +155,13 @@ export function doAction(state, ui, action) {
       ui.description.classList.remove("hidden");
       // Glow
       ui.skillList.classList.add("glow");
-      // console.log("Hit Skill");
+
       gates[Phase.PLAYER_ACTION].open("skill");
 
       break;
     case "item":
       // if (state.selectedUnit.hasAction === false) return;
 
-      // console.log("item running");
       if (state.selectedUnit.inventory.length === 0) break;
 
       const firstItem = ui.itemList.querySelector("button");

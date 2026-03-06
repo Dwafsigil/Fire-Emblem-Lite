@@ -65,11 +65,11 @@ export class unitStats {
 
   get hitRate() {
     // fix
-    return this.skill * 2.5 + this.luck * 2;
+    return this.skill * 2.5 + this.luck * 2 + +20;
   }
 
   get avoidRate() {
-    return this.speed * 0.5 + this.luck;
+    return this.speed * 0.5 + this.luck * 1;
   }
 
   get critRate() {
@@ -104,13 +104,10 @@ export class unitStats {
 
     if (pct < 33) {
       color = "red";
-      // console.log("red");
     } else if (pct < 66) {
       color = "yellow";
-      // console.log("yellow");
     } else {
       color = "#4ade80";
-      // console.log("green");
     }
 
     this.healthBarFill.style.backgroundColor = `${color}`;

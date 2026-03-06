@@ -10,16 +10,11 @@ export function itemListControls(ui, state, gates) {
   ui.itemList.addEventListener("keydown", (e) => {
     // references the active button, can do active.dataset
     let active = document.activeElement;
-    // console.log(active);
 
     let itemButtons = ui.itemList.querySelectorAll("button");
     const current = Number(active.dataset.index);
 
     let next = current;
-
-    // console.log(next);
-
-    // console.log(itemDescription);
 
     // if (state.Phase === Phase.PLAYER_ITEM) {
     if (e.key === "ArrowDown") {
@@ -46,7 +41,6 @@ export function itemListControls(ui, state, gates) {
 
       const item = foundElement.dataset.id;
 
-      // console.log(foundElement);
       if (state.selectedUnit.hasAction === false) {
         if (items[item].type === "consumable") {
           return;
@@ -78,7 +72,7 @@ export function itemListControls(ui, state, gates) {
           state.selectedUnit.equipped = null;
 
           showStats(state, ui, state.selectedUnit);
-          // console.log("unequip");
+
           const el = document.createElement("li");
           // el.textContent = `${state.selectedUnit.name} unequipped ${items[foundElement.dataset.id].name}`;
           ui.combatLog.appendChild(el);
@@ -95,8 +89,6 @@ export function itemListControls(ui, state, gates) {
           for (const [stat, value] of Object.entries(
             items[state.selectedUnit.equipped].bonuses,
           )) {
-            // console.log(stat, value);
-            // console.log("done");
             state.selectedUnit[stat] += value;
           }
 
@@ -115,9 +107,6 @@ export function itemListControls(ui, state, gates) {
           // const el = document.createElement("li");
           // el.textContent = `${state.selectedUnit.name} equipped ${items[foundElement.dataset.id].name}`;
           // ui.combatLog.appendChild(el);
-
-          // console.log("equip");
-          // console.log(state.selectedUnit.equipped);
         }
       } else {
         if (state.selectedUnit.hasWait) {
@@ -137,7 +126,6 @@ export function itemListControls(ui, state, gates) {
     }
 
     if (state.phase === Phase.PLAYER_ITEM && e.key === "x") {
-      // console.log("Inside");
       // openActionBar(ui.actionBarEl);
       playSfx(btnClick, 0.5, 0);
 

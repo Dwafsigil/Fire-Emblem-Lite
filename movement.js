@@ -58,7 +58,6 @@ export function highlightMove(
     if (ifObstacle(state.obstacles, r, c)) continue;
     tileAt(boardEl, r, c).classList.add("highlight");
   }
-  // console.log("highTile in highlightMove", highTile);
 }
 
 // ✅
@@ -66,7 +65,6 @@ export function removeHighlight(boardEl, highTile) {
   for (const [r, c] of highTile) {
     tileAt(boardEl, r, c).classList.remove("highlight");
   }
-  // console.log("removeHighlight");
 }
 
 // ✅

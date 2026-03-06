@@ -189,6 +189,8 @@ export function activateDialogueControls(state, ui, gates) {
         ui.speakerName.classList.add("hidden");
         ui.description.classList.add("hidden");
         ui.characterImage.classList.remove("animation");
+        // ui.characterImage.classList.add("fade-out");
+
         // ui.characterImage.classList.add("hidden");
 
         // setTimeout(() => {

@@ -18,7 +18,7 @@ export const items = {
     name: "Bronze Sword",
     type: "weapon",
     bonuses: { strength: 2 },
-    description: "+2 Strength",
+    description: "The hard-working man's blade.",
     image: "assets/weapons/bronzeSword.png",
     top: 84,
     left: 84,
@@ -30,15 +30,29 @@ export const items = {
     type: "weapon",
     bonuses: {
       strength: 10,
-      defense: 10,
-      resistance: 10,
+      defense: 5,
+      resistance: 5,
       skill: 10,
       luck: 10,
       speed: 10,
       movement: 2,
     },
-    description: "Artifact. Gifts the user the abilities of a demi-god.",
+    description: "Blesses the user the with god-like combat prowess.",
     image: "assets/weapons/heroSword.png",
+    top: 84,
+    left: 84,
+    height: 12,
+  },
+  runeRapier: {
+    id: "runeRapier",
+    name: "Rune Rapier",
+    type: "weapon",
+    bonuses: {
+      skill: 30,
+    },
+    description:
+      "Slender blade, perfect for finding gaps in heavy plate armor.",
+    image: "assets/weapons/runeRapier.png",
     top: 84,
     left: 84,
     height: 12,
@@ -83,5 +97,4 @@ export function useItem(state, ui, gates, foundElement) {
 
   ui.description.classList.add("hidden");
   gates[Phase.PLAYER_ITEM].open();
-  // console.log("Went through");
 }

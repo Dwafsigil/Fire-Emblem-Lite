@@ -21,10 +21,8 @@ export function activateGlobalInput(state, ui, gates) {
     if (!btn) return;
 
     if (state.phase === Phase.MENU) {
-      // console.log(btn.dataset.action);
       switch (btn.dataset.action) {
         case "start": {
-          // console.log("start");
           playSfx(btnClick, 0.5, 0);
 
           ui.startCover.classList.add("hidden");
@@ -34,7 +32,6 @@ export function activateGlobalInput(state, ui, gates) {
         case "controls": {
           playSfx(btnClick, 0.5, 0);
 
-          // console.log("controls");
           state.currentMenu = "controls";
           renderMenu(state, ui);
           break;
@@ -42,7 +39,6 @@ export function activateGlobalInput(state, ui, gates) {
         case "credits": {
           playSfx(btnClick, 0.5, 0);
 
-          // console.log("credits");
           state.currentMenu = "credits";
           renderMenu(state, ui);
           break;
@@ -50,7 +46,6 @@ export function activateGlobalInput(state, ui, gates) {
         case "back": {
           playSfx(btnClick, 0.5, 0);
 
-          // console.log("back");
           state.currentMenu = "main";
           renderMenu(state, ui);
           break;
@@ -67,8 +62,6 @@ export function activateGlobalInput(state, ui, gates) {
 
   let bgmMuted = false;
   document.addEventListener("keydown", (e) => {
-    // console.log("toggle");
-
     if (e.key == "b") {
       bgmMuted = !bgmMuted;
       if (bgmMuted == true) {

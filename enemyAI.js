@@ -13,9 +13,8 @@ import { attack } from "./combatInput.js";
 import { removeDead } from "./unitsView.js";
 import { healthBarUI } from "./unitStatsUI.js";
 export async function runEnemyTurn(state, ui) {
-  // console.log("Running Enemy Turn");
   let enemyUnit = state.units.filter((e) => e.affiliation == 1);
-  // console.log(enemyUnit);
+
   for (const u of enemyUnit) {
     state.enemyMoves.length = 0;
     state.closestFriendly = null;
@@ -29,8 +28,6 @@ export async function runEnemyTurn(state, ui) {
       state.closestFriendly,
     );
 
-    // console.log("Closest friendly", state.closestFriendly);
-
     state.optimalMove = checkOptimalMove(
       state.enemyMoves,
       state.closestFriendly,
@@ -38,7 +35,6 @@ export async function runEnemyTurn(state, ui) {
       state.obstacles,
     );
 
-    // console.log(checkAdjacent(state, u));
     if (checkAdjacent(state, u)) {
       enemyAttack(state, ui, u, state.closestFriendly);
       healthBarUI(ui, state.closestFriendly);
@@ -62,7 +58,6 @@ export async function runEnemyTurn(state, ui) {
 }
 
 export async function enemyMove(state, ui, enemyUnit) {
-  // console.log(state.closestFriendly);
   if (!state.closestFriendly) return;
   const [oR, oC] = state.optimalMove[0];
   const { _, parent } = enemyPossibleMoves(
@@ -138,7 +133,6 @@ export function enemyPossibleMoves(state, startRow, startCol, moveRange) {
     state.enemyMoves.push([r, c]);
   }
 
-  // console.log(parent);
   return { reachable, parent };
 }
 
@@ -165,9 +159,6 @@ export function checkOptimalMove(
   optimalMove,
   obstacles,
 ) {
-  // console.log("Running check optimal");
-  // console.log(closestFriendly);
-
   let closestDistance = 1000;
   let tempDistance;
   if (!closestFriendly) return optimalMove;
@@ -185,8 +176,6 @@ export function checkOptimalMove(
       optimalMove = [[r, c]];
     }
   }
-
-  // console.log("optimal move", optimalMove);
 
   return optimalMove;
 }
@@ -207,7 +196,7 @@ export function findClosestFriendly(units, enemyUnit, closestFriendly) {
       closestFriendly = u;
     }
   }
-  // console.log("find closest friendly", closestFriendly);
+
   return closestFriendly;
 }
 

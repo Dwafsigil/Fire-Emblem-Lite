@@ -13,13 +13,10 @@ export function placeUnits(state, ui, units) {
 }
 
 export function createPlayerNode(unit) {
-  // console.log(unit.variant);
   const el = document.createElement("div");
 
   el.className = `player ${unit.variant} idle`;
   el.id = `player-${unit.playerId}`;
-
-  // console.log(el);
 
   const healthBarContainer = document.createElement("div");
   healthBarContainer.classList.add("health-bar-container");
@@ -52,7 +49,6 @@ export function createPlayerNode(unit) {
 
 // ✅
 export function placePlayer(state, ui, r, c) {
-  // console.log("placePlayer");
   if (
     !inBounds(
       state.board.rows,
@@ -70,7 +66,6 @@ export function placePlayer(state, ui, r, c) {
 }
 
 export async function removeDead(state, ui, deadUnit) {
-  // console.log("Running", deadUnit);
   deadAnimation(deadUnit);
 
   const el = document.createElement("li");

@@ -54,13 +54,13 @@ runGame(state, ui, gates);
 
 // leveling, weapon triangle, saves,
 
-// maybe a little burnt out?
-
 // Refactor: Tons of redunancy and bad logic
 
 // TODO Immediately:
 
-// only grey scale on wait
+// add units make it 3v3 focus on balance
+
+// Can add animation on description box and such to make it feel more dynamic
 
 // Add Archer Class
 

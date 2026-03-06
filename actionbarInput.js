@@ -6,7 +6,6 @@ import { gates } from "./script.js";
 
 export function activateActionbarInput(state, ui) {
   ui.actionBarEl.addEventListener("keydown", (e) => {
-    // console.log("inside", e.key);
     let active = document.activeElement;
 
     let actionButtons = ui.actionBarEl.querySelectorAll("button");
@@ -31,7 +30,6 @@ export function activateActionbarInput(state, ui) {
     }
 
     if (e.code === "KeyZ") {
-      // console.log("IN aCTION BAR");
       e.preventDefault();
       playSfx(btnClick, 0.5, 0);
 
@@ -41,7 +39,6 @@ export function activateActionbarInput(state, ui) {
         return btn.dataset.index === String(current);
       });
 
-      // console.log(foundElement.dataset.action);
       // ui.actionBarEl.tabIndex = -1;
       active.classList.remove("buttonGlow");
       doAction(state, ui, foundElement.dataset.action);
@@ -50,14 +47,12 @@ export function activateActionbarInput(state, ui) {
 
     actionButtons[next].focus();
 
-    // console.log(actionButtons[next]);
     document.activeElement.classList.add("buttonGlow");
 
     if (e.code === "KeyX") {
       if (state.phase === Phase.PLAYER_ACTION) {
         playSfx(btnClick, 0.5, 0);
 
-        // console.log("Player Select Cancelled");
         state.selectedUnit = null;
         state.playerSelected = null;
 

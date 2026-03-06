@@ -2,7 +2,6 @@
 
 // ✅
 export function checkAdjacent(state, unit = null) {
-  // console.log("checking adjacent", unit);
   const directions = [
     [-1, 0],
     [1, 0],

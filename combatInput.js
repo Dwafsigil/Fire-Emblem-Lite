@@ -15,7 +15,6 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
   });
   // check if attack will hit
   // if hit then check if crit
-  // console.log("In attack", skill);
 
   let randomHitInt = Math.floor(Math.random() * 100 + 1);
   let randomCritInt = Math.floor(Math.random() * 100 + 1);
@@ -76,7 +75,6 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
       floatingValue.textContent = `${damage}`;
       floatingValue.style.setProperty("--float-color", "red");
 
-      // console.log(receivingUnit);
       receivingUnit.node.appendChild(floatingValue);
       playAndRemove(floatingValue);
 
@@ -93,7 +91,6 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
         el.textContent = `${attackingUnit.name} hits ${receivingUnit.name}`;
         ui.combatLog.appendChild(el);
       }
-      // console.log(receivingUnit);
       return "Hit";
     }
   } else {
@@ -128,14 +125,12 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
 
 // outdated
 export function attackedUnit(state, r, c) {
-  // console.log("rannn");
   let match = state.units.find(
     (u) => u.row === r && u.col === c && u.affiliation === 1,
   );
   if (match) {
     state.receivingUnit = match;
-    // console.log(state.receivingUnit.name);
-    // console.log(state.receivingUnit);
+
     return true;
   }
   return false;
@@ -215,10 +210,9 @@ export function attackHighlight(
     // if map obstacle
     // if (ifObstacle(state.obstacles, r, c)) continue;
     if (state.mapObstacles.some((e) => e[0] == r && e[1] == c)) continue;
-    // console.log(state.mapObstacles);
+
     tileAt(boardEl, r, c).classList.add("attack-border");
   }
-  // console.log("attack tiles", state.attackTile);
 }
 
 export function removeAttackHighlight(state, ui) {

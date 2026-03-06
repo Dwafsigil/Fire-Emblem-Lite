@@ -50,8 +50,6 @@ export function activateBoardInput(state, ui, gates) {
 
     // 1. x go back
     if (e.code == "KeyX") {
-      // console.log("detecting x");
-
       // cancel player select
 
       // cancel when player selected
@@ -82,7 +80,6 @@ export function activateBoardInput(state, ui, gates) {
       if (state.phase === Phase.PLAYER_ATTACK) {
         playSfx(btnClick, 0.5, 0);
 
-        // console.log("attack cancel");
         removeAttackHighlight(state, ui);
         removeConfirmHiglight(state, ui);
         tileAt(
@@ -203,8 +200,6 @@ export function activateBoardInput(state, ui, gates) {
           firstButton?.focus();
           firstButton.classList.add("buttonGlow");
 
-          // console.log(firstButton);
-
           // openActionBar(ui.actionBarEl);
 
           gates[Phase.PLAYER_SELECT].open(state.selectedUnit);
@@ -323,7 +318,6 @@ export function activateBoardInput(state, ui, gates) {
               state.attackHover.col,
             ).classList.remove("attack-confirm");
             state.attackHover.row = state.attackHover.row - 1;
-            // console.log("Worked");
 
             confirmHighlight(
               state,
@@ -426,8 +420,6 @@ export function activateBoardInput(state, ui, gates) {
             );
           }
 
-          console.log(state.hover.row, state.hover.col);
-          // console.log(state.hover.row);
           break;
       }
 
@@ -443,9 +435,6 @@ export function activateBoardInput(state, ui, gates) {
       e.key == "z" &&
       attackedUnit(state, state.attackHover.row, state.attackHover.col)
     ) {
-      // console.log(
-      //   tileAt(ui.boardEl, state.attackHover.row, state.attackHover.col),
-      // );
       playSfx(hoverSound, 0.2, 0);
       const type = attack(
         state.selectedUnit,
@@ -466,14 +455,12 @@ export function activateBoardInput(state, ui, gates) {
 
         skill.uses--;
 
-        // console.log(skill.uses);
         // ui.skillList.replaceChildren();
         // ui.itemList.replaceChildren();
 
         // showUnitInfo(state, ui);
       }
 
-      // console.log(type);
       state.attackOn = false;
       if (state.receivingUnit.checkDead()) {
         removeDead(state, ui, state.receivingUnit);
@@ -520,7 +507,7 @@ export function activateBoardInput(state, ui, gates) {
 
     // if game is over
     // if (state.phase === Phase.GAME_OVER && e.key === "z") {
-    //   console.log("Game Restarted");
+
     // }
   });
 }
