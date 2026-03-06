@@ -32,7 +32,7 @@ export function playAnim(unit, className) {
         unit.affiliation === 0 &&
         (className === "attack" || className === "fireball")
       ) {
-        unit.node.classList.add("grayed");
+        // unit.node.classList.add("grayed");
       }
       el.classList.remove(className);
     },

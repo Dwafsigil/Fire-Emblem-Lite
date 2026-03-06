@@ -83,8 +83,8 @@ export function createInitialUnits() {
       strength: 25,
       inventory: [],
       skills: [],
-      maxHealth: 1,
-      health: 1,
+      maxHealth: 100,
+      health: 100,
     }),
     // new unitStats({
     //   playerId: 4,

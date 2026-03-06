@@ -188,7 +188,17 @@ export function activateDialogueControls(state, ui, gates) {
       if (currentLine === dialogueLength) {
         ui.speakerName.classList.add("hidden");
         ui.description.classList.add("hidden");
+        ui.characterImage.classList.remove("animation");
+        // ui.characterImage.classList.add("hidden");
+
+        // setTimeout(() => {
+        //   //  ui.characterImage.src = `assets/queen/talk.png`;
+        //   ui.characterImage.classList.add("hidden");
+        //   ui.characterImage.src = `assets/queen/talk.png`;
+        // }, 100);
+
         ui.characterImage.classList.add("hidden");
+        ui.characterImage.src = `assets/queen/talk.png`;
 
         // ui.characterImage.src = "";
 
@@ -197,8 +207,7 @@ export function activateDialogueControls(state, ui, gates) {
         //   Open phase to move on
         dialogueActive = false;
 
-        ui.characterImage.src = `assets/queen/talk.png`;
-        ui.characterImage.classList.remove("animation");
+        // ui.characterImage.src = `assets/queen/talk.png`;
         bgm.volume = 0.06;
 
         gates[Phase.DIALOGUE].open();
