@@ -58,7 +58,7 @@ runGame(state, ui, gates);
 
 // TODO Immediately:
 
-// add units make it 3v3 focus on balance
+// tweak enemy ai. it calculates immediate closest unit instead of closest by possible move
 
 // Can add animation on description box and such to make it feel more dynamic
 

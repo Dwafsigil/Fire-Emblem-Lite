@@ -24,7 +24,7 @@ export const dialogue = [
   // },
   {
     speaker: "???",
-    text: "The objective is to either wipe out the enemies or sieze the castle.",
+    text: "The objective is to either wipe out the enemies or seize the castle.",
     url: "talk",
   },
   {
