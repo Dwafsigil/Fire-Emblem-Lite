@@ -67,6 +67,7 @@ export function useItem(state, ui, gates, foundElement) {
     const el = document.createElement("li");
     el.textContent = `${state.selectedUnit.name} uses a ${items["potion"].name}`;
     ui.combatLog.appendChild(el);
+    ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
 
     if (
       Number(state.selectedUnit.health) > Number(state.selectedUnit.maxHealth)

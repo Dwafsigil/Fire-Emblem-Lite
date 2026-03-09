@@ -200,6 +200,7 @@ export function doAction(state, ui, action) {
       const el = document.createElement("li");
       el.textContent = `${state.selectedUnit.name} is waiting`;
       ui.combatLog.appendChild(el);
+
       state.selectedUnit.playerWait();
 
       gates[Phase.PLAYER_ACTION].open("wait");

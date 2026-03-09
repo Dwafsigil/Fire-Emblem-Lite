@@ -71,6 +71,7 @@ export async function removeDead(state, ui, deadUnit) {
   const el = document.createElement("li");
   el.textContent = `${deadUnit.name} has been slain`;
   ui.combatLog.appendChild(el);
+  ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
 
   state.units = state.units.filter((e) => e !== deadUnit);
   let t = tileAt(ui.boardEl, deadUnit.row, deadUnit.col);

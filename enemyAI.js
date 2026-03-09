@@ -51,6 +51,7 @@ export async function runEnemyTurn(state, ui) {
         const el = document.createElement("li");
         el.textContent = `${u.name} is waiting`;
         ui.combatLog.appendChild(el);
+        ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
       }
     }
 

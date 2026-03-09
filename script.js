@@ -41,6 +41,7 @@ preloadImage("assets/queen/special.png");
 preloadImage("assets/queen/talk.png");
 preloadImage("assets/potions/potions1.png");
 preloadImage("assets/weapons/bronzeSword.png");
+preloadImage("assets/weapons/runeRapier.png");
 
 // initUIControls(ui);
 activateDialogueControls(state, ui, gates);
@@ -58,7 +59,12 @@ runGame(state, ui, gates);
 
 // TODO Immediately:
 
-// tweak enemy ai. it calculates immediate closest unit instead of closest by possible move
+// the description box doesnt auto scroll
+// color blind mode
+// menu option that shows stats
+//  Environmental tiles that have effects on characters that move onto them (both beneficial and detrimental ones)
+// • Having type advantages (Weaknesses to range vs melee attacks, magic resistances of certain spells, etc)
+// • UI polishing - having a menu available mid game (in case someone forgets controls, if the game is to become longer), ability to change control scheme (This would probably be a stretch goal and not an immediate thing to worry for), different troop types, different equipment, merchants/shops,
 
 // Can add animation on description box and such to make it feel more dynamic
 

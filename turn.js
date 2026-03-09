@@ -37,7 +37,7 @@ export async function runBattle(state, ui, gates) {
       const el = document.createElement("li");
       const space = document.createElement("li");
       // const space2 = document.createElement("li");
-      space.textContent = `---------------------------------------`;
+      space.textContent = `------------------------------`;
       // space2.textContent = ``;
 
       el.textContent = `Turn ${state.turnCounter}`;
@@ -46,6 +46,8 @@ export async function runBattle(state, ui, gates) {
         ui.combatLog.appendChild(space);
       }
       ui.combatLog.appendChild(el);
+      ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
+
       // ui.combatLog.appendChild(space2);
 
       while (hasPlayableUnits(state)) {
@@ -96,6 +98,7 @@ export async function runBattle(state, ui, gates) {
 
                   await gates[Phase.PLAYER_ATTACK].wait();
                   state.selectedUnit.hasAction = false;
+                  ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
 
                   break;
                 case "move":
@@ -103,6 +106,7 @@ export async function runBattle(state, ui, gates) {
                   await gates[Phase.PLAYER_MOVE].wait();
 
                   state.selectedUnit.hasMove = false;
+                  ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
 
                   break;
 
@@ -111,6 +115,7 @@ export async function runBattle(state, ui, gates) {
 
                   await gates[Phase.PLAYER_SKILL].wait();
                   state.selectedUnit.hasAction = false;
+                  ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
 
                   break;
                 case "item":
@@ -118,11 +123,14 @@ export async function runBattle(state, ui, gates) {
 
                   await gates[Phase.PLAYER_ITEM].wait();
                   state.selectedUnit.hasAction = false;
+                  ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
+
                   break;
                 case "wait":
                   // state.selectedUnit.hasAction = false;
                   // state.selectedUnit.hasMove = false;
                   state.selectedUnit.hasWait = false;
+                  ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
 
                   break;
               }

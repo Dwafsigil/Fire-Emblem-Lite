@@ -76,6 +76,8 @@ export function itemListControls(ui, state, gates) {
           const el = document.createElement("li");
           // el.textContent = `${state.selectedUnit.name} unequipped ${items[foundElement.dataset.id].name}`;
           ui.combatLog.appendChild(el);
+          ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
+
           // showUnitInfo(state, ui);
         } else {
           // equip item

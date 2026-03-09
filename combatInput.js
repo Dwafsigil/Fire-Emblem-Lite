@@ -53,10 +53,12 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
         const el = document.createElement("li");
         el.textContent = `${attackingUnit.name} hits a critical ${skills[skillID].name} on ${receivingUnit.name}`;
         ui.combatLog.appendChild(el);
+        ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
       } else {
         const el = document.createElement("li");
         el.textContent = `${attackingUnit.name} hits a critical on ${receivingUnit.name}`;
         ui.combatLog.appendChild(el);
+        ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
       }
       return "Crit";
     } else {
@@ -86,10 +88,14 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
         const el = document.createElement("li");
         el.textContent = `${attackingUnit.name} hits ${skills[skillID].name} on ${receivingUnit.name}`;
         ui.combatLog.appendChild(el);
+        ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
       } else {
         const el = document.createElement("li");
         el.textContent = `${attackingUnit.name} hits ${receivingUnit.name}`;
         ui.combatLog.appendChild(el);
+        ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
+
+        // ui.scrollTop = ui.scrollHeight;
       }
       return "Hit";
     }
@@ -114,10 +120,12 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
       const el = document.createElement("li");
       el.textContent = `${attackingUnit.name} misses ${skills[skillID].name} on ${receivingUnit.name}`;
       ui.combatLog.appendChild(el);
+      ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
     } else {
       const el = document.createElement("li");
       el.textContent = `${attackingUnit.name} misses ${receivingUnit.name}`;
       ui.combatLog.appendChild(el);
+      ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
     }
     return "Miss";
   }
