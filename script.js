@@ -59,7 +59,6 @@ runGame(state, ui, gates);
 
 // TODO Immediately:
 
-// the description box doesnt auto scroll
 // color blind mode
 // menu option that shows stats
 //  Environmental tiles that have effects on characters that move onto them (both beneficial and detrimental ones)

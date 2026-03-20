@@ -24,10 +24,10 @@ export async function runBattle(state, ui, gates) {
   startMusic(0);
   showCondition(ui);
   // dialogue
-  state.phase = Phase.DIALOGUE;
-  initDialogue(state, ui);
+  // state.phase = Phase.DIALOGUE;
+  // initDialogue(state, ui);
 
-  await gates[Phase.DIALOGUE].wait();
+  // await gates[Phase.DIALOGUE].wait();
   // state.phase = Phase.PLAYER_SELECT;
   while (true) {
     try {
