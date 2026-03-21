@@ -3,36 +3,34 @@
 import { inBounds } from "./board.js";
 import { ifObstacle } from "./movement.js";
 import { checkUnitAdjacent, isOccupied } from "./unitQueries.js";
-import { checkAdjacent } from "./unitQueries.js";
 import { delay } from "./turn.js";
 import { runAnimation } from "./animations.js";
 import { tileAt } from "./board.js";
 import { hurtAnimation } from "./animations.js";
-import { attackAnimation } from "./animations.js";
 import { attack } from "./combatInput.js";
 import { removeDead } from "./unitsView.js";
 import { healthBarUI } from "./unitStatsUI.js";
+
 export async function runEnemyTurn(state, ui) {
   let enemyUnit = state.units.filter((e) => e.affiliation == 1);
+  let friendlyUnit = state.units.filter((e) => e.affiliation == 0);
 
   for (const u of enemyUnit) {
     state.enemyMoves.length = 0;
     state.closestFriendly = null;
     state.optimalMove = null;
 
+    // Check all potential enemy moves
     enemyPossibleMoves(state, u.row, u.col, u.movement);
 
-    state.closestFriendly = findClosestFriendly(
-      state.units,
-      u,
-      state.closestFriendly,
-    );
+    state.closestFriendly = chooseTarget(state, friendlyUnit, u);
 
     state.optimalMove = checkOptimalMove(
       state.enemyMoves,
       state.closestFriendly,
       state.optimalMove,
       state.obstacles,
+      enemyUnit,
     );
 
     if (checkUnitAdjacent(u, state.closestFriendly)) {
@@ -59,6 +57,50 @@ export async function runEnemyTurn(state, ui) {
   }
 }
 
+function chooseTarget(state, friendlyUnit, enemy) {
+  let bestScore = 0;
+  let bestTarget = null;
+  let attackableUnits = getAttackableUnits(
+    state,
+    enemy,
+    state.enemyMoves,
+    friendlyUnit,
+  );
+
+  let targetUnits = attackableUnits || friendlyUnit;
+
+  for (let unit of targetUnits) {
+    // console.log(unit);
+
+    let score = 0;
+    let damage = unit.strength || unit.intelligence;
+    let unitDistance = Math.sqrt(
+      Math.pow(unit.row - 7, 2) + Math.pow(unit.col - 5, 2),
+    );
+
+    // console.log(unit);
+    if (unitDistance <= 3) {
+      score += (60 - unitDistance) * 6;
+    } else {
+      score += (40 - unitDistance) * 5;
+    }
+    // console.log("distance score", score);
+    score += (10 - unit.health) * 2;
+    // console.log("health score", score);
+    score += damage * 2;
+    // console.log("damage score", score);
+
+    if (score >= bestScore) {
+      bestScore = score;
+      bestTarget = unit;
+    }
+  }
+
+  // console.log("Best Score", bestScore);
+  // console.log("Best Target", bestTarget);
+  return bestTarget;
+}
+
 export async function enemyMove(state, ui, enemyUnit) {
   if (!state.closestFriendly) return;
   const [oR, oC] = state.optimalMove[0];
@@ -82,10 +124,6 @@ export async function enemyMove(state, ui, enemyUnit) {
     await delay(500);
   }
   enemyUnit.node.classList.remove("run");
-  // enemyUnit.node.style.setProperty(
-  //   "--sprite-url",
-  //   `url("assets/${enemyUnit.variant}/Idle.png")`,
-  // );
 }
 
 const key = (r, c) => `${r},${c}`;
@@ -97,6 +135,7 @@ export function enemyPossibleMoves(state, startRow, startCol, moveRange) {
   const reachable = [];
   const queue = [[startRow, startCol, moveRange]];
   const visited = new Set([`${startRow},${startCol}`]);
+  let friendlyUnits = state.units.filter((e) => e.affiliation == 0);
 
   parent[key(startRow, startCol)] = null;
 
@@ -116,13 +155,22 @@ export function enemyPossibleMoves(state, startRow, startCol, moveRange) {
       const newRow = r + dR;
       const newCol = c + dC;
       const k = key(newRow, newCol);
+      // if (
+      //   !inBounds(state.board.rows, state.board.cols, newRow, newCol) ||
+      //   visited.has(k) ||
+      //   ifObstacle(state.obstacles, newRow, newCol) ||
+      //   isOccupied(state.units, newRow, newCol)
+      // )
+      //   continue;
+
       if (
         !inBounds(state.board.rows, state.board.cols, newRow, newCol) ||
         visited.has(k) ||
-        ifObstacle(state.obstacles, newRow, newCol) ||
-        isOccupied(state.units, newRow, newCol)
-      )
+        ifObstacle(state.mapObstacles, newRow, newCol) ||
+        isOccupied(friendlyUnits, newRow, newCol)
+      ) {
         continue;
+      }
 
       visited.add(k);
       parent[k] = key(r, c);
@@ -131,11 +179,45 @@ export function enemyPossibleMoves(state, startRow, startCol, moveRange) {
   }
 
   for (const { r, c } of reachable) {
-    if (ifObstacle(state.obstacles, r, c)) continue;
+    // if (ifObstacle(state.obstacles, r, c)) continue;
     state.enemyMoves.push([r, c]);
   }
 
   return { reachable, parent };
+}
+
+function getAttackableUnits(state, enemy, moveTiles, friendlyUnits) {
+  const attackable = [];
+
+  const legalTiles = moveTiles.filter(([r, c]) => {
+    return (
+      (r === enemy.row && c === enemy.col) || !isOccupied(state.units, r, c)
+    );
+  });
+
+  for (const [r, c] of legalTiles) {
+    const directions = [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+    ];
+
+    for (const [dR, dC] of directions) {
+      const attackRow = r + dR;
+      const attackCol = c + dC;
+
+      const unit = friendlyUnits.find(
+        (u) => u.row === attackRow && u.col === attackCol,
+      );
+
+      if (unit && !attackable.includes(unit)) {
+        attackable.push(unit);
+      }
+    }
+  }
+
+  return attackable;
 }
 
 export function enemyAttack(state, ui, enemyUnit, closestFriendly) {
@@ -147,12 +229,6 @@ export function enemyAttack(state, ui, enemyUnit, closestFriendly) {
   if ((!closestFriendly.checkDead() && type === "Hit") || type === "Crit") {
     hurtAnimation(closestFriendly);
   }
-
-  // enemyUnit.attackPlayer(closestFriendly);
-  // if (!closestFriendly.checkDead()) {
-  //   hurtAnimation(closestFriendly);
-  // }
-  // attackAnimation(enemyUnit);
 }
 
 export function checkOptimalMove(
@@ -160,13 +236,14 @@ export function checkOptimalMove(
   closestFriendly,
   optimalMove,
   obstacles,
+  enemyUnits,
 ) {
   let closestDistance = 1000;
   let tempDistance;
   if (!closestFriendly) return optimalMove;
 
   for (const [r, c] of enemyMoves) {
-    if (ifObstacle(obstacles, r, c)) continue;
+    if (ifObstacle(obstacles, r, c) || isOccupied(enemyUnits, r, c)) continue;
 
     tempDistance = Math.sqrt(
       Math.pow(closestFriendly.row - r, 2) +
@@ -211,5 +288,6 @@ export function buildPath(parent, endRow, endCol) {
     const [r, c] = k.split(",").map(Number);
     path.push({ r, c });
   }
+
   return path.reverse();
 }
