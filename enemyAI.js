@@ -70,34 +70,35 @@ function chooseTarget(state, friendlyUnit, enemy) {
   let targetUnits = attackableUnits || friendlyUnit;
 
   for (let unit of targetUnits) {
-    // console.log(unit);
-
+    let armorResis = enemy.strength ? unit.defense : unit.resistance;
+    // console.log(damageType);
     let score = 0;
     let damage = unit.strength || unit.intelligence;
     let unitDistance = Math.sqrt(
       Math.pow(unit.row - 7, 2) + Math.pow(unit.col - 5, 2),
     );
 
-    // console.log(unit);
+    // Distance to Castle Gate
     if (unitDistance <= 3) {
       score += (60 - unitDistance) * 6;
     } else {
       score += (40 - unitDistance) * 5;
     }
-    // console.log("distance score", score);
+    // Unit Health
     score += (10 - unit.health) * 2;
-    // console.log("health score", score);
+    // Unit Damage
     score += damage * 2;
-    // console.log("damage score", score);
+
+    score += -(armorResis * 0.75);
+
+    console.log(unit.name);
+    console.log(score);
 
     if (score >= bestScore) {
       bestScore = score;
       bestTarget = unit;
     }
   }
-
-  // console.log("Best Score", bestScore);
-  // console.log("Best Target", bestTarget);
   return bestTarget;
 }
 

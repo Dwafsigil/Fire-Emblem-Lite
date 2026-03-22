@@ -72,3 +72,4 @@ runGame(state, ui, gates);
 // Optimize and Organize Code Logic
 
 // BUG LIST:
+// unit sharpening issue

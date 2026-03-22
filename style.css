@@ -460,7 +460,7 @@ button[button-disabled="true"]:focus {
 }
 /* individual cells */
 .tile {
-  background: #fff4dc;
+  /* background: #fff4dc; */
   width: 100%;
   height: 100%;
   display: grid;
@@ -471,7 +471,7 @@ button[button-disabled="true"]:focus {
 }
 
 .alt {
-  background: #ffe5aa;
+  /* background: #ffe5aa; */
   background: transparent;
 }
 
@@ -484,9 +484,10 @@ button[button-disabled="true"]:focus {
   content: "";
   position: absolute;
   inset: 0;
-  /* box-sizing: border-box; */
   border: 1px solid rgb(31, 10, 223);
-  z-index: 4;
+  z-index: 1;
+  pointer-events: none;
+  /* box-shadow: inset 0 0 0 1px rgb(31, 10, 223); */
   animation: pulse 1s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 }
 
@@ -501,6 +502,18 @@ button[button-disabled="true"]:focus {
     transform: scale(1);
   }
 }
+
+/* @keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 1;
+  }
+} */
 
 .attack-border {
   border: 1px solid red;
@@ -541,6 +554,7 @@ button[button-disabled="true"]:focus {
   z-index: 5;
   transform: scale(0.8, 1.5);
   transform-origin: center bottom;
+  image-rendering: pixelated;
 }
 
 .player.knight_1::before {
@@ -554,8 +568,10 @@ button[button-disabled="true"]:focus {
   background-size: 400% 100%;
   background-position: 0 0;
 
-  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
+  /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35)); */
   transform: translate(-12px, -8px);
+  image-rendering: pixelated;
+  filter: none;
   /* transform: translate; */
   /* background-image: var(--sprite-url);
 
