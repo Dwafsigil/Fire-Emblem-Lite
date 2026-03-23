@@ -10,6 +10,7 @@ import { hurtAnimation } from "./animations.js";
 import { attack } from "./combatInput.js";
 import { removeDead } from "./unitsView.js";
 import { healthBarUI } from "./unitStatsUI.js";
+import { counterAttack } from "./combatInput.js";
 
 export async function runEnemyTurn(state, ui) {
   let enemyUnit = state.units.filter((e) => e.affiliation == 1);
@@ -34,14 +35,24 @@ export async function runEnemyTurn(state, ui) {
     );
 
     if (checkUnitAdjacent(u, state.closestFriendly)) {
-      enemyAttack(state, ui, u, state.closestFriendly);
+      await enemyAttack(state, ui, u, state.closestFriendly);
+      await delay(900);
+      await counterAttack(state, ui, u);
+      await delay(200);
+
       healthBarUI(ui, state.closestFriendly);
       // if (state.closestFriendly.checkDead()) removeDead(state, ui);
     } else {
       // fix here
       await enemyMove(state, ui, u);
       if (checkUnitAdjacent(u, state.closestFriendly)) {
-        enemyAttack(state, ui, u, state.closestFriendly);
+        await enemyAttack(state, ui, u, state.closestFriendly);
+        await delay(900);
+        await counterAttack(state, ui, u);
+        await delay(200);
+
+        // attack(state.closestFriendly, u, state.useSkill, state, ui);
+
         healthBarUI(ui, state.closestFriendly);
 
         // if (state.closestFriendly.checkDead()) removeDead(state, ui);
@@ -90,9 +101,6 @@ function chooseTarget(state, friendlyUnit, enemy) {
     score += damage * 2;
 
     score += -(armorResis * 0.75);
-
-    console.log(unit.name);
-    console.log(score);
 
     if (score >= bestScore) {
       bestScore = score;
@@ -221,7 +229,7 @@ function getAttackableUnits(state, enemy, moveTiles, friendlyUnits) {
   return attackable;
 }
 
-export function enemyAttack(state, ui, enemyUnit, closestFriendly) {
+export async function enemyAttack(state, ui, enemyUnit, closestFriendly) {
   const type = attack(enemyUnit, closestFriendly, state.useSkill, state, ui);
 
   if (closestFriendly.checkDead()) {

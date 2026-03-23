@@ -15,6 +15,7 @@ export function activateActionbarInput(state, ui) {
 
     if (e.key === "ArrowRight") {
       e.preventDefault();
+      if (state.inputLock === true) return;
       playSfx(btnClick, 0.5, 0);
 
       active.classList.remove("buttonGlow");
@@ -23,6 +24,8 @@ export function activateActionbarInput(state, ui) {
 
     if (e.key === "ArrowLeft") {
       e.preventDefault();
+      if (state.inputLock === true) return;
+
       playSfx(btnClick, 0.5, 0);
       active.classList.remove("buttonGlow");
 
@@ -31,6 +34,8 @@ export function activateActionbarInput(state, ui) {
 
     if (e.code === "KeyZ") {
       e.preventDefault();
+      if (state.inputLock === true) return;
+
       playSfx(btnClick, 0.5, 0);
 
       const actionButtons = [...ui.actionBarEl.querySelectorAll("button")];
@@ -51,6 +56,8 @@ export function activateActionbarInput(state, ui) {
 
     if (e.code === "KeyX") {
       if (state.phase === Phase.PLAYER_ACTION) {
+        if (state.inputLock === true) return;
+
         playSfx(btnClick, 0.5, 0);
 
         state.selectedUnit = null;

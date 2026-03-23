@@ -15,29 +15,33 @@ import { items } from "./items.js";
 import { skills } from "./skills.js";
 import { highlightMove } from "./movement.js";
 import { tileAt } from "./board.js";
+import { delay } from "./turn.js";
 
 export function playAnim(unit, className) {
-  const el = unit.node;
+  return new Promise((resolve) => {
+    const el = unit.node;
 
-  if (el.dataset.dead === "1") return;
+    if (el.dataset.dead === "1") return;
 
-  el.classList.remove(className);
-  void el.offsetWidth;
-  el.classList.add(className);
+    el.classList.remove(className);
+    void el.offsetWidth;
+    el.classList.add(className);
 
-  el.addEventListener(
-    "animationend",
-    () => {
-      if (
-        unit.affiliation === 0 &&
-        (className === "attack" || className === "fireball")
-      ) {
-        // unit.node.classList.add("grayed");
-      }
-      el.classList.remove(className);
-    },
-    { once: true },
-  );
+    el.addEventListener(
+      "animationend",
+      () => {
+        if (
+          unit.affiliation === 0 &&
+          (className === "attack" || className === "fireball")
+        ) {
+          // unit.node.classList.add("grayed");
+        }
+        el.classList.remove(className);
+        resolve();
+      },
+      { once: true },
+    );
+  });
 }
 
 export function attackAnimation(unit, type, skill = null) {
@@ -55,8 +59,8 @@ export function attackAnimation(unit, type, skill = null) {
 }
 
 export function hurtAnimation(unit) {
-  playAnim(unit, "hurt", 500);
   playSfx(hurtGrunt, 0.3, 200);
+  return playAnim(unit, "hurt", 500);
 }
 
 export function runAnimation(unit) {

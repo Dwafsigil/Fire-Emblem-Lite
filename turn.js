@@ -189,8 +189,9 @@ export async function runBattle(state, ui, gates) {
     }
     state.playerTurn = false;
 
-    await delay(1500);
+    await delay(500);
     showPhase(ui, "Enemy Phase");
+    await delay(750);
 
     let friendlyUnits = state.units.filter((e) => e.affiliation == 0);
 

@@ -10,7 +10,6 @@ import {
   attackedUnit,
   confirmHighlight,
 } from "./combatInput.js";
-import { hurtAnimation } from "./animations.js";
 import { placePlayer, removeDead } from "./unitsView.js";
 import { playSfx, btnClick } from "./audio.js";
 import {
@@ -21,11 +20,11 @@ import {
   movePlayer,
 } from "./movement.js";
 import { skills } from "./skills.js";
-import { removeUnitInfo, showStats } from "./unitStatsUI.js";
 import { showTerrainInfo } from "./terrainInfo.js";
 import { tileAt } from "./board.js";
 import { showUnitInfo } from "./unitStatsUI.js";
 import { hoverSound } from "./audio.js";
+import { attackInteraction } from "./combatInput.js";
 
 export function activateBoardInput(state, ui, gates) {
   ui.boardEl.addEventListener("keydown", (e) => {
@@ -435,47 +434,43 @@ export function activateBoardInput(state, ui, gates) {
       e.key == "z" &&
       attackedUnit(state, state.attackHover.row, state.attackHover.col)
     ) {
-      playSfx(hoverSound, 0.2, 0);
-      const type = attack(
-        state.selectedUnit,
-        state.receivingUnit,
-        state.useSkill,
-        state,
-        ui,
-      );
+      attackInteraction(state, ui);
+      // playSfx(hoverSound, 0.2, 0);
+      // const type = attack(
+      //   state.selectedUnit,
+      //   state.receivingUnit,
+      //   state.useSkill,
+      //   state,
+      //   ui,
+      // );
 
-      // Removing a use
+      // // Removing a use
 
-      if (state.useSkill) {
-        const removeSkillUse = state.useSkill.dataset.id;
+      // if (state.useSkill) {
+      //   const removeSkillUse = state.useSkill.dataset.id;
 
-        const skill = state.selectedUnit.skills.find((skill) => {
-          return skill.id === removeSkillUse;
-        });
+      //   const skill = state.selectedUnit.skills.find((skill) => {
+      //     return skill.id === removeSkillUse;
+      //   });
 
-        skill.uses--;
-
-        // ui.skillList.replaceChildren();
-        // ui.itemList.replaceChildren();
-
-        // showUnitInfo(state, ui);
-      }
+      //   skill.uses--;
+      // }
 
       state.attackOn = false;
-      if (state.receivingUnit.checkDead()) {
-        removeDead(state, ui, state.receivingUnit);
-      }
-      if (
-        (!state.receivingUnit.checkDead() && type === "Hit") ||
-        type === "Crit"
-      ) {
-        hurtAnimation(state.receivingUnit);
-      }
+      // if (state.receivingUnit.checkDead()) {
+      //   removeDead(state, ui, state.receivingUnit);
+      // }
+      // if (
+      //   (!state.receivingUnit.checkDead() && type === "Hit") ||
+      //   type === "Crit"
+      // ) {
+      //   hurtAnimation(state.receivingUnit);
+      // }
 
       removeAttackHighlight(state, ui);
       removeConfirmHiglight(state, ui);
 
-      state.receivingUnit = null;
+      // state.receivingUnit = null;
       state.unitHighlighted = false;
       state.isTargeting = false;
       playSfx(btnClick, 0.5, 0);

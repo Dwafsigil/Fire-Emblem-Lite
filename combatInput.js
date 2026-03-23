@@ -8,6 +8,11 @@ import { getAvoidWithTerrain, terrainBonus } from "./terrainInfo.js";
 import { skills } from "./skills.js";
 import { updateObstacle } from "./movement.js";
 import { ifObstacle } from "./movement.js";
+import { removeDead } from "./unitsView.js";
+import { hurtAnimation } from "./animations.js";
+import { enemyAttack } from "./enemyAI.js";
+import { delay } from "./turn.js";
+import { checkUnitAdjacent } from "./unitQueries.js";
 
 export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
   state.attackTile.forEach((u) => {
@@ -254,4 +259,81 @@ export function removeConfirmHiglight(state, ui) {
     state.receivingUnit.row,
     state.receivingUnit.col,
   ).classList.remove("attack-confirm");
+}
+
+export async function attackInteraction(state, ui) {
+  const type = attack(
+    state.selectedUnit,
+    state.receivingUnit,
+    state.useSkill,
+    state,
+    ui,
+  );
+
+  if (state.useSkill) {
+    const removeSkillUse = state.useSkill.dataset.id;
+
+    const skill = state.selectedUnit.skills.find((skill) => {
+      return skill.id === removeSkillUse;
+    });
+
+    skill.uses--;
+  }
+
+  if (state.receivingUnit.checkDead()) {
+    removeDead(state, ui, state.receivingUnit);
+  }
+  if (
+    (!state.receivingUnit.checkDead() && type === "Hit") ||
+    type === "Crit" ||
+    type === "Miss"
+  ) {
+    state.inputLock = true;
+    await hurtAnimation(state.receivingUnit);
+    await delay(500);
+    await counterAttack(state, ui);
+    state.inputLock = false;
+  }
+}
+
+export async function counterAttack(state, ui, enemy) {
+  if (state.selectedUnit) {
+    if (!checkUnitAdjacent(state.selectedUnit, state.receivingUnit)) {
+      return;
+    }
+    await enemyAttack(state, ui, state.receivingUnit, state.selectedUnit);
+    await delay(900);
+
+    if (state.selectedUnit.speed >= state.receivingUnit.speed * 1.5) {
+      attack(
+        state.selectedUnit,
+        state.receivingUnit,
+        state.useSkill,
+        state,
+        ui,
+      );
+    }
+
+    if (state.receivingUnit.speed >= state.selectedUnit.speed * 1.5) {
+      await enemyAttack(state, ui, state.receivingUnit, state.selectedUnit);
+      await delay(300);
+    }
+  } else {
+    if (!checkUnitAdjacent(enemy, state.closestFriendly)) {
+      return;
+    }
+    attack(state.closestFriendly, enemy, state.useSkill, state, ui);
+    await delay(900);
+
+    if (state.closestFriendly.speed >= enemy.speed * 1.5) {
+      attack(state.closestFriendly, enemy, state.useSkill, state, ui);
+      await delay(300);
+    }
+
+    if (enemy.speed >= state.closestFriendly.speed * 1.5) {
+      console.log("Worked");
+      await enemyAttack(state, ui, enemy, state.closestFriendly);
+      await delay(300);
+    }
+  }
 }
