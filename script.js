@@ -12,6 +12,7 @@ import { itemListControls } from "./itemListControls.js";
 import { skillListControls } from "./skillListControls.js";
 import { preloadSprites, preloadImage } from "./preload.js";
 import { activateDialogueControls } from "./dialogue.js";
+import { escapeMenuControls } from "./escapeMenuControls.js";
 
 export const state = createInitialState();
 export const ui = createUI();
@@ -47,6 +48,7 @@ preloadImage("assets/weapons/runeRapier.png");
 activateDialogueControls(state, ui, gates);
 skillListControls(ui, state, gates);
 itemListControls(ui, state, gates);
+escapeMenuControls(ui, state, gates);
 activateBoardInput(state, ui, gates);
 activateActionbarInput(state, ui);
 activateGlobalInput(state, ui, gates);

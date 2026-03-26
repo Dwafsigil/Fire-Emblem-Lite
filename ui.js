@@ -60,6 +60,7 @@ export function createUI() {
     healthBarFillUI: document.querySelector(".health-fill-ui"),
     unitNameContent: document.querySelector(".unit-name-content"),
     unitClass: document.querySelector(".unit-class"),
+    escapeMenu: document.querySelector(".menu-overlay"),
 
     // descriptionBox: document.querySelector(".description-box"),
   };
