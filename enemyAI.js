@@ -13,9 +13,9 @@ import { healthBarUI } from "./unitStatsUI.js";
 
 export async function runEnemyTurn(state, ui) {
   let enemyUnit = state.units.filter((e) => e.affiliation == 1);
-  let friendlyUnit = state.units.filter((e) => e.affiliation == 0);
 
   for (const u of enemyUnit) {
+    let friendlyUnit = state.units.filter((e) => e.affiliation == 0);
     state.enemyMoves.length = 0;
     state.closestFriendly = null;
     state.optimalMove = null;
@@ -46,9 +46,9 @@ export async function runEnemyTurn(state, ui) {
 
         // if (state.closestFriendly.checkDead()) removeDead(state, ui);
       } else {
-        const el = document.createElement("li");
-        el.textContent = `${u.name} is waiting`;
-        ui.combatLog.appendChild(el);
+        // const el = document.createElement("li");
+        // el.textContent = `${u.name} is waiting`;
+        // ui.combatLog.appendChild(el);
         ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
       }
     }
@@ -66,8 +66,9 @@ function chooseTarget(state, friendlyUnit, enemy) {
     state.enemyMoves,
     friendlyUnit,
   );
-
-  let targetUnits = attackableUnits || friendlyUnit;
+  console.log(enemy.name);
+  console.log(friendlyUnit);
+  let targetUnits = attackableUnits.length ? attackableUnits : friendlyUnit;
 
   for (let unit of targetUnits) {
     let armorResis = enemy.strength ? unit.defense : unit.resistance;
@@ -96,6 +97,7 @@ function chooseTarget(state, friendlyUnit, enemy) {
       bestTarget = unit;
     }
   }
+
   return bestTarget;
 }
 
@@ -220,6 +222,7 @@ function getAttackableUnits(state, enemy, moveTiles, friendlyUnits) {
 
 export function enemyAttack(state, ui, enemyUnit, closestFriendly) {
   const type = attack(enemyUnit, closestFriendly, state.useSkill, state, ui);
+  console.log(enemyUnit.name, "Attacked");
 
   if (closestFriendly.checkDead()) {
     removeDead(state, ui, closestFriendly);

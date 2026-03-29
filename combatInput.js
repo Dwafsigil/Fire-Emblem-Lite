@@ -51,12 +51,12 @@ export function attack(attackingUnit, receivingUnit, skill = null, state, ui) {
       if (state.useSkill) {
         const skillID = state.useSkill.dataset.id;
         const el = document.createElement("li");
-        el.textContent = `${attackingUnit.name} hits a critical ${skills[skillID].name} on ${receivingUnit.name}`;
+        el.textContent = `${attackingUnit.name} lands a critical ${skills[skillID].name} on ${receivingUnit.name}`;
         ui.combatLog.appendChild(el);
         ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
       } else {
         const el = document.createElement("li");
-        el.textContent = `${attackingUnit.name} hits a critical on ${receivingUnit.name}`;
+        el.textContent = `${attackingUnit.name} lands a crit on ${receivingUnit.name}`;
         ui.combatLog.appendChild(el);
         ui.combatLog.scrollTop = ui.combatLog.scrollHeight;
       }

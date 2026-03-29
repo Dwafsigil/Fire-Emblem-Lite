@@ -52,7 +52,7 @@ export const dialogueWon = [
   },
   {
     speaker: "???",
-    text: "Hope you enjoyed the demo. Don't forget to leave some feedback!",
+    text: "Hope you enjoyed the demo.",
     url: "smile",
   },
 ];
@@ -65,7 +65,7 @@ export const dialogueLoss = [
   },
   {
     speaker: "???",
-    text: "Hope you enjoyed the demo. Don't forget to leave some feedback!",
+    text: "Hope you enjoyed the demo.",
     url: "smile",
   },
 ];

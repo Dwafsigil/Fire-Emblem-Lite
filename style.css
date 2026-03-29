@@ -95,7 +95,7 @@ body {
 .action-bar {
   position: absolute;
   bottom: -13%;
-  right: 8%;
+  right: 6%;
   /* transform: translateX(8%) scale(1.8); */
   display: flex;
   gap: 12px;
@@ -1214,6 +1214,7 @@ button[button-disabled="true"]:focus {
   font-size: 11px;
 
   background: #000000;
+
   color: #ffffff;
   border: 2px solid #444;
   padding: 10px;

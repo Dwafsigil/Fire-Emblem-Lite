@@ -197,9 +197,9 @@ export function doAction(state, ui, action) {
       state.selectedUnit.node.classList.add("grayed");
 
       // battle log
-      const el = document.createElement("li");
-      el.textContent = `${state.selectedUnit.name} is waiting`;
-      ui.combatLog.appendChild(el);
+      // const el = document.createElement("li");
+      // el.textContent = `${state.selectedUnit.name} is waiting`;
+      // ui.combatLog.appendChild(el);
 
       state.selectedUnit.playerWait();
 
