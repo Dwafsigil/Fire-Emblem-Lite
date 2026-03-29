@@ -71,7 +71,7 @@ function chooseTarget(state, friendlyUnit, enemy) {
 
   for (let unit of targetUnits) {
     let armorResis = enemy.strength ? unit.defense : unit.resistance;
-    // console.log(damageType);
+
     let score = 0;
     let damage = unit.strength || unit.intelligence;
     let unitDistance = Math.sqrt(
@@ -90,9 +90,6 @@ function chooseTarget(state, friendlyUnit, enemy) {
     score += damage * 2;
 
     score += -(armorResis * 0.75);
-
-    console.log(unit.name);
-    console.log(score);
 
     if (score >= bestScore) {
       bestScore = score;

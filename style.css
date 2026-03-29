@@ -93,10 +93,10 @@ body {
 }
 
 .action-bar {
-  position: fixed;
-  bottom: 24px;
-  /* right: px; */
-  transform: translateX(8%) scale(1.8);
+  position: absolute;
+  bottom: -13%;
+  right: 8%;
+  /* transform: translateX(8%) scale(1.8); */
   display: flex;
   gap: 12px;
   background: #1f2937;
@@ -1344,7 +1344,7 @@ button[button-disabled="true"]:focus {
 .combat-log {
   position: absolute;
   top: -1px;
-  right: calc(-39% + 1px);
+  left: calc(101.75% + 1px);
   width: clamp(150px, 6vw, 240px);
   height: calc(87% + 1px);
 
@@ -1385,7 +1385,7 @@ button[button-disabled="true"]:focus {
 .terrain-stat {
   position: absolute;
   top: calc(88.17% + 2px);
-  right: calc(-39% + 1px);
+  left: calc(101.75% + 1px);
   width: clamp(150px, 6vw, 240px);
   height: 11.5%;
   /* font-size: 10px; */
